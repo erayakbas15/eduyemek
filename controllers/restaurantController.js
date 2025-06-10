@@ -41,7 +41,6 @@ const upload = multer({
 // Export multer upload middleware for use in routes
 exports.upload = upload;
 
-// Restoran dashboard - temel bilgiler ve istatistikler
 module.exports.getRestaurantDashboard = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -66,9 +65,11 @@ module.exports.getRestaurantDashboard = async (req, res) => {
     const todayEnd = new Date(todayStart);
     todayEnd.setHours(23, 59, 59, 999);
 
-    const totalOrders = await Order.countDocuments({
+    // Bugünkü Teslim Edilen Sipariş Sayısı
+    const todayDeliveredOrders = await Order.countDocuments({
       restaurantId: restaurant._id,
       createdAt: { $gte: todayStart, $lte: todayEnd },
+      status: "delivered",
     });
     const pendingOrders = await Order.countDocuments({
       restaurantId: restaurant._id,
@@ -185,7 +186,7 @@ module.exports.getRestaurantDashboard = async (req, res) => {
       stats: {
         totalMeals: totalMeals || 0,
         activeMeals: activeMeals || 0,
-        totalOrders: totalOrders || 0,
+        todayDeliveredOrders: todayDeliveredOrders || 0,
         pendingOrders: pendingOrders || 0,
         preparingOrders: preparingOrders || 0,
         dailyRevenue: dailyRevenue[0]?.total || 0,
@@ -601,22 +602,19 @@ module.exports.getRestaurantInfoPage = async (req, res) => {
   }
 };
 
-// Ayarlar sayfası
+
+
+
 module.exports.getRestaurantSettingsPage = async (req, res) => {
   try {
     const userId = req.user._id;
-
     const restaurant = await Restaurant.findOne({ ownerId: userId });
     if (!restaurant) {
-      return res
-        .status(404)
-        .render("error", { message: "Restoran bulunamadı" });
+      console.log("Restoran bulunamadı, userId:", userId);
+      return res.status(404).render("error", { message: "Restoran bulunamadı" });
     }
-
-    const user = await User.findById(userId).select(
-      "firstName lastName email phone"
-    );
-
+    const user = await User.findById(userId).select("firstName lastName email phone");
+    console.log("Render edilen veriler:", { user, restaurant });
     res.render("../views/restaurant/rest_settings.ejs", {
       restaurant,
       user,
@@ -628,8 +626,14 @@ module.exports.getRestaurantSettingsPage = async (req, res) => {
   }
 };
 
+
+
+
+
+
 // Ayarları güncelleme işlemi
 module.exports.updateRestaurantSettings = async (req, res) => {
+  console.log("Gelen form verileri:", req.body);
   try {
     const userId = req.user._id;
     const {

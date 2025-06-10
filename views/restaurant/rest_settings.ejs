@@ -674,6 +674,7 @@ input:checked + .slider:before {
     </style>
 
 </head>
+
 <body>
     <button class="hamburger-btn" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
@@ -739,48 +740,48 @@ input:checked + .slider:before {
             </div>
         </div>
 
-        <div class="content-section">
-            <div class="section-header">
-                <h2>Kullanıcı Ayarları</h2>
-            </div>
-            <form action="/restaurant/update_settings" method="POST">
-                <div class="form-group">
-                    <label for="firstName">Restoran Sahibinin Adı</label>
-                    <input type="text" id="firstName" name="firstName" value="Mehmet" required>
-                </div>
-                <div class="form-group">
-                    <label for="lastName">Restoran Sahibinin Soy Adı</label>
-                    <input type="text" id="lastName" name="lastName" value="Yılmaz" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">E-posta (Değiştirilemez)</label>
-                    <input type="email" id="email" name="email" value="mehmet@example.com" readonly>
-                </div>
-                <div class="form-group">
-                    <label for="ownerPhone">Restoran Sahibinin Numarası</label>
-                    <input type="tel" id="ownerPhone" name="ownerPhone" value="0532 123 45 67" pattern="[0-9\s\-\(\)]{10,15}" required>
-                </div>
-                <div class="form-group">
-                    <label for="currentPassword">Mevcut Şifre</label>
-                    <input type="password" id="currentPassword" name="currentPassword" placeholder="Mevcut şifrenizi girin">
-                </div>
-                <div class="form-row">
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label for="newPassword">Yeni Şifre</label>
-                            <input type="password" id="newPassword" name="newPassword" placeholder="Yeni şifrenizi girin">
-                        </div>
-                    </div>
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label for="confirmPassword">Şifre Tekrar</label>
-                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Yeni şifrenizi tekrar girin">
-                        </div>
-                    </div>
-                </div>
-                <button type="submit" class="btn-save">Kaydet</button>
-            </form>
+<div class="content-section">
+    <div class="section-header">
+        <h2>Kullanıcı Ayarları</h2>
+    </div>
+    <form action="/restaurant/update_settings" method="POST">
+        <div class="form-group">
+            <label for="firstName">Restoran Sahibinin Adı</label>
+            <input type="text" id="firstName" name="firstName" value="<%= user?.firstName || '' %>" required>
         </div>
+        <div class="form-group">
+            <label for="lastName">Restoran Sahibinin Soy Adı</label>
+            <input type="text" id="lastName" name="lastName" value="<%= user?.lastName || '' %>" required>
+        </div>
+        <div class="form-group">
+            <label for="email">E-posta (Değiştirilemez)</label>
+            <input type="email" id="email" name="email" value="<%= user?.email || '' %>" readonly>
+        </div>
+        <div class="form-group">
+            <label for="ownerPhone">Restoran Sahibinin Numarası</label>
+            <input type="tel" id="ownerPhone" name="ownerPhone" value="<%= user?.phone || '' %>" pattern="[0-9\s\-\(\)]{10,15}" required>
+        </div>
+        <div class="form-group">
+            <label for="currentPassword">Mevcut Şifre</label>
+            <input type="password" id="currentPassword" name="currentPassword" placeholder="Mevcut şifrenizi girin">
+        </div>
+        <div class="form-row">
+            <div class="form-col">
+                <div class="form-group">
+                    <label for="newPassword">Yeni Şifre</label>
+                    <input type="password" id="newPassword" name="newPassword" placeholder="Yeni şifrenizi girin">
+                </div>
+            </div>
+            <div class="form-col">
+                <div class="form-group">
+                    <label for="confirmPassword">Şifre Tekrar</label>
+                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Yeni şifrenizi tekrar girin">
+                </div>
+            </div>
+        </div>
+        <button type="submit" class="btn-save">Kaydet</button>
+    </form>
+</div>
     </div>
 
     <div class="notification-container"></div>
@@ -939,4 +940,5 @@ input:checked + .slider:before {
         }
     </script>
 </body>
+
 </html>

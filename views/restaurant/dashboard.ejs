@@ -412,7 +412,7 @@
         }
 
         .popular-item-name {
-            font-size: 18px;
+            font-size: 30px;
             font-weight: bold;
             color: var(--text-color);
             margin-bottom: 5px;
@@ -1035,28 +1035,28 @@
             </div>
         </div>
 
-        <div class="stats-section">
-            <div class="stat-card">
-                <h3 class="stats-number">
-                    <%= stats?.totalOrders || 0 %>
-                </h3>
-                <p class="stats-label">Bugünkü Sipariş</p>
+<div class="stats-section">
+    <div class="stat-card">
+        <h3 class="stats-number">
+            <%= stats?.todayDeliveredOrders || 0 %>
+        </h3>
+        <p class="stats-label">Bugünkü Teslim Edilen Sipariş</p>
+    </div>
+    <div class="stat-card">
+        <h3 class="stats-number">
+            <%= stats?.dailyRevenue?.toFixed(2) || '0.00' %> TL
+        </h3>
+        <p class="stats-label">Bugünkü Ciro</p>
+    </div>
+    <div class="stat-card">
+        <div class="popular">
+            <div class="popular-item-name">
+                <%= popularMeal?.name || 'Veri Yok' %>
             </div>
-            <div class="stat-card">
-                <h3 class="stats-number">
-                    <%= stats?.dailyRevenue?.toFixed(2) || '0.00' %> TL
-                </h3>
-                <p class="stats-label">Günlük Ciro</p>
-            </div>
-            <div class="stat-card">
-                <div class="popular">
-                    <div class="popular-item-name">
-                        <%= popularMeal?.name || 'Veri Yok' %>
-                    </div>
-                    <div class="popular-item-desc">En Çok Sipariş Edilen 🔥</div>
-                </div>
-            </div>
+            <div class="popular-item-desc">Bugün En Çok Sipariş Edilen</div>
         </div>
+    </div>
+</div>
 
         <div class="orders-section">
             <div class="table-header">

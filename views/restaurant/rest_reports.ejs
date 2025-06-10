@@ -844,7 +844,7 @@
                         <div class="stat-card">
                             <h3 class="stat-value"><%= stats.popularMeal.name %></h3>
                             <p class="stat-title">En Popüler Ürün</p>
-                            <p class="stat-subtitle">(<%= stats.popularMeal.orderCount %> sipariş)</p>
+                            <p class="stat-subtitle">(<%= stats.popularMeal.orderCount %> adet satıldı)</p>
                         </div>
                         <div class="stat-card">
                             <h3 class="stat-value"><%= stats.customerSatisfaction %>/5</h3>
@@ -859,21 +859,21 @@
             <div class="section-header">
                 <h2 class="section-title">En Popüler Ürünler</h2>
             </div>
-            <div class="popular-items">
-                <% if (Array.isArray(popularItems) && popularItems.length > 0) { %>
-                    <% popularItems.forEach(function(item) { %>
-                        <div class="popular-item">
-                            <div>
-                                <div class="item-name"><%= item.name %></div>
-                                <div class="item-orders"><%= item.orderCount %> sipariş</div>
-                            </div>
-                            <div class="item-count"><%= item.orderCount %></div>
-                        </div>
-                    <% }); %>
-                <% } else { %>
-                    <div class="empty-state">Popüler ürün bulunmamaktadır.</div>
-                <% } %>
+<div class="popular-items">
+    <% if (Array.isArray(popularItems) && popularItems.length > 0) { %>
+        <% popularItems.forEach(function(item) { %>
+            <div class="popular-item">
+                <div>
+                    <div class="item-name"><%= item.name %></div>
+                    <div class="item-orders"><%= item.orderCount %> adet satıldı</div>
+                </div>
+                <div class="item-count"><%= item.orderCount %></div>
             </div>
+        <% }); %>
+    <% } else { %>
+        <div class="empty-state">Popüler ürün bulunmamaktadır.</div>
+    <% } %>
+</div>
         </div>
     </div>
     <div class="notification-container"></div>
