@@ -1,0 +1,942 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="/ituyemek_logo.png" type="image/png">
+    <title>Ayarlar - Restoran Paneli</title>
+
+
+    <style>
+        :root {
+    --bg-color: #f5f9ff;
+    --text-color: #333;
+    --sidebar-bg: linear-gradient(180deg, #1e3a8a, #3b82f6);
+    --sidebar-text: #fff;
+    --card-bg: #fff;
+    --card-border: #dbeafe;
+    --table-header-bg: #eff6ff;
+    --table-border: #e5e7eb;
+    --secondary-text: #64748b;
+    --button-bg: #3b82f6;
+    --button-hover: #2563eb;
+    --status-hazir: #22c55e;
+    --status-hazirlanıyor: #f97316;
+    --status-iptal: #ef4444;
+    --rating-color: #f59e0b;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+    --modal-bg: rgba(0, 0, 0, 0.6);
+    --border-radius: 8px;
+    --transition: all 0.3s ease;
+}
+
+.dark-theme {
+    --bg-color: #1a202c;
+    --text-color: #a3bffa;
+    --sidebar-bg: linear-gradient(180deg, #1e3a8a, #2a4365);
+    --sidebar-text: #e2e8f0;
+    --card-bg: #2d3748;
+    --card-border: #4a5568;
+    --table-header-bg: #2d3748;
+    --table-border: #4a5568;
+    --secondary-text: #a0aec0;
+    --button-bg: #4fd1c5;
+    --button-hover: #38b2ac;
+    --status-hazir: #48bb78;
+    --status-hazirlanıyor: #f6ad55;
+    --status-iptal: #e53e3e;
+    --rating-color: #ecc94b;
+    --shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    --modal-bg: rgba(0, 0, 0, 0.8);
+}
+
+body {
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--bg-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    min-height: 100vh;
+    color: var(--text-color);
+    transition: var(--transition);
+}
+
+.notification.success {
+    border-left: 4px solid var(--status-hazir);
+}
+
+.notification.error {
+    border-left: 4px solid var(--status-iptal);
+}
+
+.notification span {
+    color: var(--text-color);
+    font-size: 14px;
+}
+
+.notification .close-btn {
+    background: none;
+    border: none;
+    color: var(--secondary-text);
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.hamburger-btn {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 1001;
+    background: var(--button-bg);
+    color: var(--sidebar-text);
+    border: none;
+    width: 45px;
+    height: 45px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: var(--shadow);
+    transition: var(--transition);
+}
+
+.hamburger-btn:hover {
+    background: var(--button-hover);
+}
+
+.sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--modal-bg);
+    z-index: 999;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+}
+
+.sidebar-overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.sidebar {
+    width: 260px;
+    background: var(--sidebar-bg);
+    color: var(--sidebar-text);
+    padding: 20px 0;
+    position: fixed;
+    height: 100vh;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    transition: var(--transition);
+    overflow-y: auto;
+}
+
+.sidebar-close-btn {
+    display: none;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    color: var(--sidebar-text);
+    font-size: 24px;
+    cursor: pointer;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    transition: var(--transition);
+}
+
+.sidebar-close-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.sidebar h2 {
+    font-size: 22px;
+    margin: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+.sidebar a {
+    display: flex;
+    align-items: center;
+    padding: 15px 30px;
+    text-decoration: none;
+    color: var(--sidebar-text);
+    font-size: 16px;
+    font-weight: 500;
+    transition: var(--transition);
+    text-align: center;
+    border-left: 4px solid transparent;
+}
+
+.sidebar a:hover,
+.sidebar a.active-link {
+    background-color: var(--button-hover);
+    border-left-color: var(--sidebar-text);
+}
+
+.sidebar a i {
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+.main-content {
+    margin-left: 260px;
+    padding: 40px;
+    flex-grow: 1;
+    background-color: var(--bg-color);
+    transition: var(--transition);
+    width: calc(100% - 260px);
+    box-sizing: border-box;
+}
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    flex-wrap: wrap;
+    gap: 20px;
+    position: relative;
+}
+
+.page-header h1 {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--text-color);
+    margin: 0;
+}
+
+.page-header p {
+    font-size: 14px;
+    color: var(--secondary-text);
+    margin: 5px 0 0;
+}
+
+.header-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    margin-top: -22px;
+    margin-right: -10px;
+}
+
+.slider-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.slider-label {
+    font-size: 14px;
+    font-weight: bold;
+    color: var(--secondary-text);
+    white-space: nowrap;
+    line-height: 1;
+    margin-left: 17px;
+}
+
+.slider-label-close {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--status-iptal);
+}
+
+.slider-label-open {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--status-hazir);
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 30px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--status-iptal);
+    transition: .4s;
+    border-radius: 15px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: var(--status-hazir);
+}
+
+input:checked + .slider:before {
+    transform: translateX(30px);
+}
+
+.theme-toggle {
+    background-color: var(--button-bg);
+    color: var(--sidebar-text);
+    border: none;
+    padding: 8px 16px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 30px;
+    line-height: 1;
+}
+
+.theme-toggle:hover {
+    background-color: var(--button-hover);
+}
+
+.theme-toggle .sun,
+.theme-toggle .moon {
+    font-size: 18px;
+    transition: opacity 0.3s;
+}
+
+.theme-toggle .sun.active,
+.theme-toggle .moon.active {
+    opacity: 1;
+}
+
+.theme-toggle .sun:not(.active),
+.theme-toggle .moon:not(.active) {
+    opacity: 0.3;
+}
+
+.content-section {
+    background-color: var(--card-bg);
+    padding: 25px;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow);
+    margin-bottom: 18px;
+}
+
+.section-header h2 {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-color);
+    margin: 0 0 20px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    font-size: 14px;
+    color: var(--text-color);
+    margin-bottom: 5px;
+    font-weight: 600;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid var(--card-border);
+    border-radius: var(--border-radius);
+    font-family: 'Montserrat', sans-serif;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    box-sizing: border-box;
+    transition: var(--transition);
+    min-height: 44px;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--button-bg);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+.form-group input[readonly] {
+    background-color: var(--table-header-bg);
+    cursor: not-allowed;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.form-col {
+    flex: 1;
+    min-width: 200px;
+}
+
+.btn-save {
+    background-color: var(--button-bg);
+    color: var(--sidebar-text);
+    border: none;
+    padding: 10px 20px;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 14px;
+    font-weight: 600;
+    min-height: 44px;
+}
+
+.btn-save:hover {
+    background-color: var(--button-hover);
+    transform: translateY(-2px);
+}
+
+.notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    z-index: 1000;
+}
+
+.notification {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    border-radius: var(--border-radius);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    box-shadow: var(--shadow);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+.settings-icon {
+    display: none;
+}
+
+@media (max-width: 1024px) {
+    .sidebar {
+        width: 220px;
+    }
+
+    .main-content {
+        margin-left: 220px;
+        padding: 30px;
+        width: calc(100% - 220px);
+    }
+
+    .page-header h1 {
+        font-size: 24px;
+    }
+
+    .section-header h2 {
+        font-size: 20px;
+    }
+
+    .header-controls {
+        gap: 15px;
+    }
+
+    .slider-container {
+        margin-top: -18px;
+        margin-right: -5px;
+    }
+}
+
+@media (max-width: 768px) {
+    .hamburger-btn {
+        display: block;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        width: 280px;
+        max-width: 80vw;
+    }
+
+    .sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sidebar-close-btn {
+        display: block;
+    }
+
+    .sidebar h2 {
+        margin: 50px 20px 20px 20px;
+        font-size: 20px;
+    }
+
+    .sidebar a {
+        padding: 12px 25px;
+        font-size: 15px;
+    }
+
+    .main-content {
+        margin-left: 0;
+        padding: 80px 20px 20px 20px;
+        width: 100%;
+    }
+
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 15px;
+    }
+
+    .page-header h1 {
+        font-size: 22px;
+    }
+
+    .header-controls {
+        width: 100%;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .slider-container {
+        margin-top: 0;
+        margin-right: 0;
+        order: 1;
+    }
+
+    .theme-toggle {
+        order: 2;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .form-col {
+        min-width: unset;
+        width: 100%;
+    }
+
+    .content-section {
+        padding: 20px;
+    }
+
+    .notification-container {
+        width: calc(100% - 40px);
+        left: 20px;
+        right: 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .hamburger-btn {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        top: 15px;
+        left: 15px;
+    }
+
+    .sidebar {
+        width: 260px;
+        max-width: 85vw;
+    }
+
+    .sidebar h2 {
+        font-size: 18px;
+        margin: 45px 15px 15px 15px;
+    }
+
+    .sidebar a {
+        padding: 10px 20px;
+        font-size: 14px;
+    }
+
+    .main-content {
+        padding: 70px 15px 15px 15px;
+    }
+
+    .page-header h1 {
+        font-size: 20px;
+    }
+
+    .section-header h2 {
+        font-size: 18px;
+    }
+
+    .btn-save {
+        padding: 8px 16px;
+        font-size: 13px;
+        width: 100%;
+    }
+
+    .slider-container {
+        gap: 6px;
+    }
+
+    .slider-label,
+    .slider-label-close,
+    .slider-label-open {
+        font-size: 12px;
+    }
+
+    .switch {
+        width: 50px;
+        height: 26px;
+    }
+
+    .slider:before {
+        height: 22px;
+        width: 22px;
+        left: 2px;
+        bottom: 2px;
+    }
+
+    input:checked + .slider:before {
+        transform: translateX(26px);
+    }
+
+    .theme-toggle {
+        padding: 8px 16px;
+        height: 30px;
+        line-height: 1;
+    }
+
+    .content-section {
+        padding: 20px;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        padding: 10px;
+        font-size: 14px;
+        min-height: 44px;
+    }
+
+    .notification-container {
+        top: 15px;
+        left: 15px;
+        right: 15px;
+        width: calc(100% - 30px);
+    }
+
+    .notification {
+        padding: 8px 12px;
+        font-size: 13px;
+    }
+}
+    </style>
+
+</head>
+<body>
+    <button class="hamburger-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+
+    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-close-btn" onclick="closeSidebar()">
+            <i class="fas fa-times"></i>
+        </button>
+        <h2>
+            <%= restaurant?.name || "Restoran Paneli" %>
+        </h2>
+        <a href="/restaurant/dashboard" class="menu-item">
+            <i class="fas fa-home"></i> Ana Sayfa
+        </a>
+        <a href="/restaurant/rest_orders" class="menu-item">
+            <i class="fas fa-clipboard-list"></i> Tüm Siparişler
+        </a>
+        <a href="/restaurant/rest_menu" class="menu-item">
+            <i class="fas fa-edit"></i> Menü Yönetimi
+        </a>
+        <a href="/restaurant/rest_comments" class="restaurant">
+            <i class="fas fa-star"></i> Müşteri Yorumları
+        </a>
+        <a href="/restaurant/rest_reports" class="menu-item">
+            <i class="fas fa-chart-bar"></i> Satış Raporları
+        </a>
+        <a href="/restaurant/rest_info" class="menu-item">
+            <i class="fas fa-info-circle"></i> Restoran Bilgileri
+        </a>
+        <a href="/restaurant/rest_settings" class="menu-item active-link">
+            <i class="fas fa-cog"></i> Ayarlar
+        </a>
+        <a href="/" onclick="logout()" class="menu-item">
+            <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Ayarlar</h1>
+                <p class="page-subtitle">Restoran sahibi bilgilerinizi ve hesabınızı burada yönetebilirsiniz</p>
+            </div>
+            <div class="header-controls">
+                <div class="slider-container">
+                    <span class="slider-label">Restoran</span>
+                    <div class="slider-wrapper">
+                        <span class="slider-label-close">Kapat</span>
+                        <label class="switch">
+                            <input type="checkbox" id="restaurant-toggle" <%= restaurant?.delivery?.case === 'open' ? 'checked' : '' %>>
+                            <span class="slider"></span>
+                        </label>
+                        <span class="slider-label-open">Aç</span>
+                    </div>
+                </div>
+                <button class="theme-toggle">
+                    <i class="fas fa-sun sun active"></i>
+                    <i class="fas fa-moon moon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <h2>Kullanıcı Ayarları</h2>
+            </div>
+            <form action="/restaurant/update_settings" method="POST">
+                <div class="form-group">
+                    <label for="firstName">Restoran Sahibinin Adı</label>
+                    <input type="text" id="firstName" name="firstName" value="Mehmet" required>
+                </div>
+                <div class="form-group">
+                    <label for="lastName">Restoran Sahibinin Soy Adı</label>
+                    <input type="text" id="lastName" name="lastName" value="Yılmaz" required>
+                </div>
+                <div class="form-group">
+                    <label for="email">E-posta (Değiştirilemez)</label>
+                    <input type="email" id="email" name="email" value="mehmet@example.com" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="ownerPhone">Restoran Sahibinin Numarası</label>
+                    <input type="tel" id="ownerPhone" name="ownerPhone" value="0532 123 45 67" pattern="[0-9\s\-\(\)]{10,15}" required>
+                </div>
+                <div class="form-group">
+                    <label for="currentPassword">Mevcut Şifre</label>
+                    <input type="password" id="currentPassword" name="currentPassword" placeholder="Mevcut şifrenizi girin">
+                </div>
+                <div class="form-row">
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="newPassword">Yeni Şifre</label>
+                            <input type="password" id="newPassword" name="newPassword" placeholder="Yeni şifrenizi girin">
+                        </div>
+                    </div>
+                    <div class="form-col">
+                        <div class="form-group">
+                            <label for="confirmPassword">Şifre Tekrar</label>
+                            <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Yeni şifrenizi tekrar girin">
+                        </div>
+                    </div>
+                </div>
+                <button type="submit" class="btn-save">Kaydet</button>
+            </form>
+        </div>
+    </div>
+
+    <div class="notification-container"></div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const themeToggle = document.querySelector('.theme-toggle');
+            const sunIcon = document.querySelector('.sun');
+            const moonIcon = document.querySelector('.moon');
+            const toggleInput = document.getElementById('restaurant-toggle');
+            const inputs = document.querySelectorAll('input');
+
+            themeToggle.addEventListener('click', function () {
+                console.log('Theme toggle clicked');
+                document.body.classList.toggle('dark-theme');
+                sunIcon.classList.toggle('active');
+                moonIcon.classList.toggle('active');
+                localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+            });
+
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-theme');
+                sunIcon.classList.remove('active');
+                moonIcon.classList.add('active');
+            }
+
+            const ownerPhoneInput = document.getElementById('ownerPhone');
+            ownerPhoneInput.addEventListener('input', function () {
+                const phoneRegex = /^[0-9\s\-\(\)]{10,15}$/;
+                if (!phoneRegex.test(ownerPhoneInput.value)) {
+                    ownerPhoneInput.setCustomValidity('Geçerli bir telefon numarası girin (10-15 rakam, boşluk, tire veya parantez içerebilir).');
+                } else {
+                    ownerPhoneInput.setCustomValidity('');
+                }
+            });
+
+            toggleInput.addEventListener('change', function () {
+                console.log('Toggle changed');
+                const newStatus = this.checked ? 'open' : 'closed';
+                toggleRestaurantStatus(newStatus);
+            });
+
+            inputs.forEach(input => {
+                input.addEventListener('focus', () => console.log('Input focused:', input.id));
+                input.addEventListener('blur', () => console.log('Input blurred:', input.id));
+            });
+        });
+
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.add('open');
+            overlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuItems = document.querySelectorAll('.sidebar a');
+            menuItems.forEach(item => {
+                item.addEventListener('click', function() {
+                    if (window.innerWidth <= 768) {
+                        closeSidebar();
+                    }
+                });
+            });
+        });
+
+        function showNotification(message, type) {
+            const notificationContainer = document.querySelector('.notification-container');
+            if (!notificationContainer) {
+                console.error('Notification container not found');
+                alert('Bildirim gösterilemedi: Bildirim konteyneri bulunamadı.');
+                return;
+            }
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <span>${message}</span>
+                <button class="close-btn">×</button>
+            `;
+            notificationContainer.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 5000);
+
+            notification.querySelector('.close-btn').addEventListener('click', () => {
+                notification.remove();
+            });
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch('/restaurant/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+
+                if (response.redirected || response.status === 301 || response.status === 302) {
+                    console.log('Redirecting to:', response.url);
+                    showNotification('Oturum doğrulaması başarısız. Lütfen tekrar giriş yap.', 'error');
+                    window.location.href = '/account/login';
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    showNotification(data.message || 'Başarıyla çıkış yapıldı.', 'success');
+                    window.location.href = '/';
+                } else {
+                    showNotification(data.message || 'Çıkış yapılamadı.', 'error');
+                    console.error('Logout failed:', data.message);
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                showNotification('Çıkış yapılırken hata oluştu.', 'error');
+            }
+        }
+
+        async function toggleRestaurantStatus(newStatus) {
+            try {
+                const toggleInput = document.getElementById('restaurant-toggle');
+                const response = await fetch('/restaurant/toggle-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus }),
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    showNotification(`Restoran ${newStatus === 'open' ? 'açıldı' : 'kapatıldı'}.`, 'success');
+                } else {
+                    const errorData = await response.json();
+                    if (errorData?.message === 'Aktif siparişler varken restoran kapatılamaz') {
+                        showNotification('Aktif siparişler varken restoran kapatılamaz.', 'error');
+                        toggleInput.checked = newStatus !== 'open';
+                    } else {
+                        showNotification('Restoran durumu değiştirilemedi.', 'error');
+                        toggleInput.checked = newStatus !== 'open';
+                    }
+                }
+            } catch (error) {
+                console.error('Bağlantı hatası:', error);
+                showNotification('Restoran durumu değiştirilemedi.', 'error');
+                document.getElementById('restaurant-toggle').checked = newStatus !== 'open';
+            }
+        }
+    </script>
+</body>
+</html>

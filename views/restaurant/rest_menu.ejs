@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="icon" href="/ituyemek_logo.png" type="image/png">
+    <title>Menü Yönetimi - Restoran Paneli</title>
+    <style>
+        :root {
+            --bg-color: #f5f9ff;
+            --text-color: #333;
+            --sidebar-bg: linear-gradient(180deg, #1e3a8a, #3b82f6);
+            --sidebar-text: #fff;
+            --card-bg: #eff6fb;
+            --card-border: #dbeafe;
+            --table-header-bg: #dbeafe;
+            --table-border: #e5e7eb;
+            --secondary-text: #64748b;
+            --button-bg: #3b82f6;
+            --button-hover: #2563eb;
+            --status-hazir: #22c55e;
+            --status-hazirlanıyor: #f97316;
+            --status-iptal: #ef4444;
+            --status-on-the-way: #f59e0b;
+            --status-pending: #f97316;
+            --status-bilinmeyen: #6b7280;
+            --rating-color: #f59e0b;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            --modal-bg: rgba(0, 0, 0, 0.6);
+            --border-radius: 8px;
+            --transition: all 0.3s ease;
+        }
+
+        .dark-theme {
+            --bg-color: #1a202c;
+            --text-color: #a3bffa;
+            --sidebar-bg: linear-gradient(180deg, #1e3a8a, #2a4365);
+            --sidebar-text: #e2e8f0;
+            --card-bg: #2d3748;
+            --card-border: #4a5568;
+            --table-header-bg: #2d3748;
+            --table-border: #4a5568;
+            --secondary-text: #a0aec0;
+            --button-bg: #4fd1c5;
+            --button-hover: #38b2ac;
+            --status-hazir: #48bb78;
+            --status-hazirlanıyor: #f6ad55;
+            --status-iptal: #e53e3e;
+            --status-on-the-way: #ecc94b;
+            --status-pending: #f6ad55;
+            --status-bilinmeyen: #6b7280;
+            --rating-color: #ecc94b;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            --modal-bg: rgba(0, 0, 0, 0.8);
+        }
+
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-height: 100vh;
+            color: var(--text-color);
+            transition: var(--transition);
+        }
+
+        .notification.success {
+            border-left: 4px solid var(--status-hazir);
+        }
+
+        .notification.error {
+            border-left: 4px solid var(--status-iptal);
+        }
+
+        .notification span {
+            color: var(--text-color);
+            font-size: 14px;
+        }
+
+        .notification .close-btn {
+            background: none;
+            border: none;
+            color: var(--secondary-text);
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .hamburger-btn {
+            display: none;
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1001;
+            background: var(--button-bg);
+            color: var(--sidebar-text);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-size: 18px;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+
+        .hamburger-btn:hover {
+            background: var(--button-hover);
+        }
+
+        .sidebar-overlay {
+            display: block;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--modal-bg);
+            z-index: 999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .sidebar-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .sidebar {
+            width: 260px;
+            background: var(--sidebar-bg);
+            color: var(--sidebar-text);
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: var(--transition);
+            overflow-y: auto;
+        }
+
+        .sidebar-close-btn {
+            display: none;
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: var(--sidebar-text);
+            font-size: 24px;
+            cursor: pointer;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            transition: var(--transition);
+        }
+
+        .sidebar-close-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar h2 {
+            font-size: 22px;
+            margin: 20px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .sidebar a {
+            display: flex;
+            align-items: center;
+            padding: 15px 30px;
+            text-decoration: none;
+            color: var(--sidebar-text);
+            font-size: 16px;
+            font-weight: 500;
+            transition: var(--transition);
+            border-left: 4px solid transparent;
+            cursor: pointer;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active-link {
+            background-color: var(--button-hover);
+            border-left-color: var(--sidebar-text);
+        }
+
+        .sidebar a i {
+            margin-right: 12px;
+            font-size: 18px;
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 40px;
+            flex-grow: 1;
+            background-color: var(--bg-color);
+            transition: var(--transition);
+            width: calc(100% - 260px);
+            box-sizing: border-box;
+        }
+
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .page-header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .page-header p {
+            font-size: 14px;
+            color: var(--secondary-text);
+            margin: 5px 0 0;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            margin-top: -22px;
+            margin-right: -10px;
+        }
+
+        .slider-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .slider-label {
+            font-size: 14px;
+            font-weight: bold;
+            color: var(--secondary-text);
+            white-space: nowrap;
+            line-height: 1;
+            margin-left: 17px;
+        }
+
+        .slider-label-close {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--status-iptal);
+        }
+
+        .slider-label-open {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--status-hazir);
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--status-iptal);
+            transition: .4s;
+            border-radius: 15px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: var(--status-hazir);
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(30px);
+        }
+
+        .theme-toggle {
+            background-color: var(--button-bg);
+            color: var(--sidebar-text);
+            border: none;
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            height: 30px;
+            line-height: 1;
+        }
+
+        .theme-toggle:hover {
+            background-color: var(--button-hover);
+        }
+
+        .theme-toggle .sun,
+        .theme-toggle .moon {
+            font-size: 18px;
+            transition: opacity 0.3s;
+        }
+
+        .theme-toggle .sun.active,
+        .theme-toggle .moon.active {
+            opacity: 1;
+        }
+
+        .theme-toggle .sun:not(.active),
+        .theme-toggle .moon:not(.active) {
+            opacity: 0.3;
+        }
+
+        .content-section {
+            background-color: var(--card-bg);
+            padding: 25px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            border: 1px solid var(--card-border);
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-header h2 {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin: 0;
+        }
+
+        .search-bar {
+            position: relative;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        .search-bar input {
+            width: 100%;
+            padding: 10px 40px 10px 15px;
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .search-bar input:focus {
+            outline: none;
+            border-color: var(--button-bg);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .search-bar::before {
+            content: '\f002';
+            font-family: 'Font Awesome 5 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--secondary-text);
+        }
+
+        .filter-bar {
+            max-width: 200px;
+            width: 100%;
+        }
+
+        .filter-bar select {
+            width: 100%;
+            padding: 10px 15px;
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            font-size: 14px;
+            transition: var(--transition);
+        }
+
+        .filter-bar select:focus {
+            outline: none;
+            border-color: var(--button-bg);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            max-height: calc(95vh - 350px);
+            position: relative;
+        }
+
+        .menu-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background-color: var(--card-bg);
+        }
+
+        .menu-table thead {
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+
+        .menu-table th,
+        .menu-table td {
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid var(--table-border);
+            transition: var(--transition);
+        }
+
+        .menu-table th {
+            background: var(--table-header-bg);
+            color: var(--text-color);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 13px;
+        }
+
+        .menu-table td {
+            color: var(--text-color);
+        }
+
+        .menu-table th:nth-child(1),
+        .menu-table td:nth-child(1) {
+            width: 10%;
+        }
+
+        .menu-table th:nth-child(2),
+        .menu-table td:nth-child(2) {
+            width: 15%;
+        }
+
+        .menu-table th:nth-child(3),
+        .menu-table td:nth-child(3) {
+            width: 25%;
+        }
+
+        .menu-table th:nth-child(4),
+        .menu-table td:nth-child(4) {
+            width: 15%;
+        }
+
+        .menu-table th:nth-child(5),
+        .menu-table td:nth-child(5) {
+            width: 10%;
+        }
+
+        .menu-table th:nth-child(6),
+        .menu-table td:nth-child(6) {
+            width: 15%;
+        }
+
+        .menu-table th:nth-child(7),
+        .menu-table td:nth-child(7) {
+            width: 15%;
+        }
+
+        .menu-table tbody {
+            display: table-row-group;
+        }
+
+        .menu-table tbody tr {
+            display: table-row;
+            width: 100%;
+        }
+
+        .menu-table tbody::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .menu-table tbody::-webkit-scrollbar-track {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+        }
+
+        .menu-table tbody::-webkit-scrollbar-thumb {
+            background: var(--button-bg);
+            border-radius: var(--border-radius);
+        }
+
+        .menu-table tbody::-webkit-scrollbar-thumb:hover {
+            background: var(--button-hover);
+        }
+
+        .menu-table tr:hover {
+            background-color: rgba(59, 130, 246, 0.05);
+        }
+
+        .menu-table .empty-state {
+            text-align: center;
+            color: var(--secondary-text);
+            padding: 20px;
+        }
+
+        .btn-add,
+        .btn-edit,
+        .btn-delete,
+        .btn-save,
+        .btn-toggle {
+            background-color: var(--button-bg);
+            color: var(--sidebar-text);
+            border: none;
+            padding: 8px 15px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-size: 13px;
+            margin-right: 5px;
+        }
+
+        .btn-add:hover,
+        .btn-edit:hover,
+        .btn-save:hover,
+        .btn-toggle:hover {
+            background-color: var(--button-hover);
+        }
+
+        .btn-delete {
+            background-color: var(--status-iptal);
+        }
+
+        .btn-delete:hover {
+            background-color: #c53030;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            color: var(--text-color);
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            box-sizing: border-box;
+            transition: var(--transition);
+            font-size: 14px;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--button-bg);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+
+        .form-group textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .form-group .error {
+            color: var(--status-iptal);
+            font-size: 12px;
+            margin-top: 5px;
+            display: none;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: var(--modal-bg);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            margin: auto;
+            padding: 30px;
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: var(--shadow);
+            position: relative;
+            animation: modalFadeIn 0.3s ease-out;
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-content h3 {
+            color: var(--text-color);
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .modal-close-btn {
+            color: var(--secondary-text);
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .modal-close-btn:hover {
+            color: var(--text-color);
+        }
+
+        .notification-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            width: 320px;
+            z-index: 1000;
+        }
+
+        .notification {
+            background-color: var(--card-bg);
+            border-left: 4px solid var(--button-bg);
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: var(--border-radius);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            animation: slideIn 0.3s ease;
+        }
+
+        .notification.error {
+            border-left-color: var(--status-iptal);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .notification span {
+            color: var(--text-color);
+            font-size: 14px;
+        }
+
+        .notification .close-btn {
+            background: none;
+            border: none;
+            color: var(--secondary-text);
+            cursor: pointer;
+            font-size: 16px;
+            transition: var(--transition);
+        }
+
+        .notification .close-btn:hover {
+            color: var(--text-color);
+        }
+
+        @media (max-width: 1024px) {
+            .sidebar {
+                width: 220px;
+            }
+
+            .main-content {
+                margin-left: 220px;
+                padding: 30px;
+                width: calc(100% - 220px);
+            }
+
+            .page-header h1 {
+                font-size: 24px;
+            }
+
+            .section-header h2 {
+                font-size: 20px;
+            }
+
+            .header-controls {
+                gap: 15px;
+            }
+
+            .slider-container {
+                margin-top: -18px;
+                margin-right: -5px;
+            }
+
+            .search-bar {
+                max-width: 250px;
+            }
+
+            .table-container {
+                max-height: calc(100vh - 300px);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hamburger-btn {
+                display: block;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                width: 280px;
+                max-width: 80vw;
+            }
+
+            .sidebar.open {
+                transform: translateX(0);
+            }
+
+            .sidebar-close-btn {
+                display: block;
+            }
+
+            .sidebar h2 {
+                margin: 50px 20px 20px 20px;
+                font-size: 20px;
+            }
+
+            .sidebar a {
+                padding: 12px 25px;
+                font-size: 15px;
+            }
+
+            .main-content {
+                margin-left: 0;
+                padding: 80px 20px 20px 20px;
+                width: 100%;
+            }
+
+            .page-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .page-header h1 {
+                font-size: 22px;
+            }
+
+            .header-controls {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+
+            .slider-container {
+                margin-top: 0;
+                margin-right: 0;
+                order: 1;
+            }
+
+            .theme-toggle {
+                order: 2;
+            }
+
+            .search-bar,
+            .filter-bar {
+                max-width: 100%;
+            }
+
+            .menu-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .menu-table thead {
+                display: none;
+            }
+
+            .menu-table tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid var(--table-border);
+                border-radius: var(--border-radius);
+                padding: 10px;
+            }
+
+            .menu-table td {
+                display: flex;
+                justify-content: space-between;
+                border-bottom: none;
+                padding: 8px 10px;
+            }
+
+            .menu-table td::before {
+                content: attr(data-label);
+                font-weight: 600;
+                color: var(--secondary-text);
+                margin-right: 10px;
+                flex: 0 0 40%;
+            }
+
+            .table-container {
+                max-height: calc(100vh - 280px);
+            }
+
+            .modal-content {
+                width: 95%;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hamburger-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 16px;
+                top: 15px;
+                left: 15px;
+            }
+
+            .sidebar {
+                width: 260px;
+                max-width: 85vw;
+            }
+
+            .sidebar h2 {
+                font-size: 18px;
+                margin: 45px 15px 15px 15px;
+            }
+
+            .sidebar a {
+                padding: 10px 20px;
+                font-size: 14px;
+            }
+
+            .main-content {
+                padding: 70px 15px 15px 15px;
+            }
+
+            .page-header h1 {
+                font-size: 20px;
+            }
+
+            .section-header h2 {
+                font-size: 18px;
+            }
+
+            .btn-add,
+            .btn-edit,
+            .btn-delete,
+            .btn-save,
+            .btn-toggle {
+                padding: 8px 12px;
+                font-size: 12px;
+            }
+
+            .notification-container {
+                width: 280px;
+                right: 10px;
+                top: 15px;
+            }
+
+            .table-container {
+                max-height: calc(100vh - 250px);
+            }
+
+            .modal-content h3 {
+                font-size: 20px;
+            }
+
+            .modal-content {
+                padding: 15px;
+            }
+
+            .slider-container {
+                gap: 6px;
+            }
+
+            .slider-label,
+            .slider-label-close,
+            .slider-label-open {
+                font-size: 12px;
+            }
+
+            .switch {
+                width: 50px;
+                height: 26px;
+            }
+
+            .slider:before {
+                height: 22px;
+                width: 22px;
+                left: 2px;
+                bottom: 2px;
+            }
+
+            input:checked+.slider:before {
+                transform: translateX(26px);
+            }
+        }
+    </style>
+
+
+
+</head>
+
+<body>
+    <button class="hamburger-btn" onclick="toggleSidebar()">
+        <i class="fas fa-bars"></i>
+    </button>
+    <div class="sidebar-overlay" onclick="closeSidebar()"></div>
+
+    <div class="sidebar" id="sidebar">
+        <button class="sidebar-close-btn" onclick="closeSidebar()">×</button>
+        <h2><%= restaurant?.name || "Restoran Adı" %></h2>
+        <a href="/restaurant/dashboard" class="menu-item">
+            <i class="fas fa-home"></i> Ana Sayfa
+        </a>
+        <a href="/restaurant/rest_orders" class="menu-item">
+            <i class="fas fa-clipboard-list"></i> Tüm Siparişler
+        </a>
+        <a href="/restaurant/rest_menu" class="menu-item active-link">
+            <i class="fas fa-edit"></i> Menü Yönetimi
+        </a>
+        <a href="/restaurant/rest_comments" class="menu-item">
+            <i class="fas fa-star"></i> Müşteri Yorumları
+        </a>
+        <a href="/restaurant/rest_reports" class="menu-item">
+            <i class="fas fa-chart-bar"></i> Satış Raporları
+        </a>
+        <a href="/restaurant/rest_info" class="menu-item">
+            <i class="fas fa-info-circle"></i> Restoran Bilgileri
+        </a>
+        <a href="/restaurant/rest_settings" class="menu-item">
+            <i class="fas fa-cog"></i> Ayarlar
+        </a>
+        <a href="#" onclick="logout(); return false;" class="menu-item">
+            <i class="fas fa-sign-out-alt"></i> Çıkış Yap
+        </a>
+    </div>
+
+    <div class="main-content">
+        <div class="page-header">
+            <div>
+                <h1 class="page-title">Menü Yönetimi</h1>
+                <p class="page-subtitle">Restoranınızın menüsünü buradan düzenleyebilirsiniz.</p>
+            </div>
+            <div class="header-controls">
+                <div class="slider-container">
+                    <span class="slider-label">Restoran</span>
+                    <div class="slider-wrapper">
+                        <span class="slider-label-close">Kapat</span>
+                        <div class="switch">
+                            <input type="checkbox" id="restaurant-status" <%= restaurant?.delivery?.case === 'open' ? 'checked' : '' %>>
+                            <label class="slider" for="restaurant-status"></label>
+                        </div>
+                        <span class="slider-label-open">Aç</span>
+                    </div>
+                </div>
+                <button class="theme-toggle">
+                    <i class="fas fa-sun sun active"></i>
+                    <i class="fas fa-moon moon"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="content-section">
+            <div class="section-header">
+                <h2>Mevcut Menüler</h2>
+                <div class="search-bar">
+                    <input type="text" id="searchInput" placeholder="Ürün adına göre ara...">
+                </div>
+                <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                    <div class="filter-bar">
+                        <select id="availabilityFilter">
+                            <option value="all">Tümü</option>
+                            <option value="available">Stokta Var</option>
+                            <option value="unavailable">Stokta Yok</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn-add" onclick="openAddModal()">Yeni Menü Ekle</button>
+            </div>
+
+            <div class="table-container">
+                <table class="menu-table">
+                    <thead>
+                        <tr>
+                            <th>Resim</th>
+                            <th>Ürün Adı</th>
+                            <th>Açıklama</th>
+                            <th>Kategori</th>
+                            <th>Fiyat</th>
+                            <th>Stok Durumu</th>
+                            <th>İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (meals.length === 0) { %>
+                            <tr>
+                                <td colspan="7" class="empty-state">Henüz menü öğesi eklenmemiş</td>
+                            </tr>
+                        <% } else { %>
+                            <% meals.forEach(meal => { %>
+                                <tr data-meal-id="<%= meal._id %>">
+                                    <td data-label="Resim">
+                                        <img src="<%= meal.imageUrl || '/Uploads/default-meal.jpg' %>" alt="<%= meal.name %>" style="width: 50px; height: 50px; object-fit: cover; border-radius: var(--border-radius);">
+                                    </td>
+                                    <td data-label="Ürün Adı"><%= meal.name %></td>
+                                    <td data-label="Açıklama"><%= meal.description || 'Açıklama yok' %></td>
+                                    <td data-label="Kategori"><%= meal.category %></td>
+                                    <td data-label="Fiyat"><%= meal.price.toFixed(2) %> TL</td>
+                                    <td data-label="Stok Durumu">
+                                        <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                                            <span>Yok</span>
+                                            <label class="switch">
+                                                <input type="checkbox" <%= meal.available ? 'checked' : '' %> onchange="toggleStockStatus('<%= meal._id %>')">
+                                                <span class="slider"></span>
+                                            </label>
+                                            <span>Var</span>
+                                        </div>
+                                    </td>
+                                    <td data-label="İşlemler">
+                                        <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+                                            <button type="button" class="btn-edit" onclick="openEditModal('<%- encodeURIComponent(JSON.stringify(meal)) %>')">Düzenle</button>
+                                            <form action="/restaurant/meal/delete/<%= meal._id %>?force=true" method="POST" onsubmit="handleDeleteSubmit(event, '<%= meal._id %>')">
+                                                <button type="submit" class="btn-delete">Sil</button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="addMealModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close-btn" onclick="closeAddModal()">×</span>
+                <h3>Yeni Menü Öğesi Ekle</h3>
+                <form id="addMealForm" action="/restaurant/meal/add" method="POST" enctype="multipart/form-data" onsubmit="handleAddSubmit(event)">
+                    <div class="form-group">
+                        <label for="add-name">Ürün Adı</label>
+                        <input type="text" name="name" id="add-name" required>
+                        <p class="error" data-error="name">Ürün adı gerekli.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-description">Açıklama</label>
+                        <textarea name="description" id="add-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-category">Kategori</label>
+                        <input type="text" name="category" id="add-category" required>
+                        <p class="error" data-error="category">Kategori gerekli.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-price">Fiyat (TL)</label>
+                        <input type="number" name="price" id="add-price" step="0.01" min="0" required>
+                        <p class="error" data-error="price">Fiyat gerekli ve sayı olmalı.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="add-image">Resim</label>
+                        <input type="file" name="image" id="add-image" accept="image/*">
+                        <p class="error" data-error="image">Geçerli bir resim dosyası seçin.</p>
+                    </div>
+                    <div class="form-group" style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button type="button" class="btn-delete" onclick="closeAddModal()">İptal</button>
+                        <button type="submit" class="btn-save">Ekle</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="editMealModal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close-btn" onclick="closeEditModal()">×</span>
+                <h3>Menü Öğesi Düzenle</h3>
+                <form id="editMealForm" method="POST" enctype="multipart/form-data" onsubmit="handleEditSubmit(event)">
+                    <input type="hidden" name="mealId" id="edit-meal-id">
+                    <input type="hidden" name="available" id="edit-available">
+                    <div class="form-group">
+                        <label for="edit-name">Ürün Adı</label>
+                        <input type="text" name="name" id="edit-name" required>
+                        <p class="error" data-error="name">Ürün adı gerekli.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-description">Açıklama</label>
+                        <textarea name="description" id="edit-description" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-category">Kategori</label>
+                        <input type="text" name="category" id="edit-category" required>
+                        <p class="error" data-error="category">Kategori gerekli.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-price">Fiyat (TL)</label>
+                        <input type="number" name="price" id="edit-price" step="0.01" required>
+                        <p class="error" data-error="price">Fiyat gerekli ve sayı olmalı.</p>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-image">Resim</label>
+                        <input type="file" name="image" id="edit-image" accept="image/*">
+                        <p class="error" data-error="image">Geçerli bir resim dosyası seçin.</p>
+                    </div>
+                    <div class="form-group" style="display: flex; justify-content: flex-end; gap: 10px;">
+                        <button type="button" class="btn-delete" onclick="closeEditModal()">İptal</button>
+                        <button type="submit" class="btn-save">Kaydet</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="notification-container"></div>
+    </div>
+
+    <script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+        }
+
+        function showNotification(message, type = 'success') {
+            const container = document.querySelector('.notification-container');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `<span>${message}</span><button class="close-btn"><i class="fas fa-times"></i></button>`;
+            container.appendChild(notification);
+            notification.querySelector('.close-btn').onclick = () => {
+                notification.style.display = 'none';
+                notification.remove();
+            };
+            setTimeout(() => {
+                notification.style.display = 'none';
+                notification.remove();
+            }, 3000);
+        }
+
+
+async function toggleStockStatus(mealId) {
+    const checkbox = document.querySelector(`tr[data-meal-id="${mealId}"] input[type="checkbox"]`);
+    const available = checkbox.checked;
+    const stockCell = checkbox.closest('td');
+    const yokSpan = stockCell.querySelector('span:first-child');
+    const varSpan = stockCell.querySelector('span:last-child');
+
+    if (yokSpan) yokSpan.style.display = 'inline';
+    if (varSpan) varSpan.style.display = 'inline';
+
+    try {
+        const response = await fetch(`/restaurant/meal/toggle/${mealId}?force=true`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ available }),
+            credentials: 'include'
+        });
+
+        const data = await response.json();
+        if (!response.ok) {
+            showNotification(data.error || 'Stok durumu güncellenemedi.', 'error');
+            checkbox.checked = !available;
+            return;
+        }
+
+        showNotification(data.message || 'Stok durumu güncellendi.', 'success');
+        filterTable();
+    } catch (err) {
+        console.error("Stok güncelleme hatası:", err);
+        showNotification("Stok durumu güncellenemedi.", 'error');
+        checkbox.checked = !available;
+    }
+}
+
+
+        function openAddModal() {
+            document.getElementById('addMealForm').reset();
+            document.getElementById('add-category').value = '';
+            document.querySelectorAll('#addMealForm .error').forEach(p => p.style.display = 'none');
+            document.getElementById('addMealModal').style.display = 'flex';
+        }
+
+        function closeAddModal() {
+            document.getElementById('addMealModal').style.display = 'none';
+            document.getElementById('addMealForm').reset();
+            document.getElementById('add-category').value = '';
+            document.querySelectorAll('#addMealForm .error').forEach(p => p.style.display = 'none');
+        }
+
+        async function handleAddSubmit(event) {
+            event.preventDefault();
+            document.querySelectorAll('#addMealForm .error').forEach(p => p.style.display = 'none');
+            const formData = new FormData(event.target);
+
+            let hasError = false;
+            const name = formData.get('name')?.trim();
+            const price = parseFloat(formData.get('price'));
+            const category = formData.get('category')?.trim();
+            const image = formData.get('image');
+            const description = formData.get('description')?.trim() || '';
+
+            if (!name) {
+                document.querySelector('#addMealForm [data-error="name"]').style.display = 'block';
+                hasError = true;
+            }
+            if (isNaN(price) || price < 0) {
+                document.querySelector('#addMealForm [data-error="price"]').style.display = 'block';
+                hasError = true;
+            }
+            if (!category) {
+                document.querySelector('#addMealForm [data-error="category"]').style.display = 'block';
+                hasError = true;
+            }
+            if (image && image.size > 0 && !image.type.startsWith('image/')) {
+                document.querySelector('#addMealForm [data-error="image"]').style.display = 'block';
+                hasError = true;
+            }
+            if (hasError) return;
+
+            try {
+                const response = await fetch('/restaurant/meal/add', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    showNotification(errorData.error || 'Yemek eklenirken bir hata oluştu', 'error');
+                    return;
+                }
+
+                const result = await response.json();
+                showNotification('Menü öğesi başarıyla eklendi!');
+                closeAddModal();
+
+                const tableBody = document.querySelector('.menu-table tbody');
+                const emptyRow = tableBody.querySelector('.empty-state');
+                if (emptyRow) {
+                    emptyRow.parentElement.remove();
+                }
+                const newRow = document.createElement('tr');
+                newRow.setAttribute('data-meal-id', result.mealId);
+                newRow.innerHTML = `
+                    <td data-label="Resim"><img src="${result.imageUrl || '/Uploads/default-meal.jpg'}" alt="${name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: var(--border-radius);"></td>
+                    <td data-label="Ürün Adı">${name}</td>
+                    <td data-label="Açıklama">${description || 'Açıklama yok'}</td>
+                    <td data-label="Kategori">${category}</td>
+                    <td data-label="Fiyat">${price.toFixed(2)} TL</td>
+                    <td data-label="Stok Durumu">
+                        <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                            <span>Yok</span>
+                            <label class="switch">
+                                <input type="checkbox" checked onchange="toggleStockStatus('${result.mealId}')">
+                                <span class="slider"></span>
+                            </label>
+                            <span>Var</span>
+                        </div>
+                    </td>
+                    <td data-label="İşlemler">
+                        <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+                            <button type="button" class="btn-edit" onclick="openEditModal('${encodeURIComponent(JSON.stringify({ _id: result.mealId, name, price, category, description, imageUrl: result.imageUrl || '/Uploads/default-meal.jpg', available: true }))}')">Düzenle</button>
+                            <form action="/restaurant/meal/delete/${result.mealId}?force=true" method="POST" onsubmit="handleDeleteSubmit(event, '${result.mealId}')">
+                                <button type="submit" class="btn-delete">Sil</button>
+                            </form>
+                        </div>
+                    </td>
+                `;
+                tableBody.appendChild(newRow);
+                document.getElementById('searchInput').value = '';
+                filterTable();
+            } catch (error) {
+                console.error('Add meal error:', error);
+                showNotification('Yemek eklenirken bir hata oluştu', 'error');
+            }
+        }
+
+
+
+        async function handleDeleteSubmit(event, mealId) {
+    event.preventDefault();
+    if (!confirm('Bu menü öğesini silmek istediğinizden emin misiniz? Aktif siparişlerde olsa bile silinecek.')) {
+        return;
+    }
+
+    try {
+        const response = await fetch(`/restaurant/meal/delete/${mealId}?force=true`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            credentials: 'include'
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            showNotification(errorData.error || 'Yemek silinirken bir hata oluştu', 'error');
+            return;
+        }
+
+        showNotification('Menü öğesi başarıyla silindi!');
+        const row = document.querySelector(`tr[data-meal-id="${mealId}"]`);
+        if (row) {
+            row.remove();
+        }
+
+        const tableBody = document.querySelector('.menu-table tbody');
+        if (tableBody.children.length === 0) {
+            const emptyRow = document.createElement('tr');
+            emptyRow.innerHTML = '<td colspan="7" class="empty-state">Henüz menü öğesi eklenmemiş</td>';
+            tableBody.appendChild(emptyRow);
+        }
+        filterTable();
+    } catch (error) {
+        console.error('Delete meal error:', error);
+        showNotification('Yemek silinirken bir hata oluştu', 'error');
+    }
+}
+
+
+        function openEditModal(encodedMeal) {
+            const meal = JSON.parse(decodeURIComponent(encodedMeal));
+            document.getElementById('edit-meal-id').value = meal._id;
+            document.getElementById('edit-name').value = meal.name;
+            document.getElementById('edit-price').value = meal.price;
+            document.getElementById('edit-category').value = meal.category || '';
+            document.getElementById('edit-description').value = meal.description || '';
+            document.getElementById('edit-available').value = meal.available ? 'true' : 'false';
+            document.getElementById('edit-image').value = '';
+            document.getElementById('editMealForm').action = `/restaurant/meal/edit/${meal._id}`;
+            document.querySelectorAll('#editMealForm .error').forEach(p => p.style.display = 'none');
+            document.getElementById('editMealModal').style.display = 'flex';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editMealModal').style.display = 'none';
+            document.getElementById('editMealForm').reset();
+            document.getElementById('edit-category').value = '';
+            document.getElementById('edit-available').value = '';
+            document.querySelectorAll('#editMealForm .error').forEach(p => p.style.display = 'none');
+        }
+
+        async function handleEditSubmit(event) {
+            event.preventDefault();
+            document.querySelectorAll('#editMealForm .error').forEach(p => p.style.display = 'none');
+
+            const formData = new FormData(event.target);
+            const mealId = formData.get('mealId');
+            const name = formData.get('name')?.trim();
+            const price = parseFloat(formData.get('price'));
+            const category = formData.get('category')?.trim();
+            const image = formData.get('image');
+            const description = formData.get('description')?.trim() || '';
+            const available = formData.get('available') === 'true';
+
+            let hasError = false;
+            if (!name) {
+                document.querySelector('#editMealForm [data-error="name"]').style.display = 'block';
+                hasError = true;
+            }
+            if (isNaN(price) || price < 0) {
+                document.querySelector('#editMealForm [data-error="price"]').style.display = 'block';
+                hasError = true;
+            }
+            if (!category) {
+                document.querySelector('#editMealForm [data-error="category"]').style.display = 'block';
+                hasError = true;
+            }
+            if (image && image.size > 0 && !image.type.startsWith('image/')) {
+                document.querySelector('#editMealForm [data-error="image"]').style.display = 'block';
+                hasError = true;
+            }
+            if (hasError) return;
+
+            try {
+                const response = await fetch(event.target.action, {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'include'
+                });
+
+                const result = await response.json();
+                if (!response.ok) {
+                    showNotification(result.error || 'Yemek güncellenirken bir hata oluştu', 'error');
+                    return;
+                }
+
+                showNotification('Menü öğesi başarıyla güncellendi!');
+                closeEditModal();
+
+                const row = document.querySelector(`tr[data-meal-id="${mealId}"]`);
+                if (row) {
+                    const imageUrl = result.imageUrl || row.querySelector('img')?.src || '/Uploads/default-meal.jpg';
+                    row.innerHTML = `
+                        <td data-label="Resim"><img src="${imageUrl}" alt="${name}" style="width: 50px; height: 50px; object-fit: cover; border-radius: var(--border-radius);"></td>
+                        <td data-label="Ürün Adı">${name}</td>
+                        <td data-label="Açıklama">${description || 'Açıklama yok'}</td>
+                        <td data-label="Kategori">${category}</td>
+                        <td data-label="Fiyat">${price.toFixed(2)} TL</td>
+                        <td data-label="Stok Durumu">
+                            <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                                <span>Yok</span>
+                                <label class="switch">
+                                    <input type="checkbox" ${available ? 'checked' : ''} onchange="toggleStockStatus('${mealId}')">
+                                    <span class="slider"></span>
+                                </label>
+                                <span>Var</span>
+                            </div>
+                        </td>
+                        <td data-label="İşlemler">
+                            <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+                                <button type="button" class="btn-edit" onclick="openEditModal('${encodeURIComponent(JSON.stringify({ _id: mealId, name, price, category, description, imageUrl, available }))}')">Düzenle</button>
+                                <form action="/restaurant/meal/delete/${mealId}?force=true" method="POST" onsubmit="handleDeleteSubmit(event, '${mealId}')">
+                                    <button type="submit" class="btn-delete">Sil</button>
+                                </form>
+                            </div>
+                        </td>
+                    `;
+                }
+                filterTable();
+            } catch (error) {
+                console.error("Edit submit error:", error);
+                showNotification('Yemek güncellenirken bir hata oluştu', 'error');
+            }
+        }
+
+        function filterTable() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const availabilityFilter = document.getElementById('availabilityFilter').value;
+            const tableBody = document.querySelector('.menu-table tbody');
+            const rows = tableBody.querySelectorAll('tr:not(.empty-state)');
+            let visibleRows = [];
+
+            rows.forEach(row => {
+                const nameCell = row.querySelector('td[data-label="Ürün Adı"]');
+                const checkbox = row.querySelector('input[type="checkbox"]');
+                if (!nameCell || !checkbox) {
+                    console.warn('Skipping malformed row:', row);
+                    return;
+                }
+
+                const name = nameCell.textContent.toLowerCase();
+                const isAvailable = checkbox.checked;
+                const matchesSearch = name.includes(input);
+                const matchesAvailability = availabilityFilter === 'all' ||
+                    (availabilityFilter === 'available' && isAvailable) ||
+                    (availabilityFilter === 'unavailable' && !isAvailable);
+
+                if (matchesSearch && matchesAvailability) {
+                    visibleRows.push(row);
+                }
+            });
+
+            rows.forEach(row => row.style.display = 'none');
+            visibleRows.forEach(row => row.style.display = 'table-row');
+
+            const emptyRow = tableBody.querySelector('.empty-state');
+            if (visibleRows.length === 0 && !emptyRow) {
+                const noResultsRow = document.createElement('tr');
+                noResultsRow.innerHTML = '<td colspan="7" class="empty-state">Arama kriterlerine uygun ürün bulunamadı</td>';
+                tableBody.appendChild(noResultsRow);
+            } else if (emptyRow && visibleRows.length > 0) {
+                emptyRow.remove();
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const themeToggle = document.querySelector('.theme-toggle');
+            const sunIcon = document.querySelector('.sun');
+            const moonIcon = document.querySelector('.moon');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            const hamburgerBtn = document.querySelector('.hamburger-btn');
+
+            sidebar.classList.remove('open');
+            overlay.classList.remove('active');
+            document.getElementById('addMealModal').style.display = 'none';
+            document.getElementById('editMealModal').style.display = 'none';
+
+            themeToggle.addEventListener('click', function () {
+                document.body.classList.toggle('dark-theme');
+                sunIcon.classList.toggle('active');
+                moonIcon.classList.toggle('active');
+                localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+            });
+
+            if (localStorage.getItem('theme') === 'dark') {
+                document.body.classList.add('dark-theme');
+                sunIcon.classList.remove('active');
+                moonIcon.classList.add('active');
+            }
+
+            document.getElementById('searchInput').addEventListener('input', filterTable);
+            document.getElementById('availabilityFilter').addEventListener('change', filterTable);
+            document.getElementById('restaurant-status').addEventListener('change', toggleRestaurantStatus);
+
+            filterTable();
+
+            window.onclick = function (event) {
+                const addModal = document.getElementById('addMealModal');
+                const editModal = document.getElementById('editMealModal');
+                if (event.target === addModal) {
+                    closeAddModal();
+                }
+                if (event.target === editModal) {
+                    closeEditModal();
+                }
+                if (!sidebar.contains(event.target) && !hamburgerBtn.contains(event.target) && !overlay.contains(event.target)) {
+                    closeSidebar();
+                }
+            };
+
+            document.addEventListener('keydown', function (event) {
+                if (event.key === 'Escape') {
+                    closeAddModal();
+                    closeEditModal();
+                    closeSidebar();
+                }
+            });
+        });
+
+        async function logout() {
+            try {
+                const response = await fetch('/restaurant/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+
+                if (response.redirected || response.status === 301 || response.status === 302) {
+                    console.log('Redirecting to:', response.url);
+                    showNotification('Oturum hatası. Lütfen tekrar giriş yapın.', 'error');
+                    window.location.href = '/';
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    showNotification(data.message || 'Başarıyla çıkış yapıldı.');
+                    window.location.href = '/';
+                } else {
+                    showNotification(data.message || 'Çıkış yapılamadı.', 'error');
+                    console.error('Logout failed:', data.message);
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                showNotification('Çıkış yapılırken hata oluştu.', 'error');
+            }
+        }
+
+        async function toggleRestaurantStatus() {
+            try {
+                const checkbox = document.getElementById('restaurant-status');
+                const newStatus = checkbox.checked ? 'open' : 'closed';
+
+                const response = await fetch('/restaurant/toggle-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus }),
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    showNotification(`Restoran ${newStatus === 'open' ? 'açıldı' : 'kapatıldı'}`, 'success');
+                } else {
+                    const errorData = await response.json();
+                    showNotification(errorData.error || 'Restoran durumu değiştirilemedi.', 'error');
+                    checkbox.checked = !checkbox.checked;
+                }
+            } catch (error) {
+                console.error('Bağlantı hatası:', error);
+                showNotification('Restoran durumu değiştirilemedi.', 'error');
+                document.getElementById('restaurant-status').checked = !document.getElementById('restaurant-status').checked;
+            }
+        }
+    </script>
+</body>
+
+</html>

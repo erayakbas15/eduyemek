@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ana Sayfa - eduyemek</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="/ituyemek_logo.png" type="image/png">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'neon-blue': '#00f6ff',
+            'neon-yellow': '#ffeb3b',
+            'primary': '#667eea',
+            'primary-dark': '#5a67d8',
+            'secondary': '#764ba2',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
+            'slide-up': 'slideUp 0.8s ease-out',
+          }
+        },
+      },
+    };
+  </script>
+  <style>
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+      }
+
+      to {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.7);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .hero-gradient {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .glass-card {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .feature-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .floating-shapes {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .shape {
+      position: absolute;
+      opacity: 0.1;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .shape:nth-child(1) {
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      top: 60%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+
+    .shape:nth-child(3) {
+      bottom: 20%;
+      left: 20%;
+      animation-delay: 4s;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+    }
+
+    .scroll-indicator {
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+
+      0%,
+      20%,
+      50%,
+      80%,
+      100% {
+        transform: translateY(0);
+      }
+
+      40% {
+        transform: translateY(-10px);
+      }
+
+      60% {
+        transform: translateY(-5px);
+      }
+    }
+
+    @media (max-width: 1024px) {
+      .hero-title {
+        font-size: 3rem;
+      }
+
+      .feature-card {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-section p {
+        font-size: 1rem;
+      }
+
+      .stats-counter {
+        padding: 1.5rem;
+      }
+
+      .feature-card {
+        padding: 1.25rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-section p {
+        font-size: 0.9rem;
+      }
+
+      .btn-primary,
+      .btn-secondary {
+        padding: 0.75rem 1.5rem;
+        font-size: 0.9rem;
+      }
+
+      .stats-counter {
+        padding: 1rem;
+      }
+
+      .feature-card {
+        padding: 1rem;
+      }
+
+      .shape {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="font-sans min-h-screen text-gray-900">
+  <!-- Header -->
+  <header class="bg-white/95 backdrop-blur-md shadow-md fixed w-full top-0 z-50" id="header">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <div class="flex justify-between items-center">
+        <a href="/"
+          class="text-2xl font-bold text-gray-800 hover:text-primary transition-colors duration-300">
+          <i class="fas fa-utensils mr-2 text-orange-500"></i>eduyemek
+        </a>
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="#features"
+            class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Özellikler</a>
+          <a href="#how-it-works"
+            class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Nasıl Çalışır</a>
+          <a href="#stats"
+            class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">İstatistikler</a>
+          <a href="/faq" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">SSS</a>
+        </nav>
+        <div class="flex items-center space-x-3">
+          <a href="/account/login"
+            class="px-4 py-2 text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Giriş
+            Yap</a>
+          <a href="/account/register"
+            class="btn-primary text-white px-4 py-2 rounded-lg font-medium hover:scale-105">Kayıt Ol</a>
+        </div>
+        <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+      <div id="mobileMenu" class="md:hidden hidden mt-4 pb-4 border-t border-gray-200">
+        <div class="flex flex-col space-y-3 pt-4">
+          <a href="#features" class="text-gray-700 hover:text-primary transition-colors">Özellikler</a>
+          <a href="#how-it-works" class="text-gray-700 hover:text-primary transition-colors">Nasıl Çalışır</a>
+          <a href="#stats" class="text-gray-700 hover:text-primary transition-colors">İstatistikler</a>
+          <a href="/faq" class="text-gray-700 hover:text-primary transition-colors">SSS</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="hero-gradient min-h-screen flex items-center justify-center relative pt-16 sm:pt-20 pb-8">
+    <div class="floating-shapes hidden sm:block">
+      <div class="shape w-40 h-40 sm:w-48 sm:h-48 bg-white rounded-full"></div>
+      <div class="shape w-32 h-32 sm:w-36 sm:h-36 bg-yellow-200 rounded-full"></div>
+      <div class="shape w-20 h-20 sm:w-24 sm:h-24 bg-pink-200 rounded-full"></div>
+    </div>
+    <div class="text-center z-10 px-4 sm:px-6 max-w-4xl mx-auto">
+      <div class="animate-slide-up">
+        <h1 class="hero-title text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+          Edu'da Yemek Siparişi
+          <span class="block text-yellow-300 mt-2">Artık Çok Kolay!</span>
+        </h1>
+        <p class="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed">
+          Öğrenci dostu restoranlardan uygun fiyatlarla sipariş verin. Kampüste hızlı teslimat, güvenli ödeme ve
+          lezzetli yemekler sizi bekliyor!
+        </p>
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-8 sm:mb-12">
+          <a href="/account/register"
+            class="btn-primary text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold text-sm sm:text-base hover:scale-105">Hemen
+            Başla</a>
+          <a href="/account/login"
+            class="bg-white/20 backdrop-blur text-white border-2 border-white/30 px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold text-sm sm:text-base hover:bg-white/30">Giriş
+            Yap</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div class="glass-card p-3 sm:p-4 rounded-lg text-center">
+            <div class="text-xl sm:text-2xl font-bold text-white mb-2">10+</div>
+            <div class="text-white/80 text-xs sm:text-sm">Restoran</div>
+          </div>
+          <div class="glass-card p-3 sm:p-4 rounded-lg text-center">
+            <div class="text-xl sm:text-2xl font-bold text-white mb-2">100+</div>
+            <div class="text-white/80 text-xs sm:text-sm">Mutlu Öğrenci</div>
+          </div>
+          <div class="glass-card p-3 sm:p-4 rounded-lg text-center">
+            <div class="text-xl sm:text-2xl font-bold text-white mb-2">%30</div>
+            <div class="text-white/80 text-xs sm:text-sm">Daha Ucuz</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 scroll-indicator">
+      <div class="w-5 h-8 sm:w-6 sm:h-10 border-2 border-white/50 rounded-full flex justify-center">
+        <div class="w-1 h-2 sm:h-3 bg-white/70 rounded-full mt-2 animate-bounce"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features Section -->
+  <section id="features" class="py-12 sm:py-16 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8 sm:mb-12">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-3 sm:mb-4">Neden eduyemek?</h2>
+        <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">Öğrenci hayatını kolaylaştıran
+          özelliklerimizle tanışın</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
+        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
+            <i class="fas fa-percentage text-lg sm:text-xl text-white"></i>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Öğrenci İndirimleri</h3>
+          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">İTÜ öğrencilerine özel %30'a varan
+            indirimler. İTÜ mailinizle kayıt olun, tasarruf edin!</p>
+        </div>
+        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
+            <i class="fas fa-shipping-fast text-lg sm:text-xl text-white"></i>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Hızlı Teslimat</h3>
+          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Kampüs içi lokasyonlara hızlı teslimat.
+            Ders aralarında bile sipariş verebilirsiniz!</p>
+        </div>
+        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
+            <i class="fas fa-utensils text-lg sm:text-xl text-white"></i>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Kaliteli Yemekler</h3>
+          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Seçilmiş restoranlardan taze ve lezzetli
+            yemekler. Her damak zevkine uygun seçenekler!</p>
+        </div>
+        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
+            <i class="fas fa-credit-card text-lg sm:text-xl text-white"></i>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Güvenli Ödeme</h3>
+          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Kredi kartı, banka kartı veya dijital
+            cüzdan ile güvenli ödeme. 256-bit SSL şifreleme!</p>
+        </div>
+        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
+            <i class="fas fa-star text-lg sm:text-xl text-white"></i>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Puan Sistemi</h3>
+          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Her siparişinde ve yorum yaparak puan
+            kazan. Sadık müşteri olmak ödüllendiriliyor!</p>
+        </div>
+        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
+          <div
+            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
+            <i class="fas fa-headset text-lg sm:text-xl text-white"></i>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">7/24 Destek</h3>
+          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Herhangi bir sorunuz olduğunda 7/24
+            müşteri destek ekibimiz sizinle.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works Section -->
+  <section id="how-it-works" class="py-12 sm:py-16 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8 sm:mb-12">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-3 sm:mb-4">Nasıl Çalışır?</h2>
+        <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">Sadece 3 adımda sipariş verin,
+          keyfini çıkarın!</p>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        <div class="text-center group">
+          <div class="relative mb-4 sm:mb-6">
+            <div
+              class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-105 transition-transform duration-300">
+              <i class="fas fa-search text-xl sm:text-2xl text-white"></i>
+            </div>
+            <div
+              class="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">
+              1</div>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Restoran Seç</h3>
+          <p class="text-gray-600 text-xs sm:text-sm md:text-base">Kampüsünüze yakın restoranları keşfedin. Menüleri
+            inceleyin, yorumları okuyun ve favorinizi seçin.</p>
+        </div>
+        <div class="text-center group">
+          <div class="relative mb-4 sm:mb-6">
+            <div
+              class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-105 transition-transform duration-300">
+              <i class="fas fa-shopping-cart text-xl sm:text-2xl text-white"></i>
+            </div>
+            <div
+              class="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">
+              2</div>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Sipariş Ver</h3>
+          <p class="text-gray-600 text-xs sm:text-sm md:text-base">Yemeklerinizi seçin, sepete ekleyin. Özel notlarınızı
+            yazın ve ödeme bilgilerinizi girin.</p>
+        </div>
+        <div class="text-center group">
+          <div class="relative mb-4 sm:mb-6">
+            <div
+              class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-105 transition-transform duration-300">
+              <i class="fas fa-smile text-xl sm:text-2xl text-white"></i>
+            </div>
+            <div
+              class="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">
+              3</div>
+          </div>
+          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Keyfini Çıkar</h3>
+          <p class="text-gray-600 text-xs sm:text-sm md:text-base">Siparişinizi takip edin, kapınıza teslim alın.
+            Lezzetli yemeklerinizin tadını çıkarın!</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section id="stats" class="fi py-12 sm:py-16 hero-gradient">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-8 sm:mb-12">
+        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">Rakamlarla eduyemek</h2>
+        <p class="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto">Büyüyen topluluğumuzun bir parçası
+          olun</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div class="stats-counter text-center glass-card p-4 sm:p-5 rounded-lg">
+          <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" data-target="100">0</div>
+          <div class="text-white/80 text-xs sm:text-sm">Mutlu Müşteri</div>
+        </div>
+        <div class="stats-counter text-center glass-card p-4 sm:p-5 rounded-lg">
+          <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" data-target="10">0</div>
+          <div class="text-white/80 text-xs sm:text-sm">Partner Restoran</div>
+        </div>
+        <div class="stats-counter text-center glass-card p-4 sm:p-5 rounded-lg">
+          <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" data-target="500">0</div>
+          <div class="text-white/80 text-xs sm:text-sm">Teslim Edilen Sipariş</div>
+        </div>
+        <div class="stats-counter text-center glass-card p-4 sm:p-5 rounded-lg">
+          <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" data-target="98">0</div>
+          <div class="text-white/80 text-xs sm:text-sm">Memnuniyet Oranı</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA Section -->
+  <section class="py-12 sm:py-16 bg-gray-50">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">Hemen Başlayın!</h2>
+      <p class="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">Binlerce öğrenci gibi siz de eduyemek'in
+        ayrıcalıklarından yararlanın.</p>
+      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
+        <a href="/account/register"
+          class="btn-primary text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold text-sm sm:text-base hover:scale-105">Ücretsiz
+          Kayıt Ol</a>
+        <a href="/faq"
+          class="bg-white border-2 border-primary text-primary px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold text-sm sm:text-base hover:bg-primary hover:text-white">Daha
+          Fazla Bilgi</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 text-white py-12">
+    <div class="max-w-7xl mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div class="md:col-span-2">
+          <div class="flex items-center mb-4">
+            <i class="fas fa-utensils text-2xl text-orange-500 mr-2"></i>
+            <span class="text-2xl font-bold">eduyemek</span>
+          </div>
+          <p class="text-gray-300 mb-4 leading-relaxed">
+            İTÜ öğrencileri için özel olarak tasarlanan yemek sipariş platformu. Uygun fiyatlar, hızlı teslimat ve
+            kaliteli hizmet.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">Hızlı Bağlantılar</h3>
+          <ul class="space-y-2">
+            <li><a href="/account/login" class="text-gray-300 hover:text-primary transition-colors">Giriş Yap</a></li>
+            <li><a href="/account/register" class="text-gray-300 hover:text-primary transition-colors">Kayıt Ol</a></li>
+            <li><a href="/faq" class="text-gray-300 hover:text-primary transition-colors">SSS</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-4">İletişim</h3>
+          <ul class="space-y-2 text-gray-300">
+            <li class="flex items-center">
+              <i class="fas fa-map-marker-alt mr-2 text-primary"></i> İTÜ Ayazağa Kampüsü
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-envelope mr-2 text-primary"></i>
+              <a href="mailto:ituyemek1515@gmail.com" class="hover:text-primary">ituyemek1515@gmail.com</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
+        <p>© 2025 İTÜ Yemek. Tüm hakları saklıdır.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const menu = document.getElementById('mobileMenu');
+      menu.classList.toggle('hidden');
+    }
+
+    window.addEventListener('scroll', () => {
+      const header = document.getElementById('header');
+      header.classList.toggle('bg-white/98', window.scrollY > 100);
+      header.classList.toggle('bg-white/95', window.scrollY <= 100);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const mobileMenu = document.getElementById('mobileMenu');
+          if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+          }
+        }
+      });
+    });
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const counters = document.querySelectorAll('.stats-counter [data-target]');
+      const speed = 200;
+
+      const animateCounter = (counter) => {
+        const target = +counter.getAttribute('data-target');
+        const count = +counter.innerText;
+        const increment = target / speed;
+        if (count < target) {
+          counter.innerText = Math.ceil(count + increment);
+          setTimeout(() => animateCounter(counter), 10);
+        } else {
+          counter.innerText = target.toLocaleString('tr-TR');
+        }
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const counter = entry.target.querySelector('[data-target]');
+              if (counter && !counter.classList.contains('counted')) {
+                counter.classList.add('counted');
+                animateCounter(counter);
+              }
+            }
+          });
+        },
+        { threshold: 0.5 }
+      );
+
+      document.querySelectorAll('.stats-counter').forEach((section) => {
+        observer.observe(section);
+      });
+    });
+  </script>
+</body>
+
+</html>

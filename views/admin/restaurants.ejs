@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İTÜYEMEK - Restoran Yönetimi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/ituyemek_logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .sidebar-link:hover {
+            transform: translateX(5px);
+        }
+
+        .modal-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 1000;
+            }
+
+            #sidebar.open {
+                transform: translateX(0);
+            }
+
+            .responsive-table td {
+                display: block;
+                text-align: left;
+                padding: 0.5rem 1rem;
+            }
+
+            .responsive-table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: inline-block;
+                width: 40%;
+                vertical-align: top;
+            }
+
+            .responsive-table thead {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 font-sans antialiased">
+    <div class="flex min-h-screen">
+        <!-- Hamburger Menu Button (Mobile Only) -->
+        <button id="toggleSidebar"
+            class="md:hidden fixed top-4 left-4 z-10 opacity-75 p-2 bg-blue-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Menüyü Aç/Kapat">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                </path>
+            </svg>
+        </button>
+
+        <!-- Sidebar -->
+        <div id="sidebar"
+            class="fixed top-0 left-0 w-64 h-full bg-white shadow-lg p-6 flex flex-col justify-between border-r border-gray-200 transform -translate-x-full transition-transform duration-300 z-40 md:translate-x-0 md:relative md:transform-none">
+            <!-- Close Button (Mobile Only) -->
+            <button id="closeSidebar" class="absolute top-4 right-4 text-2xl text-gray-700 focus:outline-none md:hidden"
+                aria-label="Menüyü Kapat">
+                ×
+            </button>
+
+            <div>
+                <div class="text-center mb-10">
+                    <h1 class="text-3xl font-extrabold text-blue-700 tracking-tight">İTÜYEMEK</h1>
+                    <p class="text-sm text-gray-500 mt-1">Yönetim Paneli</p>
+                </div>
+
+                <nav>
+                    <a href="/admin/dashboard"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                            </path>
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="/admin/users"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h-5m-11 0h11v-3a3 3 0 016 0v3h2a2 2 0 012 2V5a2 2 0 01-2-2H5a2 2 0 01-2 2v14a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Kullanıcılar
+                    </a>
+                    <a href="/admin/restaurants"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-white bg-blue-600 hover:bg-blue-700 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                        </svg>
+                        Restoranlar
+                    </a>
+                    <a href="/admin/meals"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19.428 15.428a2 2 0 00-2.856-2.856l-3.353 3.353a2 2 0 002.856 2.856l3.353-3.353zm0 0L21 21m-1-1l-3.353-3.353m-12.87 1.84a2 2 0 002.856 2.856l3.353-3.353a2 2 0 00-2.856-2.856L3 14.87z">
+                            </path>
+                        </svg>
+                        Menü Yönetimi
+                    </a>
+                    <a href="/admin/orders"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M17 12h.01">
+                            </path>
+                        </svg>
+                        Siparişler
+                    </a>
+                </nav>
+            </div>
+
+            <div class="mt-8">
+                <a href="/" onclick="logout()"
+                    class="flex items-center justify-center w-full py-3 px-4 rounded-lg bg-red-500 text-white hover:bg-red-600 font-medium transition duration-200 ease-in-out text-sm"
+                    aria-label="Çıkış Yap">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                    Çıkış Yap
+                </a>
+            </div>
+        </div>
+
+        <main class="flex-1 overflow-y-auto p-4 md:p-8">
+            <h3 class="text-3xl font-extrabold text-gray-900 mb-8">Restoran Yönetimi</h3>
+
+            <div class="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-200 mb-6 md:mb-8">
+                <button id="addRestaurantBtn"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 transition duration-200 w-full sm:w-auto flex items-center justify-center mb-4"
+                    aria-label="Yeni Restoran Ekle">
+                    Yeni Restoran Ekle
+                </button>
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full">
+                    <div class="flex flex-col sm:flex-row items-center gap-3 w-full">
+                        <div class="flex items-center w-full sm:w-auto">
+                            <label for="statusFilter" class="text-gray-700 font-medium w-20 sm:w-auto">Durum:</label>
+                            <select id="statusFilter"
+                                class="w-full sm:w-40 border border-gray-300 p-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                                <option value="all">Tüm Durumlar</option>
+                                <option value="active">Aktif</option>
+                                <option value="inactive">Pasif</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center w-full sm:flex-1">
+                            <input type="text" id="searchInput" placeholder="Restoran adı veya adres ara..."
+                                class="flex-1 border border-gray-300 p-2 rounded-l-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                            <button id="searchBtn"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+                                aria-label="Restoran Ara">
+                                Ara
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 md:p-7 rounded-xl shadow-md border border-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full leading-normal responsive-table">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Restoran Adı</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Konum</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Telefon</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Restoran Sahibinin Telefonu</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Çalışma Saatleri</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Durum</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Menü Sayısı</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="restaurantTable" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+
+                <div class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <button id="prevPage"
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                        aria-label="Önceki Sayfa">
+                        Önceki Sayfa
+                    </button>
+                    <span id="pageInfo" class="text-gray-700 font-medium text-base md:text-lg"></span>
+                    <button id="nextPage"
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                        aria-label="Sonraki Sayfa">
+                        Sonraki Sayfa
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-60 modal-overlay z-50 hidden" id="newRestaurantModal">
+        <div class="bg-white p-4 sm:p-8 rounded-xl shadow-2xl w-full sm:w-11/12 md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0"
+            id="newRestaurantModalContent">
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-6 border-b pb-3">Yeni Restoran Ekle</h3>
+            <form id="newRestaurantForm" class="grid grid-cols-1 gap-y-4">
+                <div>
+                    <label for="newName" class="block text-gray-700 text-sm font-medium mb-1">Restoran Adı</label>
+                    <input type="text" id="newName" name="name"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newName">Restoran adı gerekli.</p>
+                </div>
+                <div>
+                    <label for="newDescription" class="block text-gray-700 text-sm font-medium mb-1">Açıklama</label>
+                    <textarea id="newDescription" name="description"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        rows="4"></textarea>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newDescription">Açıklama geçerli olmalı.
+                    </p>
+                </div>
+                <div>
+                    <label for="newAddress" class="block text-gray-700 text-sm font-medium mb-1">Adres</label>
+                    <input type="text" id="newAddress" name="address"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newAddress">Adres gerekli.</p>
+                </div>
+                <div>
+                    <label for="newPhone" class="block text-gray-700 text-sm font-medium mb-1">Restoran Telefonu</label>
+                    <input type="tel" id="newPhone" name="phone" pattern="[0-9\s\-\(\)]{10,15}"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newPhone">Geçerli bir telefon numarası
+                        gerekli.</p>
+                </div>
+                <div>
+                    <label for="newOwnerPhone" class="block text-gray-700 text-sm font-medium mb-1">Restoran Sahibinin
+                        Telefonu</label>
+                    <input type="tel" id="newOwnerPhone" name="ownerPhone" pattern="[0-9\s\-\(\)]{10,15}"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newOwnerPhone">Geçerli bir sahip telefon
+                        numarası gerekli.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="newOpenHour" class="block text-gray-700 text-sm font-medium mb-1">Açılış
+                            Saati</label>
+                        <input type="time" id="newOpenHour" name="openingHours.open"
+                            class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            required value="09:00">
+                        <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newOpenHour">Açılış saati gerekli.
+                        </p>
+                    </div>
+                    <div>
+                        <label for="newCloseHour" class="block text-gray-700 text-sm font-medium mb-1">Kapanış
+                            Saati</label>
+                        <input type="time" id="newCloseHour" name="openingHours.close"
+                            class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            required value="21:00">
+                        <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newCloseHour">Kapanış saati gerekli.
+                        </p>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Açık Günler</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.monday" checked
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Pazartesi
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.tuesday" checked
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Salı
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.wednesday" checked
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Çarşamba
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.thursday" checked
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Perşembe
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.friday" checked
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Cuma
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.saturday" checked
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Cumartesi
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.sunday"
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Pazar
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label for="newDeliveryCase" class="block text-gray-700 text-sm font-medium mb-1">Teslimat
+                        Durumu</label>
+                    <select id="newDeliveryCase" name="delivery.case"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                        <option value="open">Açık</option>
+                        <option value="closed">Kapalı</option>
+                    </select>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newDeliveryCase">Teslimat durumu
+                        gerekli.</p>
+                </div>
+                <div>
+                    <label for="newEstimatedTime" class="block text-gray-700 text-sm font-medium mb-1">Tahmini Teslimat
+                        Süresi</label>
+                    <input type="text" id="newEstimatedTime" name="delivery.estimatedTime"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        value="30-45 dk">
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newEstimatedTime">Geçerli bir teslimat
+                        süresi gerekli.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="newMinOrderAmount" class="block text-gray-700 text-sm font-medium mb-1">Minimum
+                            Sipariş Tutarı (₺)</label>
+                        <input type="number" id="newMinOrderAmount" name="delivery.minOrderAmount" min="0" step="0.01"
+                            class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            value="0">
+                        <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newMinOrderAmount">Geçerli bir
+                            minimum sipariş tutarı gerekli.</p>
+                    </div>
+                </div>
+                <div>
+                    <label for="newStatus" class="block text-gray-700 text-sm font-medium mb-1">Durum</label>
+                    <select id="newStatus" name="status"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                        <option value="active">Aktif</option>
+                        <option value="inactive">Pasif</option>
+                    </select>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newStatus">Durum seçimi gerekli.</p>
+                </div>
+                <div>
+                    <label for="newEmail" class="block text-gray-700 text-sm font-medium mb-1">Restoran Email</label>
+                    <input type="email" id="newEmail" name="email"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newEmail">Geçerli bir email gerekli.</p>
+                </div>
+                <div>
+                    <label for="newPassword" class="block text-gray-700 text-sm font-medium mb-1">Restoran
+                        Şifresi</label>
+                    <input type="password" id="newPassword" name="password"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required minlength="6">
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="newPassword">Şifre en az 6 karakter
+                        olmalı.</p>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" id="cancelNewRestaurant"
+                        class="bg-gray-300 text-gray-800 px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-gray-400 transition duration-200 font-semibold"
+                        aria-label="Ekleme İptal">İptal</button>
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold"
+                        aria-label="Restoran Ekle">Ekle</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-60 modal-overlay z-50 hidden" id="editRestaurantModal">
+        <div class="bg-white p-4 sm:p-8 rounded-xl shadow-2xl w-full sm:w-11/12 md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0"
+            id="editRestaurantModalContent">
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-6 border-b pb-3">Restoranı Düzenle</h3>
+            <form id="editRestaurantForm" class="grid grid-cols-1 gap-y-4">
+                <input type="hidden" name="restaurantId">
+                <div>
+                    <label for="editName" class="block text-gray-700 text-sm font-medium mb-1">Restoran Adı</label>
+                    <input type="text" id="editName" name="name"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editName">Restoran adı gerekli.</p>
+                </div>
+                <div>
+                    <label for="editDescription" class="block text-gray-700 text-sm font-medium mb-1">Açıklama</label>
+                    <textarea id="editDescription" name="description"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        rows="4"></textarea>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editDescription">Açıklama geçerli
+                        olmalı.</p>
+                </div>
+                <div>
+                    <label for="editAddress" class="block text-gray-700 text-sm font-medium mb-1">Adres</label>
+                    <input type="text" id="editAddress" name="address"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editAddress">Adres gerekli.</p>
+                </div>
+                <div>
+                    <label for="editPhone" class="block text-gray-700 text-sm font-medium mb-1">Restoran
+                        Telefonu</label>
+                    <input type="tel" id="editPhone" name="phone" pattern="[0-9\s\-\(\)]{10,15}"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editPhone">Geçerli bir telefon numarası
+                        gerekli.</p>
+                </div>
+                <div>
+                    <label for="editOwnerPhone" class="block text-gray-700 text-sm font-medium mb-1">Restoran Sahibinin
+                        Telefonu</label>
+                    <input type="tel" id="editOwnerPhone" name="ownerPhone" pattern="[0-9\s\-\(\)]{10,15}"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editOwnerPhone">Geçerli bir sahip
+                        telefon numarası gerekli.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="editOpeningHoursOpen" class="block text-gray-700 text-sm font-medium mb-1">Açılış
+                            Saati</label>
+                        <input type="time" id="editOpeningHoursOpen" name="openingHours.open"
+                            class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            required>
+                        <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editOpeningHoursOpen">Açılış saati
+                            gerekli.</p>
+                    </div>
+                    <div>
+                        <label for="editOpeningHoursClose" class="block text-gray-700 text-sm font-medium mb-1">Kapanış
+                            Saati</label>
+                        <input type="time" id="editOpeningHoursClose" name="openingHours.close"
+                            class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                            required>
+                        <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editOpeningHoursClose">Kapanış saati
+                            gerekli.</p>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-gray-700 text-sm font-medium mb-2">Açık Günler</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.monday"
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Pazartesi
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.tuesday"
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Salı
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.wednesday"
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Çarşamba
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.thursday"
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Perşembe
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.friday"
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Cuma
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.saturday"
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Cumartesi
+                        </label>
+                        <label class="flex items-center">
+                            <input type="checkbox" name="openingHours.daysOpen.sunday"
+                                class="mr-2 h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            Pazar
+                        </label>
+                    </div>
+                </div>
+                <div>
+                    <label for="editDeliveryCase" class="block text-gray-700 text-sm font-medium mb-1">Teslimat
+                        Durumu</label>
+                    <select id="editDeliveryCase" name="delivery.case"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                        <option value="open">Açık</option>
+                        <option value="closed">Kapalı</option>
+                    </select>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editDeliveryCase">Teslimat durumu
+                        gerekli.</p>
+                </div>
+                <div>
+                    <label for="editEstimatedTime" class="block text-gray-700 text-sm font-medium mb-1">Tahmini Teslimat
+                        Süresi</label>
+                    <input type="text" id="editEstimatedTime" name="delivery.estimatedTime"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editEstimatedTime">Geçerli bir teslimat
+                        süresi gerekli.</p>
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="editMinOrderAmount" class="block text-gray-700 text-sm font-medium mb-1">Minimum
+                            Sipariş Tutarı (₺)</label>
+                        <input type="number" id="editMinOrderAmount" name="delivery.minOrderAmount" min="0" step="0.01"
+                            class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                        <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editMinOrderAmount">Geçerli bir
+                            minimum sipariş tutarı gerekli.</p>
+                    </div>
+                </div>
+                <div>
+                    <label for="editStatus" class="block text-gray-700 text-sm font-medium mb-1">Durum</label>
+                    <select id="editStatus" name="status"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                        <option value="active">Aktif</option>
+                        <option value="inactive">Pasif</option>
+                    </select>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editStatus">Durum seçimi gerekli.</p>
+                </div>
+                <div>
+                    <label for="editEmail" class="block text-gray-700 text-sm font-medium mb-1">Restoran Email</label>
+                    <input type="email" id="editEmail" name="email"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="editEmail">Geçerli bir email gerekli.
+                    </p>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" id="cancelEditRestaurant"
+                        class="bg-gray-300 text-gray-800 px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-gray-400 transition duration-200 font-semibold"
+                        aria-label="Düzenlemeyi İptal Et">İptal</button>
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold"
+                        aria-label="Restoranı Kaydet">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/admin/restaurants';
+        let currentPage = 1;
+        const itemsPerPage = 6;
+
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        async function loadRestaurants(page = 1, status = 'all', search = '') {
+            try {
+                const tableBody = document.getElementById('restaurantTable');
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-6 text-gray-500">Yükleniyor...</td></tr>';
+
+                const response = await fetch(`${API_BASE_URL}?page=${page}&limit=${itemsPerPage}&status=${status}&search=${encodeURIComponent(search)}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    alert('Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
+                    window.location.href = '/account/login';
+                    return;
+                }
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        alert('Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
+                        window.location.href = '/account/login';
+                        return;
+                    }
+                    const errorData = await response.json();
+                    throw new Error(`API Hatası: ${response.status} - ${errorData.message || 'Bilinmeyen Hata'}`);
+                }
+
+                const data = await response.json();
+                tableBody.innerHTML = '';
+
+                if (data.restaurants && data.restaurants.length > 0) {
+                    data.restaurants.forEach(restaurant => {
+                        const row = document.createElement('tr');
+                        row.classList.add('hover:bg-gray-50');
+                        const statusClass = restaurant.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+
+                        row.innerHTML = `
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-800" data-label="Restoran Adı">${restaurant.name || ''}</td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-800" data-label="Konum">${restaurant.address || ''}</td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-800" data-label="Telefon">${restaurant.phone || ''}</td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-800" data-label="Restoran Sahibinin Telefonu">${restaurant.ownerPhone || ''}</td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-800" data-label="Çalışma Saatleri">
+                            ${restaurant.openingHours ? `${restaurant.openingHours.open} - ${restaurant.openingHours.close}` : ''}
+                        </td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap" data-label="Durum">
+                            <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">${restaurant.status === 'active' ? 'Aktif' : 'Pasif'}</span>
+                        </td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-800" data-label="Menü Sayısı">${restaurant.menuCount || 0}</td>
+                        <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium" data-label="İşlemler">
+                            <button class="edit-btn bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition duration-200 mr-2" data-id="${restaurant._id}" aria-label="Restoranı Düzenle">
+                                <svg class="w-4 h-4 inline-block align-text-bottom mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.232z"></path></svg>
+                                Düzenle
+                            </button>
+                            <button class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition duration-200" data-id="${restaurant._id}" aria-label="Restoranı Sil">
+                                <svg class="w-4 h-4 inline-block align-text-bottom mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                Sil
+                            </button>
+                        </td>
+                    `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-6 text-gray-500">Restoran bulunamadı.</td></tr>';
+                }
+
+                const prevBtn = document.getElementById('prevPage');
+                const nextBtn = document.getElementById('nextPage');
+                const pageInfo = document.getElementById('pageInfo');
+
+                if (data.pagination) {
+                    currentPage = data.pagination.page;
+                    const totalPages = data.pagination.pages;
+
+                    prevBtn.disabled = currentPage <= 1;
+                    nextBtn.disabled = currentPage >= totalPages;
+
+                    pageInfo.textContent = `Sayfa ${currentPage} / ${totalPages}`;
+                    prevBtn.classList.toggle('opacity-50', currentPage <= 1);
+                    prevBtn.classList.toggle('cursor-not-allowed', currentPage <= 1);
+                    nextBtn.classList.toggle('opacity-50', currentPage >= totalPages);
+                    nextBtn.classList.toggle('cursor-not-allowed', currentPage >= totalPages);
+                }
+            } catch (err) {
+                console.error('Restoran yükleme hatası:', err);
+                tableBody.innerHTML = '<tr><td colspan="8" class="text-center py-6 text-red-500">Restoranlar yüklenirken bir hata oluştu.</td></tr>';
+            }
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch('/account/user/usermain/logout', { method: 'POST', credentials: 'include' });
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    alert('Çıkış yapılamadı!');
+                }
+            } catch (error) {
+                alert('Bağlantı hatası!');
+            }
+        }
+
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('open');
+        });
+
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.remove('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (
+                sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) &&
+                e.target !== toggleBtn
+            ) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        document.getElementById('addRestaurantBtn').addEventListener('click', () => {
+            const modal = document.getElementById('newRestaurantModal');
+            const modalContent = document.getElementById('newRestaurantModalContent');
+            modal.classList.remove('hidden');
+            modalContent.classList.remove('opacity-0', 'scale-95');
+            modalContent.classList.add('opacity-100', 'scale-100');
+            document.getElementById('newRestaurantForm').reset();
+            document.querySelectorAll('#newRestaurantForm .border-red-500').forEach(el => el.classList.remove('border-red-500'));
+            document.querySelectorAll('#newRestaurantForm .text-red-500').forEach(el => el.classList.add('hidden'));
+            document.getElementById('sidebar').classList.remove('open');
+            // Set default values
+            document.getElementById('newOpenHour').value = '09:00';
+            document.getElementById('newCloseHour').value = '21:00';
+            document.getElementById('newEstimatedTime').value = '30-45 dk';
+            document.getElementById('newMinOrderAmount').value = '0';
+            document.getElementById('newDeliveryCase').value = 'open';
+            document.getElementById('newStatus').value = 'active';
+            ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].forEach(day => {
+                document.querySelector(`#newRestaurantForm [name="openingHours.daysOpen.${day}"]`).checked = true;
+            });
+            document.querySelector('#newRestaurantForm [name="openingHours.daysOpen.sunday"]').checked = false;
+        });
+
+        document.getElementById('newRestaurantForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = {
+                name: formData.get('name'),
+                description: formData.get('description'),
+                address: formData.get('address'),
+                phone: formData.get('phone'),
+                ownerPhone: formData.get('ownerPhone'),
+                email: formData.get('email'),
+                password: formData.get('password'),
+                openingHours: {
+                    open: formData.get('openingHours.open'),
+                    close: formData.get('openingHours.close'),
+                    daysOpen: {
+                        monday: formData.get('openingHours.daysOpen.monday') === 'on',
+                        tuesday: formData.get('openingHours.daysOpen.tuesday') === 'on',
+                        wednesday: formData.get('openingHours.daysOpen.wednesday') === 'on',
+                        thursday: formData.get('openingHours.daysOpen.thursday') === 'on',
+                        friday: formData.get('openingHours.daysOpen.friday') === 'on',
+                        saturday: formData.get('openingHours.daysOpen.saturday') === 'on',
+                        sunday: formData.get('openingHours.daysOpen.sunday') === 'on'
+                    }
+                },
+                delivery: {
+                    case: formData.get('delivery.case'),
+                    estimatedTime: formData.get('delivery.estimatedTime'),
+                    minOrderAmount: parseFloat(formData.get('delivery.minOrderAmount')) || 0
+                },
+                status: formData.get('status')
+            };
+
+            console.log('Form Data:', data);
+
+            let isValid = true;
+            const requiredFields = [
+                { name: 'name', errorFor: 'newName' },
+                { name: 'address', errorFor: 'newAddress' },
+                { name: 'phone', errorFor: 'newPhone' },
+                { name: 'ownerPhone', errorFor: 'newOwnerPhone' },
+                { name: 'email', errorFor: 'newEmail' },
+                { name: 'password', errorFor: 'newPassword' },
+                { name: 'openingHours.open', errorFor: 'newOpenHour' },
+                { name: 'openingHours.close', errorFor: 'newCloseHour' },
+                { name: 'delivery.case', errorFor: 'newDeliveryCase' },
+                { name: 'status', errorFor: 'newStatus' }
+            ];
+
+            requiredFields.forEach(field => {
+                const input = document.querySelector(`#newRestaurantForm [name="${field.name}"]`);
+                const errorElement = document.querySelector(`p[data-error-for="${field.errorFor}"]`);
+                const value = formData.get(field.name);
+
+                if (!input) {
+                    console.error(`Input element not found for field: ${field.name}`);
+                    isValid = false;
+                    return;
+                }
+
+                if (!value || !value.trim()) {
+                    input.classList.add('border-red-500');
+                    if (errorElement) errorElement.classList.remove('hidden');
+                    isValid = false;
+                } else if ((field.name === 'phone' || field.name === 'ownerPhone') && !/^[0-9\s\-\(\)]{10,15}$/.test(value)) {
+                    input.classList.add('border-red-500');
+                    if (errorElement) errorElement.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    input.classList.remove('border-red-500');
+                    if (errorElement) errorElement.classList.add('hidden');
+                }
+            });
+
+            if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+                document.querySelector('#newRestaurantForm [name="email"]').classList.add('border-red-500');
+                document.querySelector('p[data-error-for="newEmail"]').classList.remove('hidden');
+                isValid = false;
+            }
+            if (data.delivery.estimatedTime && !/^\d+-\d+\s*dk$/.test(data.delivery.estimatedTime)) {
+                document.querySelector('#newRestaurantForm [name="delivery.estimatedTime"]').classList.add('border-red-500');
+                document.querySelector('p[data-error-for="newEstimatedTime"]').classList.remove('hidden');
+                isValid = false;
+            }
+            if (isNaN(data.delivery.minOrderAmount) || data.delivery.minOrderAmount < 0) {
+                document.querySelector('#newRestaurantForm [name="delivery.minOrderAmount"]').classList.add('border-red-500');
+                document.querySelector('p[data-error-for="newMinOrderAmount"]').classList.remove('hidden');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                alert('Lütfen tüm gerekli alanları doğru şekilde doldurun.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}`, {
+                    method: 'POST',
+                    credentials: 'include',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const modal = document.getElementById('newRestaurantModal');
+                    const modalContent = document.getElementById('newRestaurantModalContent');
+                    modalContent.classList.remove('opacity-100', 'scale-100');
+                    modalContent.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => {
+                        modal.classList.add('hidden');
+                        e.target.reset();
+                    }, 300);
+
+                    alert('Yeni restoran başarıyla eklendi!');
+                    loadRestaurants(currentPage, document.getElementById('statusFilter').value, document.getElementById('searchInput').value);
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Restoran eklenirken bir hata oluştu.');
+                }
+            } catch (err) {
+                console.error('Restoran ekleme hatası:', err);
+                alert('Restoran eklenirken bir hata oluştu.');
+            }
+        });
+
+        document.getElementById('restaurantTable').addEventListener('click', async (e) => {
+            if (e.target.closest('.edit-btn')) {
+                const id = e.target.closest('.edit-btn').dataset.id;
+                if (!id) {
+                    console.error('Restaurant ID not found');
+                    alert('Restoran ID bulunamadı.');
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`${API_BASE_URL}/${id}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        alert(error.error || 'Restoran bilgileri yüklenirken hata oluştu');
+                        return;
+                    }
+
+                    const data = await response.json();
+                    if (!data.restaurant) {
+                        throw new Error('Restoran verisi alınamadı.');
+                    }
+
+                    const restaurant = data.restaurant;
+                    const form = document.getElementById('editRestaurantForm');
+                    form.querySelector('[name="restaurantId"]').value = restaurant._id || '';
+                    form.querySelector('[name="name"]').value = restaurant.name || '';
+                    form.querySelector('[name="description"]').value = restaurant.description || '';
+                    form.querySelector('[name="address"]').value = restaurant.address || '';
+                    form.querySelector('[name="phone"]').value = restaurant.phone || '';
+                    form.querySelector('[name="ownerPhone"]').value = restaurant.ownerPhone || '';
+                    form.querySelector('[name="email"]').value = restaurant.email || '';
+                    form.querySelector('[name="openingHours.open"]').value = restaurant.openingHours?.open || '09:00';
+                    form.querySelector('[name="openingHours.close"]').value = restaurant.openingHours?.close || '21:00';
+                    ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'].forEach(day => {
+                        form.querySelector(`[name="openingHours.daysOpen.${day}"]`).checked = restaurant.openingHours?.daysOpen?.[day] || false;
+                    });
+                    form.querySelector('[name="delivery.case"]').value = restaurant.delivery?.case || 'open';
+                    form.querySelector('[name="delivery.estimatedTime"]').value = restaurant.delivery?.estimatedTime || '30-45 dk';
+                    form.querySelector('[name="delivery.minOrderAmount"]').value = restaurant.delivery?.minOrderAmount || 0;
+                    form.querySelector('[name="status"]').value = restaurant.status || 'active';
+
+                    const modal = document.getElementById('editRestaurantModal');
+                    const modalContent = document.getElementById('editRestaurantModalContent');
+                    modal.classList.remove('hidden');
+                    modalContent.classList.remove('opacity-0', 'scale-95');
+                    modalContent.classList.add('opacity-100', 'scale-100');
+                    document.getElementById('sidebar').classList.remove('open');
+
+                    document.querySelectorAll('#editRestaurantForm .border-red-500').forEach(el => el.classList.remove('border-red-500'));
+                    document.querySelectorAll('#editRestaurantForm .text-red-500').forEach(el => el.classList.add('hidden'));
+                } catch (err) {
+                    console.error('Restoran yükleme hatası:', err);
+                    alert('Restoran bilgileri yüklenirken hata oluştu: ' + err.message);
+                }
+            }
+
+            if (e.target.closest('.delete-btn')) {
+                const id = e.target.closest('.delete-btn').dataset.id;
+                if (confirm('Restoranı silmek istediğinize emin misiniz? Bu işlem geri alınamaz!')) {
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/${id}`, {
+                            method: 'DELETE',
+                            credentials: 'include',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (!response.ok) {
+                            const error = await response.json();
+                            throw new Error(error.error || 'Restoran silinirken bir hata oluştu.');
+                        }
+
+                        alert('Restoran başarıyla silindi.');
+                        loadRestaurants(currentPage, document.getElementById('statusFilter').value, document.getElementById('searchInput').value);
+                    } catch (err) {
+                        console.error('Restoran silme hatası:', err);
+                        alert('Restoran silinirken hata oluştu: ' + err.message);
+                    }
+                }
+            }
+        });
+
+        document.getElementById('editRestaurantForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const formData = new FormData(e.target);
+            const data = {
+                name: formData.get('name'),
+                description: formData.get('description'),
+                address: formData.get('address'),
+                phone: formData.get('phone'),
+                ownerPhone: formData.get('ownerPhone'),
+                email: formData.get('email'),
+                openingHours: {
+                    open: formData.get('openingHours.open'),
+                    close: formData.get('openingHours.close'),
+                    daysOpen: {
+                        monday: formData.get('openingHours.daysOpen.monday') === 'on',
+                        tuesday: formData.get('openingHours.daysOpen.tuesday') === 'on',
+                        wednesday: formData.get('openingHours.daysOpen.wednesday') === 'on',
+                        thursday: formData.get('openingHours.daysOpen.thursday') === 'on',
+                        friday: formData.get('openingHours.daysOpen.friday') === 'on',
+                        saturday: formData.get('openingHours.daysOpen.saturday') === 'on',
+                        sunday: formData.get('openingHours.daysOpen.sunday') === 'on'
+                    }
+                },
+                delivery: {
+                    case: formData.get('delivery.case'),
+                    estimatedTime: formData.get('delivery.estimatedTime'),
+                    minOrderAmount: parseFloat(formData.get('delivery.minOrderAmount')) || 0
+                },
+                status: formData.get('status')
+            };
+            const restaurantId = formData.get('restaurantId');
+
+            let isValid = true;
+            const requiredFields = [
+                { name: 'name', errorFor: 'editName' },
+                { name: 'address', errorFor: 'editAddress' },
+                { name: 'phone', errorFor: 'editPhone' },
+                { name: 'ownerPhone', errorFor: 'editOwnerPhone' },
+                { name: 'openingHours.open', errorFor: 'editOpeningHoursOpen' },
+                { name: 'openingHours.close', errorFor: 'editOpeningHoursClose' },
+                { name: 'delivery.case', errorFor: 'editDeliveryCase' },
+                { name: 'status', errorFor: 'editStatus' }
+            ];
+
+            if (!restaurantId || !restaurantId.trim()) {
+                alert('Restoran ID eksik.');
+                return;
+            }
+
+            requiredFields.forEach(field => {
+                const input = document.querySelector(`#editRestaurantForm [name="${field.name}"]`);
+                const errorElement = document.querySelector(`p[data-error-for="${field.errorFor}"]`);
+                const value = formData.get(field.name);
+
+                if (!input) {
+                    console.error(`Input element not found for field: ${field.name}`);
+                    isValid = false;
+                    return;
+                }
+
+                if (!value || !value.trim()) {
+                    input.classList.add('border-red-500');
+                    if (errorElement) errorElement.classList.remove('hidden');
+                    isValid = false;
+                } else if ((field.name === 'phone' || field.name === 'ownerPhone') && !/^[0-9\s\-\(\)]{10,15}$/.test(value)) {
+                    input.classList.add('border-red-500');
+                    if (errorElement) errorElement.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    input.classList.remove('border-red-500');
+                    if (errorElement) errorElement.classList.add('hidden');
+                }
+            });
+
+            if (data.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) {
+                document.querySelector('#editRestaurantForm [name="email"]').classList.add('border-red-500');
+                document.querySelector('p[data-error-for="editEmail"]').classList.remove('hidden');
+                isValid = false;
+            }
+            if (data.delivery.estimatedTime && !/^\d+-\d+\s*dk$/.test(data.delivery.estimatedTime)) {
+                document.querySelector('#editRestaurantForm [name="delivery.estimatedTime"]').classList.add('border-red-500');
+                document.querySelector('p[data-error-for="editEstimatedTime"]').classList.remove('hidden');
+                isValid = false;
+            }
+            if (isNaN(data.delivery.minOrderAmount) || data.delivery.minOrderAmount < 0) {
+                document.querySelector('#editRestaurantForm [name="delivery.minOrderAmount"]').classList.add('border-red-500');
+                document.querySelector('p[data-error-for="editMinOrderAmount"]').classList.remove('hidden');
+                isValid = false;
+            }
+
+            if (!isValid) {
+                alert('Lütfen tüm gerekli alanları doğru şekilde doldurun.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/${restaurantId}`, {
+                    method: 'PUT',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const modal = document.getElementById('editRestaurantModal');
+                    const modalContent = document.getElementById('editRestaurantModalContent');
+                    modalContent.classList.remove('opacity-100', 'scale-100');
+                    modalContent.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+
+                    alert('Restoran başarıyla güncellendi!');
+                    loadRestaurants(currentPage, document.getElementById('statusFilter').value, document.getElementById('searchInput').value);
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Restoran güncellenirken hata oluştu.');
+                }
+            } catch (err) {
+                console.error('Restoran güncelleme hatası:', err);
+                alert('Restoran güncellenirken bir hata oluştu: ' + err.message);
+            }
+        });
+
+        document.getElementById('cancelNewRestaurant').addEventListener('click', () => {
+            const modal = document.getElementById('newRestaurantModal');
+            const modalContent = document.getElementById('newRestaurantModalContent');
+            modalContent.classList.remove('opacity-100', 'scale-100');
+            modalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        });
+
+        document.getElementById('cancelEditRestaurant').addEventListener('click', () => {
+            const modal = document.getElementById('editRestaurantModal');
+            const modalContent = document.getElementById('editRestaurantModalContent');
+            modalContent.classList.remove('opacity-100', 'scale-100');
+            modalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        });
+
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            currentPage = 1;
+            loadRestaurants(
+                currentPage,
+                document.getElementById('statusFilter').value,
+                document.getElementById('searchInput').value
+            );
+        });
+
+        document.getElementById('statusFilter').addEventListener('change', () => {
+            currentPage = 1;
+            loadRestaurants(
+                currentPage,
+                document.getElementById('statusFilter').value,
+                document.getElementById('searchInput').value
+            );
+        });
+
+        document.getElementById('searchInput').addEventListener('input', debounce(() => {
+            currentPage = 1;
+            loadRestaurants(
+                currentPage,
+                document.getElementById('statusFilter').value,
+                document.getElementById('searchInput').value
+            );
+        }, 300));
+
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('searchBtn').click();
+            }
+        });
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                loadRestaurants(
+                    currentPage - 1,
+                    document.getElementById('statusFilter').value,
+                    document.getElementById('searchInput').value
+                );
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            loadRestaurants(
+                currentPage + 1,
+                document.getElementById('statusFilter').value,
+                document.getElementById('searchInput').value
+            );
+        });
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                const newRestaurantModal = document.getElementById('newRestaurantModal');
+                const editRestaurantModal = document.getElementById('editRestaurantModal');
+                const newModalContent = document.getElementById('newRestaurantModalContent');
+                const editModalContent = document.getElementById('editRestaurantModalContent');
+
+                if (newRestaurantModal && !newRestaurantModal.classList.contains('hidden')) {
+                    newModalContent.classList.remove('opacity-100', 'scale-100');
+                    newModalContent.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => newRestaurantModal.classList.add('hidden'), 300);
+                }
+
+                if (editRestaurantModal && !editRestaurantModal.classList.contains('hidden')) {
+                    editModalContent.classList.remove('opacity-100', 'scale-100');
+                    editModalContent.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => editRestaurantModal.classList.add('hidden'), 300);
+                }
+
+                // Also close the sidebar if open on mobile
+                const sidebar = document.getElementById('sidebar');
+                if (sidebar.classList.contains('open')) {
+                    sidebar.classList.remove('open');
+                }
+            }
+        });
+
+        // Initial load of restaurants
+        loadRestaurants(currentPage, document.getElementById('statusFilter').value, document.getElementById('searchInput').value);
+    </script>
+</body>
+
+</html>

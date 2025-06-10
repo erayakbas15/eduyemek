@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>E-posta Doğrulama - eduyemek</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="/ituyemek_logo.png" type="image/png">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'neon-blue': '#00f6ff',
+            'neon-yellow': '#ffeb3b',
+            'primary': '#667eea',
+            'primary-dark': '#5a67d8',
+            'secondary': '#764ba2',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
+            'slide-up': 'slideUp 0.8s ease-out',
+          },
+          fontFamily: {
+            sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-15px);
+      }
+    }
+
+    @keyframes glow {
+      from {
+        box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+      }
+
+      to {
+        box-shadow: 0 0 20px rgba(102, 126, 234, 0.7);
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .floating-shapes {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .shape {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+
+    .shape:nth-child(1) {
+      width: 80px;
+      height: 80px;
+      top: 20%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .shape:nth-child(2) {
+      width: 120px;
+      height: 120px;
+      top: 60%;
+      right: 10%;
+      animation-delay: 2s;
+    }
+
+    .shape:nth-child(3) {
+      width: 60px;
+      height: 60px;
+      top: 80%;
+      left: 20%;
+      animation-delay: 4s;
+    }
+
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 10;
+      animation: slideUp 0.6s ease-out forwards;
+    }
+
+    .input-glow:focus {
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+      border-color: #667eea;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+
+    .verification-timer {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .timer-progress {
+      position: absolute;
+      top: 0;
+      left: 0;
+      height: 100%;
+      background: linear-gradient(90deg, rgba(102, 126, 234, 0.3), rgba(118, 75, 162, 0.3));
+      width: 0%;
+      transition: width 1s ease;
+    }
+
+    @media (max-width: 640px) {
+      .form-container {
+        padding: 1.5rem;
+        overflow-y: auto;
+        max-height: 80vh;
+      }
+
+      .shape {
+        display: none;
+      }
+    }
+  </style>
+</head>
+
+<body class="gradient-bg min-h-screen flex flex-col font-sans text-gray-900">
+  <div class="floating-shapes hidden sm:block">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+
+  <header class="bg-white/95 backdrop-blur-md shadow-md fixed w-[calc(100%+15px)] top-0 z-50 -left-[15px]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <div class="flex justify-between items-center">
+        <a href="/" class="text-2xl font-bold text-gray-800 hover:text-primary transition-colors duration-300">
+          <i class="fas fa-utensils mr-2 text-orange-500"></i>eduyemek
+        </a>
+        <div class="hidden sm:flex items-center space-x-3">
+          <a href="/account/login"
+            class="px-4 py-2 text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Giriş Yap</a>
+          <a href="/account/register"
+            class="btn-primary text-white px-4 py-2 rounded-lg font-medium hover:scale-105">Kayıt Ol</a>
+        </div>
+        <button class="sm:hidden text-gray-700" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+      <div id="mobileMenu" class="sm:hidden hidden mt-4 pb-4 border-t border-gray-200">
+        <div class="flex flex-col space-y-3 pt-4">
+          <a href="/account/login" class="text-gray-700 hover:text-primary transition-colors">Giriş Yap</a>
+          <a href="/account/register" class="text-gray-700 hover:text-primary transition-colors">Kayıt Ol</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow flex items-center justify-center p-4 sm:p-6">
+    <div class="form-container glass-effect p-6 sm:p-8 rounded-xl w-full max-w-md">
+      <div class="flex justify-center mb-4">
+        <div
+          class="w-12 h-12 bg-gradient-to-br from-primary to-secondary rounded-full flex items-center justify-center">
+          <i class="fas fa-envelope text-white text-lg"></i>
+        </div>
+      </div>
+
+      <div class="text-center mb-4">
+        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-2">E-posta Doğrulama</h2>
+        <p class="text-gray-600 text-sm sm:text-base">Doğrulama kodu İTÜ e-posta adresinize gönderildi</p>
+      </div>
+
+      <form id="verification-form" action="/account/register/verifycode" class="space-y-4">
+        <div class="bg-gray-50 border border-gray-200 rounded-lg p-3">
+          <div class="flex items-center space-x-2 mb-1">
+            <div class="w-2 h-2 bg-green-500 rounded-full"></div>
+            <span class="text-xs text-gray-600">Kod gönderilen e-posta:</span>
+          </div>
+          <p id="userEmail" class="font-medium text-gray-800 text-sm break-all">ornek@itu.edu.tr</p>
+        </div>
+
+        <div id="timerDisplay" class="verification-timer bg-gray-50 border border-gray-200 rounded-lg p-3 hidden">
+          <div class="timer-progress" id="timerProgress"></div>
+          <div class="flex items-center justify-between relative z-10">
+            <span class="text-xs text-gray-600">Kalan süre:</span>
+            <span id="timerText" class="font-bold text-primary text-sm">5:00</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="code" class="block text-sm font-medium text-gray-700 mb-1">Doğrulama Kodu</label>
+          <input type="text" id="code" placeholder="* * * * * *" required maxlength="6"
+            class="w-full p-3 rounded-lg border border-gray-200 bg-white/80 focus:outline-none input-glow transition-all text-gray-800 placeholder-gray-500 text-center text-base sm:text-lg font-medium tracking-widest"
+            aria-label="6 haneli doğrulama kodu" />
+        </div>
+
+        <div id="error"
+          class="text-red-600 text-xs sm:text-sm bg-red-50 border border-red-200 rounded-lg p-2 hidden flex items-center space-x-2">
+          <i class="fas fa-exclamation-circle flex-shrink-0"></i>
+          <span id="errorText"></span>
+        </div>
+
+        <div id="success"
+          class="text-green-600 text-xs sm:text-sm bg-green-50 border border-green-200 rounded-lg p-2 hidden flex items-center space-x-2">
+          <i class="fas fa-check-circle flex-shrink-0"></i>
+          <span>Doğrulama başarılı! Yönlendiriliyorsunuz...</span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <button type="submit" id="verifyBtn"
+            class="btn-primary text-white font-medium py-2.5 sm:py-3 rounded-lg flex items-center justify-center hover:scale-105 transition-all duration-300"
+            aria-label="Doğrulama kodunu gönder">
+            <span id="verifyBtnText">Doğrula</span>
+          </button>
+          <button type="button" id="resend-code"
+            class="bg-gray-100 hover:bg-gray-200 text-gray-700 font-medium py-2.5 sm:py-3 rounded-lg border border-gray-200 flex items-center justify-center space-x-2 transition-all duration-300 hover:scale-105 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            aria-label="Doğrulama kodunu tekrar gönder">
+            <i class="fas fa-redo text-sm"></i>
+            <span id="resendText">Kodu Tekrar Gönder</span>
+          </button>
+        </div>
+
+        <div class="text-center text-xs sm:text-sm text-gray-600 mt-3">
+          <p class="mb-1">Kodu alamadınız mı?</p>
+          <p class="text-gray-500">İTÜ mail sayfasını yenileyerek kontrol ediniz</p>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="max-w-7xl mx-auto px-6 text-center text-white/80 text-sm">
+      © 2025 İTÜ Yemek. Tüm hakları saklıdır.
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenu.classList.toggle('hidden');
+    }
+
+    let verificationState = {
+      timeLeft: 300,
+      timerInterval: null,
+      canResend: false,
+      attempts: 0,
+      maxAttempts: 3
+    };
+
+    const elements = {
+      form: document.getElementById('verification-form'),
+      codeInput: document.getElementById('code'),
+      errorDiv: document.getElementById('error'),
+      errorText: document.getElementById('errorText'),
+      successDiv: document.getElementById('success'),
+      verifyBtn: document.getElementById('verifyBtn'),
+      resendBtn: document.getElementById('resend-code'),
+      resendText: document.getElementById('resendText'),
+      userEmail: document.getElementById('userEmail'),
+      timerDisplay: document.getElementById('timerDisplay'),
+      timerText: document.getElementById('timerText'),
+      timerProgress: document.getElementById('timerProgress')
+    };
+
+    function init() {
+      const email = '<%= email || "" %>';
+      if (!email) {
+        showError('E-posta bulunamadı. Lütfen kayıt sayfasına geri dönün.');
+        elements.form.classList.add('hidden');
+        elements.resendBtn.classList.add('hidden');
+        return;
+      }
+
+      startTimer();
+
+      elements.codeInput.addEventListener('input', formatCodeInput);
+      elements.codeInput.addEventListener('keypress', handleKeyPress);
+      elements.form.addEventListener('submit', (e) => handleVerification(e, email));
+      elements.resendBtn.addEventListener('click', () => handleResendCode(email));
+    }
+
+    function startTimer() {
+      elements.timerDisplay.classList.remove('hidden');
+      updateTimerDisplay();
+
+      verificationState.timerInterval = setInterval(() => {
+        verificationState.timeLeft--;
+        updateTimerDisplay();
+
+        if (verificationState.timeLeft <= 0) {
+          clearInterval(verificationState.timerInterval);
+          enableResend();
+        }
+      }, 1000);
+    }
+
+    function updateTimerDisplay() {
+      const minutes = Math.floor(verificationState.timeLeft / 60);
+      const seconds = verificationState.timeLeft % 60;
+      elements.timerText.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+      const progress = ((300 - verificationState.timeLeft) / 300) * 100;
+      elements.timerProgress.style.width = `${progress}%`;
+    }
+
+    function enableResend() {
+      verificationState.canResend = true;
+      elements.resendBtn.disabled = false;
+      elements.resendText.textContent = 'Kodu Tekrar Gönder';
+      elements.timerDisplay.classList.add('hidden');
+    }
+
+    function formatCodeInput(e) {
+      let value = e.target.value.replace(/\D/g, '');
+      if (value.length > 6) value = value.slice(0, 6);
+      e.target.value = value;
+      if (value.length === 6) {
+        setTimeout(() => {
+          elements.form.dispatchEvent(new Event('submit'));
+        }, 500);
+      }
+    }
+
+    function handleKeyPress(e) {
+      if (!/\d/.test(e.key) && !['Backspace', 'Delete', 'Tab', 'Enter'].includes(e.key)) {
+        e.preventDefault();
+      }
+    }
+
+    async function handleVerification(e, email) {
+      e.preventDefault();
+      const code = elements.codeInput.value.trim();
+      if (!email) {
+        showError('E-posta bulunamadı. Lütfen kayıt sayfasına geri dönün.');
+        return;
+      }
+      if (code.length !== 6) {
+        showError('Lütfen 6 haneli doğrulama kodunu giriniz.');
+        return;
+      }
+      setLoadingState(true);
+      hideMessages();
+      try {
+        const response = await fetch('/account/register/verifycode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email, code })
+        });
+        const result = await response.json();
+        if (response.ok) {
+          showSuccess('Kayıt ve giriş başarılı! Yönlendiriliyorsunuz...');
+          setTimeout(() => {
+            window.location.href = result.redirect || '/user/usermain';
+          }, 2000);
+        } else {
+          showError(result.error || 'Doğrulama başarısız.');
+        }
+      } catch (err) {
+        showError('Sunucu hatası oluştu.');
+      } finally {
+        setLoadingState(false);
+      }
+    }
+
+    async function handleResendCode(email) {
+      if (!verificationState.canResend) return;
+      if (!email) {
+        showError('E-posta bulunamadı. Lütfen kayıt sayfasına geri dönün.');
+        return;
+      }
+      setResendLoadingState(true);
+      hideMessages();
+      try {
+        const response = await fetch('/account/register/resendcode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email })
+        });
+        const result = await response.json();
+        if (response.ok) {
+          verificationState.timeLeft = 300;
+          verificationState.canResend = false;
+          verificationState.attempts = 0;
+          elements.codeInput.disabled = false;
+          elements.verifyBtn.disabled = false;
+          elements.codeInput.value = '';
+          startTimer();
+          showSuccess('Yeni doğrulama kodu gönderildi!');
+        } else {
+          showError(result.error || 'Kod gönderilemedi.');
+        }
+      } catch (err) {
+        showError('Sunucu hatası oluştu.');
+      } finally {
+        setResendLoadingState(false);
+      }
+    }
+
+    function setLoadingState(loading) {
+      elements.verifyBtn.disabled = loading;
+      elements.verifyBtn.innerHTML = loading ? 'Doğrulanıyor...' : 'Doğrula';
+    }
+
+    function setResendLoadingState(loading) {
+      elements.resendBtn.disabled = loading;
+      elements.resendText.textContent = loading ? 'Gönderiliyor...' : 'Kodu Tekrar Gönder';
+    }
+
+    function showError(message) {
+      elements.errorText.textContent = message;
+      elements.errorDiv.classList.remove('hidden');
+      elements.successDiv.classList.add('hidden');
+    }
+
+    function showSuccess(message = 'Doğrulama başarılı! Yönlendiriliyorsunuz...') {
+      elements.successDiv.querySelector('span:last-child').textContent = message;
+      elements.successDiv.classList.remove('hidden');
+      elements.errorDiv.classList.add('hidden');
+    }
+
+    function hideMessages() {
+      elements.errorDiv.classList.add('hidden');
+      elements.successDiv.classList.add('hidden');
+    }
+
+    document.addEventListener('DOMContentLoaded', init);
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) {
+        if (verificationState.timerInterval) {
+          clearInterval(verificationState.timerInterval);
+        }
+      } else {
+        if (verificationState.timeLeft > 0 && !verificationState.canResend) {
+          startTimer();
+        }
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      header.classList.toggle('bg-white/98', window.scrollY > 100);
+      header.classList.toggle('bg-white/95', window.scrollY <= 100);
+    });
+  </script>
+</body>
+
+</html>

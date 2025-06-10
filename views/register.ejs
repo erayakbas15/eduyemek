@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Kayıt Ol - eduyemek</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" href="/ituyemek_logo.png" type="image/png">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'neon-blue': '#00f6ff',
+            'neon-yellow': '#ffeb3b',
+            'primary': '#667eea',
+            'primary-dark': '#5a67d8',
+            'secondary': '#764ba2',
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'glow': 'glow 2s ease-in-out infinite alternate',
+            'slide-up': 'slideUp 0.8s ease-out',
+          },
+          fontFamily: {
+            sans: ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Open Sans', 'Helvetica Neue', 'sans-serif'],
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+    @keyframes glow {
+      from { box-shadow: 0 0 10px rgba(102, 126, 234, 0.5); }
+      to { box-shadow: 0 0 20px rgba(102, 126, 234, 0.7); }
+    }
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .gradient-bg {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .floating-shapes {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+    .shape {
+      position: absolute;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 50%;
+      animation: float 8s ease-in-out infinite;
+    }
+    .shape:nth-child(1) { width: 80px; height: 80px; top: 20%; left: 10%; animation-delay: 0s; }
+    .shape:nth-child(2) { width: 120px; height: 120px; top: 60%; right: 10%; animation-delay: 2s; }
+    .shape:nth-child(3) { width: 60px; height: 60px; top: 80%; left: 20%; animation-delay: 4s; }
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      position: relative;
+      z-index: 10;
+      animation: slideUp 0.6s ease-out forwards;
+    }
+    .welcome-text { animation: slideUp 0.6s ease-out 0.2s forwards; }
+    .input-glow:focus {
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+      border-color: #667eea;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+    }
+    .password-toggle {
+      position: absolute;
+      right: 10px;
+      top: 52%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: #6b7280;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+    }
+    .password-toggle:hover { color: #374151; }
+    .notification {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      padding: 12px 20px;
+      border-radius: 8px;
+      color: white;
+      font-weight: 500;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 1000;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    }
+    .notification.show { transform: translateX(0); }
+    .notification.success { background: #10b981; }
+    .notification.error { background: #ef4444; }
+    .strength-meter {
+      height: 4px;
+      background: #e5e7eb;
+      border-radius: 2px;
+      margin-top: 0.5rem;
+    }
+    .strength-bar {
+      height: 100%;
+      transition: width 0.3s ease;
+      border-radius: 2px;
+    }
+    .strength-weak { background: #ef4444; width: 33%; }
+    .strength-medium { background: #f59e0b; width: 66%; }
+    .strength-strong { background: #10b981; width: 100%; }
+    @media (max-width: 640px) {
+      .form-container {
+        padding: 1.5rem;
+        overflow-y: auto;
+        max-height: 80vh;
+      }
+      .shape { display: none; }
+      header .max-w-7xl {
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body class="gradient-bg min-h-screen flex flex-col font-sans text-gray-900 overflow-y-auto">
+  <div class="floating-shapes hidden sm:block">
+    <div class="shape"></div>
+    <div class="shape"></div>
+    <div class="shape"></div>
+  </div>
+  <header class="bg-white/95 backdrop-blur-md shadow-md fixed w-[calc(100%+15px)] top-0 z-50 -left-[15px]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
+      <div class="flex justify-between items-center">
+        <a href="/"
+          class="text-2xl font-bold text-gray-800 hover:text-primary transition-colors duration-300">
+          <i class="fas fa-utensils mr-2 text-orange-500"></i>eduyemek
+        </a>
+        <div class="hidden sm:flex items-center space-x-3">
+          <a href="/account/login"
+            class="px-4 py-2 text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Giriş Yap</a>
+          <a href="/account/register"
+            class="btn-primary text-white px-4 py-2 rounded-lg font-medium hover:scale-105">Kayıt Ol</a>
+        </div>
+        <button class="sm:hidden text-gray-700" onclick="toggleMobileMenu()">
+          <i class="fas fa-bars text-xl"></i>
+        </button>
+      </div>
+      <div id="mobileMenu" class="sm:hidden hidden mt-4 pb-4 border-t border-gray-200">
+        <div class="flex flex-col space-y-3 pt-4">
+          <a href="/account/login" class="text-gray-700 hover:text-primary transition-colors">Giriş Yap</a>
+          <a href="/account/register" class="text-gray-700 hover:text-primary transition-colors">Kayıt Ol</a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="flex-grow flex items-center justify-center p-4 sm:p-6">
+    <div class="form-container glass-effect p-6 sm:p-8 rounded-xl w-full max-w-md">
+      <div class="text-center mb-6 welcome-text">
+        <h2 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-2">Kayıt Ol</h2>
+        <p class="text-gray-600 text-sm sm:text-base">İTÜ Yemek ailesine katıl!</p>
+      </div>
+      <form id="registerForm" class="space-y-4 sm:space-y-5">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label for="firstName" class="block text-sm font-medium text-gray-700 mb-1">Ad</label>
+            <input type="text" id="firstName" name="firstName" placeholder="Adınızı girin" required
+              class="w-full p-3 rounded-lg border border-gray-200 bg-white/80 focus:outline-none input-glow transition-all text-gray-800 placeholder-gray-500" />
+          </div>
+          <div>
+            <label for="lastName" class="block text-sm font-medium text-gray-700 mb-1">Soyad</label>
+            <input type="text" id="lastName" name="lastName" placeholder="Soyadınızı girin" required
+              class="w-full p-3 rounded-lg border border-gray-200 bg-white/80 focus:outline-none input-glow transition-all text-gray-800 placeholder-gray-500" />
+          </div>
+        </div>
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">İTÜ Mail Adresi</label>
+          <input type="email" id="email" name="email" placeholder="ornek@itu.edu.tr"
+            pattern="^[a-zA-Z0-9._%+\-]+@itu\.edu\.tr$" title="Lütfen sadece @itu.edu.tr uzantılı mail giriniz" required
+            class="w-full p-3 rounded-lg border border-gray-200 bg-white/80 focus:outline-none input-glow transition-all text-gray-800 placeholder-gray-500" />
+        </div>
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Şifre</label>
+          <div class="relative">
+            <input type="password" id="password" name="password" placeholder="Şifrenizi girin" required
+              class="w-full p-3 rounded-lg border border-gray-200 bg-white/80 focus:outline-none input-glow transition-all text-gray-800 placeholder-gray-500 pr-10" />
+            <button type="button" class="password-toggle" id="eyeToggleBtn" onclick="togglePasswordVisibility()">
+              <svg id="eyeIcon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
+                stroke="currentColor" class="w-5 h-5">
+                <g id="eyeOpen">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                </g>
+                <g id="eyeClosed" style="display:none;">
+                  <path stroke-linecap="round" stroke-linejoin="round"
+                    d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 11-4.243-4.243m4.242 4.242L9.88 9.88" />
+                </g>
+              </svg>
+            </button>
+          </div>
+          <div class="strength-meter">
+            <div id="strengthBar" class="strength-bar"></div>
+          </div>
+          <div class="flex justify-between text-xs mt-1 text-gray-500">
+            <span id="strengthText">Şifre gücü: Zayıf</span>
+            <span>Ninova şifrenizden bağımsızdır</span>
+          </div>
+        </div>
+        <button type="submit" id="submitBtn"
+          class="w-full btn-primary text-white font-medium py-3 rounded-lg flex items-center justify-center hover:scale-105">
+          <span id="submitText">Kayıt Ol</span>
+        </button>
+        <div class="text-center text-sm">
+          <p class="text-gray-600">
+            Zaten hesabınız var mı? <a href="/account/login"
+              class="text-primary hover:text-primary-dark font-medium">Giriş Yap</a>
+          </p>
+        </div>
+      </form>
+    </div>
+  </main>
+
+  <footer>
+    <div class="max-w-7xl mx-auto px-6 text-center text-white/80 text-sm">
+      © 2025 İTÜ Yemek. Tüm hakları saklıdır.
+    </div>
+  </footer>
+
+  <script>
+    function toggleMobileMenu() {
+      const mobileMenu = document.getElementById('mobileMenu');
+      mobileMenu.classList.toggle('hidden');
+    }
+
+    function togglePasswordVisibility() {
+      const passwordInput = document.getElementById('password');
+      const eyeOpen = document.getElementById('eyeOpen');
+      const eyeClosed = document.getElementById('eyeClosed');
+      passwordInput.type = passwordInput.type === 'password' ? 'text' : 'password';
+      eyeOpen.style.display = passwordInput.type === 'password' ? 'block' : 'none';
+      eyeClosed.style.display = passwordInput.type === 'password' ? 'none' : 'block';
+    }
+
+    function showNotification(message, type = 'success') {
+      const existingNotification = document.querySelector('.notification');
+      if (existingNotification) existingNotification.remove();
+      const notification = document.createElement('div');
+      notification.className = `notification ${type}`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+      setTimeout(() => notification.classList.add('show'), 100);
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    function checkPasswordStrength(password) {
+      let strength = 0;
+      if (password.length >= 6) strength += 1;
+      if (/[a-z]/.test(password)) strength += 1;
+      if (/[A-Z]/.test(password)) strength += 1;
+      if (/[0-9]/.test(password)) strength += 1;
+      if (/[^A-Za-z0-9]/.test(password)) strength += 1;
+      return strength;
+    }
+
+    const passwordInput = document.getElementById('password');
+    const strengthBar = document.getElementById('strengthBar');
+    const strengthText = document.getElementById('strengthText');
+
+    passwordInput.addEventListener('input', function () {
+      const strength = checkPasswordStrength(this.value);
+      strengthBar.className = 'strength-bar';
+      if (strength <= 2) {
+        strengthBar.classList.add('strength-weak');
+        strengthText.textContent = 'Şifre gücü: Zayıf';
+        strengthText.className = 'text-xs mt-1 text-red-500';
+      } else if (strength <= 4) {
+        strengthBar.classList.add('strength-medium');
+        strengthText.textContent = 'Şifre gücü: Orta';
+        strengthText.className = 'text-xs mt-1 text-yellow-500';
+      } else {
+        strengthBar.classList.add('strength-strong');
+        strengthText.textContent = 'Şifre gücü: Güçlü';
+        strengthText.className = 'text-xs mt-1 text-green-500';
+      }
+    });
+
+    function validateEmail(email) {
+      return /^[a-zA-Z0-9._%+-]+@itu\.edu\.tr$/.test(email);
+    }
+
+    document.getElementById('registerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const firstName = document.getElementById('firstName').value.trim();
+      const lastName = document.getElementById('lastName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      if (!firstName) {
+        showNotification('Ad alanı boş bırakılamaz.', 'error');
+        return;
+      }
+      if (!lastName) {
+        showNotification('Soyad alanı boş bırakılamaz.', 'error');
+        return;
+      }
+      if (!email) {
+        showNotification('E-posta alanı boş bırakılamaz.', 'error');
+        return;
+      }
+      if (!validateEmail(email)) {
+        showNotification('Lütfen geçerli bir İTÜ e-posta adresi girin.', 'error');
+        return;
+      }
+      if (checkPasswordStrength(password) < 3) {
+        showNotification('Şifre çok zayıf. Lütfen daha güçlü bir şifre seçin.', 'error');
+        return;
+      }
+
+      try {
+        const res = await fetch('/account/register/sendcode', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ firstName, lastName, email, password }),
+        });
+        const data = await res.json();
+        if (!res.ok) {
+          showNotification(data.error || 'Kayıt yapılırken hata oluştu.', 'error');
+          return;
+        }
+        showNotification(data.message || 'Doğrulama kodu gönderildi!', 'success');
+        setTimeout(() => {
+          window.location.href = `/account/register/verification?email=${encodeURIComponent(email)}`;
+        }, 1500);
+      } catch (err) {
+        showNotification('Sunucu hatası, lütfen tekrar deneyin.', 'error');
+      }
+    });
+
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      header.classList.toggle('bg-white/98', window.scrollY > 100);
+      header.classList.toggle('bg-white/95', window.scrollY <= 100);
+    });
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const targetId = this.getAttribute('href');
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const mobileMenu = document.getElementById('mobileMenu');
+          if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+            mobileMenu.classList.add('hidden');
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

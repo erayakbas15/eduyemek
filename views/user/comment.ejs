@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Yorum Yap - eduyemek</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/ituyemek_logo.png" type="image/png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <style>
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            color: #fff;
+            font-weight: 600;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.2);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(209, 213, 219, 0.3);
+            border-radius: 12px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 p-6">
+    <div class="max-w-2xl mx-auto glass-card p-6">
+        <h1 class="text-2xl font-bold text-orange-600 mb-4"><i class="fas fa-comment mr-2"></i>Yorum Yap</h1>
+        <% if (error) { %>
+            <div class="bg-red-100 text-red-800 p-3 rounded mb-4">
+                <%= error %>
+            </div>
+            <% } %>
+                <% if (success) { %>
+                    <div class="bg-green-100 text-green-800 p-3 rounded mb-4">
+                        <%= success %>
+                    </div>
+                    <% } %>
+                        <h2 class="text-xl font-semibold mb-2">
+                            <%= order.restaurantId.name %>
+                        </h2>
+                        <p class="text-gray-600 mb-4">Sipariş No: <%= order.orderNumber %>
+                        </p>
+                        <form action="/user/order/comment" method="POST">
+                            <input type="hidden" name="orderId" value="<%= order._id %>">
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Yemek
+                                    Seçin</label>
+                                <select name="mealId" class="w-full p-2 border rounded text-sm sm:text-base">
+                                    <option value="">Genel Yorum (Yemek Seçmeyin)</option>
+                                    <% order.items.forEach(item=> { %>
+                                        <option value="<%= item.mealId %>">
+                                            <%= item.name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Puan</label>
+                                <select name="rating" class="w-full p-2 border rounded text-sm sm:text-base" required>
+                                    <option value="1">1 ⭐</option>
+                                    <option value="2">2 ⭐</option>
+                                    <option value="3">3 ⭐</option>
+                                    <option value="4">4 ⭐</option>
+                                    <option value="5">5 ⭐</option>
+                                </select>
+                            </div>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-semibold mb-2 text-sm sm:text-base">Yorum</label>
+                                <textarea name="comment" rows="4" class="w-full p-2 border rounded text-sm sm:text-base"
+                                    required></textarea>
+                            </div>
+                            <button type="submit" class="btn-primary py-2 px-4 text-sm sm:text-base">Yorum
+                                Gönder</button>
+                        </form>
+    </div>
+</body>
+
+</html>

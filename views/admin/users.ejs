@@ -1,0 +1,665 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>İTÜYEMEK - Kullanıcı Yönetimi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" href="/ituyemek_logo.png" type="image/png">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+
+        .sidebar-link {
+            transition: all 0.2s ease-in-out;
+        }
+
+        .sidebar-link:hover {
+            transform: translateX(5px);
+        }
+
+        .modal-overlay {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Mobil sidebar için geçiş animasyonu */
+        #sidebar {
+            transition: transform 0.3s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            #sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                top: 0;
+                left: 0;
+                height: 100%;
+                z-index: 1000;
+            }
+
+            #sidebar.open {
+                transform: translateX(0);
+            }
+
+            /* Tablo için responsive stil */
+            .responsive-table td {
+                display: block;
+                text-align: left;
+                padding: 0.5rem 1rem;
+            }
+
+            .responsive-table td::before {
+                content: attr(data-label);
+                font-weight: bold;
+                display: inline-block;
+                width: 40%;
+                vertical-align: top;
+            }
+
+            .responsive-table thead {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-gradient-to-br from-gray-100 to-gray-200 font-sans antialiased">
+    <div class="flex min-h-screen">
+        <!-- Hamburger Menu Button (Visible on Mobile) -->
+        <button id="toggleSidebar"
+            class="md:hidden fixed top-4 left-4 z-10 opacity-75 p-2 bg-blue-600 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            aria-label="Menüyü Aç/Kapat">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                </path>
+            </svg>
+        </button>
+
+        <!-- Sidebar -->
+        <div id="sidebar"
+            class="sidebar fixed top-0 left-0 w-64 h-full bg-white shadow-lg p-6 flex flex-col justify-between border-r border-gray-200 transform -translate-x-full transition-transform duration-300 z-40 md:translate-x-0 md:relative md:transform-none">
+            <!-- Close Button (Visible on Mobile) -->
+            <button id="closeSidebar" class="absolute top-4 right-4 text-2xl text-gray-700 focus:outline-none md:hidden"
+                aria-label="Menüyü Kapat">
+                ×
+            </button>
+
+            <div>
+                <div class="text-center mb-10">
+                    <h1 class="text-3xl font-extrabold text-blue-700 tracking-tight">İTÜYEMEK</h1>
+                    <p class="text-sm text-gray-500 mt-1">Yönetim Paneli</p>
+                </div>
+                <nav>
+                    <a href="/admin/dashboard"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
+                            </path>
+                        </svg>
+                        Dashboard
+                    </a>
+                    <a href="/admin/users"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-white bg-blue-600 hover:bg-blue-700 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M17 20h-5m-11 0h11v-3a3 3 0 016 0v3h2a2 2 0 012 2V5a2 2 0 01-2-2H5a2 2 0 01-2 2v14a2 2 0 002 2z">
+                            </path>
+                        </svg>
+                        Kullanıcılar
+                    </a>
+                    <a href="/admin/restaurants"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                        </svg>
+                        Restoranlar
+                    </a>
+                    <a href="/admin/meals"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M19.428 15.428a2 2 0 00-2.856-2.856l-3.353 3.353a2 2 0 002.856 2.856l3.353-3.353zm0 0L21 21m-1-1l-3.353-3.353m-12.87 1.84a2 2 0 002.856 2.856l3.353-3.353a2 2 0 00-2.856-2.856L3 14.87z">
+                            </path>
+                        </svg>
+                        Menü Yönetimi
+                    </a>
+                    <a href="/admin/orders"
+                        class="sidebar-link flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 font-medium mb-2">
+                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M17 12h.01">
+                            </path>
+                        </svg>
+                        Siparişler
+                    </a>
+                </nav>
+            </div>
+            <div class="mt-8">
+                <a href="/" onclick="logout()"
+                    class="flex items-center justify-center w-full py-3 px-4 rounded-lg bg-red-500 text-white hover:bg-red-600 font-medium transition duration-200 ease-in-out text-sm"
+                    aria-label="Çıkış Yap">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
+                        </path>
+                    </svg>
+                    Çıkış Yap
+                </a>
+            </div>
+        </div>
+
+        <main class="flex-1 overflow-y-auto p-4 md:p-8">
+            <h3 class="text-3xl font-extrabold text-gray-900 mb-8">Kullanıcı Yönetimi</h3>
+
+            <div class="bg-white p-4 md:p-6 rounded-xl shadow-md border border-gray-200 mb-6 md:mb-8">
+                <div class="flex flex-col sm:flex-row items-center gap-3 w-full">
+                    <div class="flex flex-col sm:flex-row items-center gap-3 w-full">
+                        <div class="flex items-center w-full sm:w-auto">
+                            <label for="roleFilter" class="text-gray-700 font-medium w-20 sm:w-auto">Rol:</label>
+                            <select id="roleFilter"
+                                class="w-full sm:w-40 border border-gray-300 p-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                                <option value="all">Tüm Roller</option>
+                                <option value="student">Öğrenci</option>
+                                <option value="admin">Admin</option>
+                                <option value="rest_owner">Restoran Sahibi</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center w-full sm:w-auto">
+                            <label for="statusFilter" class="text-gray-700 font-medium w-20 sm:w-auto">Durum:</label>
+                            <select id="statusFilter"
+                                class="w-full sm:w-40 border border-gray-300 p-2 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                                <option value="all">Tüm Durumlar</option>
+                                <option value="active">Aktif</option>
+                                <option value="inactive">Pasif</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center w-full sm:flex-1">
+                            <input type="text" id="searchInput" placeholder="Adı, soyadı veya email ara..."
+                                class="flex-1 border border-gray-300 p-2 rounded-l-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200">
+                            <button id="searchBtn"
+                                class="bg-blue-600 text-white px-4 py-2 rounded-r-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-200"
+                                aria-label="Kullanıcı Ara">
+                                Ara
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bg-white p-4 md:p-7 rounded-xl shadow-md border border-gray-200">
+                <div class="overflow-x-auto">
+                    <table class="min-w-full leading-normal responsive-table">
+                        <thead>
+                            <tr class="bg-gray-50 border-b border-gray-200">
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Ad Soyad</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Email</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Rol</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Kayıt Tarihi</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    Durum</th>
+                                <th
+                                    class="px-4 md:px-6 py-3 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                                    İşlemler</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTable" class="divide-y divide-gray-100"></tbody>
+                    </table>
+                </div>
+
+                <div class="mt-6 flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <button id="prevPage"
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                        aria-label="Önceki Sayfa">
+                        Önceki Sayfa
+                    </button>
+                    <span id="pageInfo" class="text-gray-700 font-medium text-base md:text-lg"></span>
+                    <button id="nextPage"
+                        class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition duration-200 disabled:opacity-50 disabled:cursor-not-allowed w-full sm:w-auto"
+                        aria-label="Sonraki Sayfa">
+                        Sonraki Sayfa
+                    </button>
+                </div>
+
+            </div>
+        </main>
+    </div>
+
+    <div class="fixed inset-0 bg-gray-900 bg-opacity-60 modal-overlay z-50 hidden" id="editUserModal">
+        <div class="bg-white p-4 sm:p-8 rounded-xl shadow-2xl w-full sm:w-11/12 md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-y-auto transform transition-all duration-300 scale-95 opacity-0"
+            id="editUserModalContent">
+            <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-6 border-b pb-3">Kullanıcıyı Düzenle</h3>
+            <form id="editUserForm" class="grid grid-cols-1 gap-y-4">
+                <input type="hidden" name="userId">
+                <div>
+                    <label for="firstName" class="block text-gray-700 text-sm font-medium mb-1">Ad</label>
+                    <input type="text" id="firstName" name="firstName"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="firstName">Ad gerekli.</p>
+                </div>
+                <div>
+                    <label for="lastName" class="block text-gray-700 text-sm font-medium mb-1">Soyad</label>
+                    <input type="text" id="lastName" name="lastName"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="lastName">Soyad gerekli.</p>
+                </div>
+                <div>
+                    <label for="email" class="block text-gray-700 text-sm font-medium mb-1">Email</label>
+                    <input type="email" id="email" name="email"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="email">Geçerli bir email gerekli.</p>
+                </div>
+                <div>
+                    <label for="role" class="block text-gray-700 text-sm font-medium mb-1">Rol</label>
+                    <select id="role" name="role"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                        <option value="student">Öğrenci</option>
+                        <option value="admin">Admin</option>
+                        <option value="rest_owner">Restoran Sahibi</option>
+                    </select>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="role">Rol seçimi gerekli.</p>
+                </div>
+                <div>
+                    <label for="status" class="block text-gray-700 text-sm font-medium mb-1">Durum</label>
+                    <select id="status" name="status"
+                        class="w-full border border-gray-300 p-3 rounded-lg focus:ring-blue-500 focus:border-blue-500 transition duration-200"
+                        required>
+                        <option value="active">Aktif</option>
+                        <option value="inactive">Pasif</option>
+                    </select>
+                    <p class="text-red-500 text-xs mt-1 hidden" data-error-for="status">Durum seçimi gerekli.</p>
+                </div>
+                <div class="flex justify-end gap-3 mt-6">
+                    <button type="button" id="cancelEditUser"
+                        class="bg-gray-300 text-gray-800 px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-gray-400 transition duration-200 font-semibold"
+                        aria-label="Düzenlemeyi İptal Et">İptal</button>
+                    <button type="submit"
+                        class="bg-blue-600 text-white px-4 sm:px-6 py-2 sm:py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold"
+                        aria-label="Kullanıcıyı Kaydet">Kaydet</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        const API_BASE_URL = '/admin/users';
+        let currentPage = 1;
+        const itemsPerPage = 6;
+
+        const roleConfig = {
+            student: { text: 'Öğrenci', class: 'text-blue-600' },
+            admin: { text: 'Admin', class: 'text-red-600' },
+            rest_owner: { text: 'Restoran Sahibi', class: 'text-green-600' },
+            default: { text: 'Bilinmeyen', class: 'text-gray-600' }
+        };
+
+        const roleText = (role) => roleConfig[role]?.text || roleConfig.default.text;
+        const roleClass = (role) => roleConfig[role]?.class || roleConfig.default.class;
+
+        function debounce(func, wait) {
+            let timeout;
+            return function (...args) {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => func.apply(this, args), wait);
+            };
+        }
+
+        async function loadUsers(page = 1, role = 'all', search = '', status = 'all') {
+            try {
+                const tableBody = document.getElementById('userTable');
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Yükleniyor...</td></tr>';
+
+                const response = await fetch(`${API_BASE_URL}?page=${page}&limit=${itemsPerPage}&role=${role}&search=${encodeURIComponent(search)}&status=${status}`, {
+                    method: 'GET',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                const contentType = response.headers.get('content-type');
+                if (!contentType || !contentType.includes('application/json')) {
+                    alert('Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
+                    window.location.href = '/account/login';
+                    return;
+                }
+
+                if (!response.ok) {
+                    if (response.status === 401 || response.status === 403) {
+                        alert('Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
+                        window.location.href = '/account/login';
+                        return;
+                    }
+                    const errorData = await response.json();
+                    throw new Error(`API Hatası: ${response.status} - ${errorData.message || 'Bilinmeyen Hata'}`);
+                }
+
+                const data = await response.json();
+                tableBody.innerHTML = '';
+
+                if (data.users && data.users.length > 0) {
+                    data.users.forEach(user => {
+                        const row = document.createElement('tr');
+                        row.classList.add('hover:bg-gray-50');
+                        const statusClass = user.status === 'active' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800';
+
+                        row.innerHTML = `
+                            <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-800" data-label="Ad Soyad">${user.firstName || ''} ${user.lastName || ''}</td>
+                            <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-800" data-label="Email">${user.email || ''}</td>
+                            <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium ${roleClass(user.role)}" data-label="Rol">${roleText(user.role)}</td>
+                            <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm text-gray-800" data-label="Kayıt Tarihi">${user.createdAt ? new Date(user.createdAt).toLocaleDateString('tr-TR', { year: 'numeric', month: 'short', day: 'numeric' }) : ''}</td>
+                            <td class="px-4 md:px-6 py-4 whitespace-nowrap" data-label="Durum">
+                                <span class="px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${statusClass}">${user.status === 'active' ? 'Aktif' : 'Pasif'}</span>
+                            </td>
+                            <td class="px-4 md:px-6 py-4 whitespace-nowrap text-sm font-medium" data-label="İşlemler">
+                                <button class="edit-btn bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-md transition duration-200 mr-2" data-id="${user._id}" aria-label="Kullanıcıyı düzenle">
+                                    <svg class="w-4 h-4 inline-block align-text-bottom mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.232z"></path></svg>
+                                    Düzenle
+                                </button>
+                                <button class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded-md transition duration-200" data-id="${user._id}" aria-label="Kullanıcıyı sil">
+                                    <svg class="w-4 h-4 inline-block align-text-bottom mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                    Sil
+                                </button>
+                            </td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                } else {
+                    tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-gray-500">Kullanıcı bulunamadı.</td></tr>';
+                }
+
+                const prevBtn = document.getElementById('prevPage');
+                const nextBtn = document.getElementById('nextPage');
+                const pageInfo = document.getElementById('pageInfo');
+
+                if (data.pagination) {
+                    currentPage = data.pagination.page;
+                    const totalPages = data.pagination.pages;
+
+                    prevBtn.disabled = currentPage <= 1;
+                    nextBtn.disabled = currentPage >= totalPages;
+
+                    pageInfo.textContent = `Sayfa ${currentPage} / ${totalPages}`;
+                    prevBtn.classList.toggle('opacity-50', currentPage <= 1);
+                    prevBtn.classList.toggle('cursor-not-allowed', currentPage <= 1);
+                    nextBtn.classList.toggle('opacity-50', currentPage >= totalPages);
+                    nextBtn.classList.toggle('cursor-not-allowed', currentPage >= totalPages);
+                }
+            } catch (err) {
+                console.error('Kullanıcı yükleme hatası:', err);
+                tableBody.innerHTML = '<tr><td colspan="6" class="text-center py-6 text-red-500">Kullanıcılar yüklenirken bir hata oluştu.</td></tr>';
+            }
+        }
+
+        async function logout() {
+            try {
+                const response = await fetch('/account/user/usermain/logout', { method: 'POST', credentials: 'include' });
+                if (response.ok) {
+                    window.location.href = '/';
+                } else {
+                    showToast('Çıkış yapılamadı!', 'error');
+                }
+            } catch (error) {
+                showToast('Bağlantı hatası!', 'error');
+            }
+        }
+
+        // Sidebar toggle functionality
+        const toggleBtn = document.getElementById('toggleSidebar');
+        const sidebar = document.getElementById('sidebar');
+        const closeBtn = document.getElementById('closeSidebar');
+
+        toggleBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.toggle('open');
+        });
+
+        closeBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            sidebar.classList.remove('open');
+        });
+
+        document.addEventListener('click', (e) => {
+            if (
+                sidebar.classList.contains('open') &&
+                !sidebar.contains(e.target) &&
+                !toggleBtn.contains(e.target)
+            ) {
+                sidebar.classList.remove('open');
+            }
+        });
+
+        document.getElementById('userTable').addEventListener('click', async (e) => {
+            if (e.target.closest('.edit-btn')) {
+                const id = e.target.closest('.edit-btn').dataset.id;
+                try {
+                    const response = await fetch(`${API_BASE_URL}/${id}`, {
+                        method: 'GET',
+                        credentials: 'include',
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    });
+
+                    if (!response.ok) {
+                        const error = await response.json();
+                        alert(error.error || 'Kullanıcı bilgileri yüklenirken hata oluştu');
+                        return;
+                    }
+
+                    const { user } = await response.json();
+                    const form = document.getElementById('editUserForm');
+                    form.userId.value = user._id;
+                    form.firstName.value = user.firstName || '';
+                    form.lastName.value = user.lastName || '';
+                    form.email.value = user.email || '';
+                    form.role.value = user.role || 'student';
+                    form.status.value = user.status || 'active';
+
+                    const modal = document.getElementById('editUserModal');
+                    const modalContent = document.getElementById('editUserModalContent');
+                    modal.classList.remove('hidden');
+                    modalContent.classList.remove('opacity-0', 'scale-95');
+                    modalContent.classList.add('opacity-100', 'scale-100');
+
+                    sidebar.classList.remove('open');
+                } catch (err) {
+                    console.error('Kullanıcı yükleme hatası:', err);
+                    alert('Kullanıcı bilgileri yüklenirken hata oluştu');
+                }
+            }
+
+            if (e.target.closest('.delete-btn')) {
+                const id = e.target.closest('.delete-btn').dataset.id;
+                if (confirm('Kullanıcıyı silmek istediğinize emin misiniz? Bu işlem geri alınamaz!')) {
+                    try {
+                        const response = await fetch(`${API_BASE_URL}/${id}`, {
+                            method: 'DELETE',
+                            credentials: 'include',
+                            headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json'
+                            }
+                        });
+
+                        if (!response.ok) {
+                            const error = await response.json();
+                            throw new Error(error.error || 'Kullanıcı silinirken bir hata oluştu.');
+                        }
+
+                        alert('Kullanıcı başarıyla silindi.');
+                        loadUsers(currentPage, document.getElementById('roleFilter').value, document.getElementById('searchInput').value, document.getElementById('statusFilter').value);
+                    } catch (err) {
+                        console.error('Kullanıcı silme hatası:', err);
+                        alert('Kullanıcı silinirken hata oluştu: ' + err.message);
+                    }
+                }
+            }
+        });
+
+        document.getElementById('editUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const formData = new FormData(e.target);
+            const data = Object.fromEntries(formData);
+
+            let isValid = true;
+            document.querySelectorAll('#editUserForm input[required], #editUserForm select[required]').forEach(input => {
+                const errorElement = document.querySelector(`p[data-error-for="${input.id || input.name}"]`);
+                if (!input.value.trim()) {
+                    input.classList.add('border-red-500');
+                    if (errorElement) errorElement.classList.remove('hidden');
+                    isValid = false;
+                } else {
+                    input.classList.remove('border-red-500');
+                    if (errorElement) errorElement.classList.add('hidden');
+                }
+            });
+
+            if (!isValid) {
+                alert('Lütfen tüm gerekli alanları doldurun.');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE_URL}/${data.userId}`, {
+                    method: 'PUT',
+                    credentials: 'include',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                if (response.ok) {
+                    const modal = document.getElementById('editUserModal');
+                    const modalContent = document.getElementById('editUserModalContent');
+                    modalContent.classList.remove('opacity-100', 'scale-100');
+                    modalContent.classList.add('opacity-0', 'scale-95');
+                    setTimeout(() => modal.classList.add('hidden'), 300);
+
+                    loadUsers(currentPage, document.getElementById('roleFilter').value, document.getElementById('searchInput').value, document.getElementById('statusFilter').value);
+                    alert('Kullanıcı başarıyla güncellendi!');
+                } else {
+                    const error = await response.json();
+                    alert(error.error || 'Kullanıcı güncellenirken hata oluştu');
+                }
+            } catch (err) {
+                console.error('Kullanıcı güncelleme hatası:', err);
+                alert('Kullanıcı güncellenirken bir hata oluştu.');
+            }
+        });
+
+        document.getElementById('cancelEditUser').addEventListener('click', () => {
+            const modal = document.getElementById('editUserModal');
+            const modalContent = document.getElementById('editUserModalContent');
+            modalContent.classList.remove('opacity-100', 'scale-100');
+            modalContent.classList.add('opacity-0', 'scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        });
+
+        document.getElementById('searchBtn').addEventListener('click', () => {
+            currentPage = 1;
+            loadUsers(
+                currentPage,
+                document.getElementById('roleFilter').value,
+                document.getElementById('searchInput').value,
+                document.getElementById('statusFilter').value
+            );
+        });
+
+        document.getElementById('roleFilter').addEventListener('change', () => {
+            currentPage = 1;
+            loadUsers(
+                currentPage,
+                document.getElementById('roleFilter').value,
+                document.getElementById('searchInput').value,
+                document.getElementById('statusFilter').value
+            );
+        });
+
+        document.getElementById('statusFilter').addEventListener('change', () => {
+            currentPage = 1;
+            loadUsers(
+                currentPage,
+                document.getElementById('roleFilter').value,
+                document.getElementById('searchInput').value,
+                document.getElementById('statusFilter').value
+            );
+        });
+
+        document.getElementById('searchInput').addEventListener('input', debounce(() => {
+            currentPage = 1;
+            loadUsers(
+                currentPage,
+                document.getElementById('roleFilter').value,
+                document.getElementById('searchInput').value,
+                document.getElementById('statusFilter').value
+            );
+        }, 300));
+
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                document.getElementById('searchBtn').click();
+            }
+        });
+
+        document.getElementById('prevPage').addEventListener('click', () => {
+            if (currentPage > 1) {
+                loadUsers(
+                    currentPage - 1,
+                    document.getElementById('roleFilter').value,
+                    document.getElementById('searchInput').value,
+                    document.getElementById('statusFilter').value
+                );
+            }
+        });
+
+        document.getElementById('nextPage').addEventListener('click', () => {
+            loadUsers(
+                currentPage + 1,
+                document.getElementById('roleFilter').value,
+                document.getElementById('searchInput').value,
+                document.getElementById('statusFilter').value
+            );
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadUsers(
+                currentPage,
+                document.getElementById('roleFilter').value,
+                document.getElementById('searchInput').value,
+                document.getElementById('statusFilter').value
+            );
+        });
+    </script>
+</body>
+
+</html>
