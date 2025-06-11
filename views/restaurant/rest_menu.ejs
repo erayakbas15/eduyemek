@@ -1,10 +1,14 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="icon" href="/ituyemek_logo.png" type="image/png">
+
+    <script src="/views/restaurant/common.js"></script>
+
     <title>Menü Yönetimi - Restoran Paneli</title>
     <style>
         :root {
@@ -648,6 +652,7 @@
                 opacity: 0;
                 transform: scale(0.95);
             }
+
             to {
                 opacity: 1;
                 transform: scale(1);
@@ -707,6 +712,7 @@
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -980,7 +986,9 @@
 
     <div class="sidebar" id="sidebar">
         <button class="sidebar-close-btn" onclick="closeSidebar()">×</button>
-        <h2><%= restaurant?.name || "Restoran Adı" %></h2>
+        <h2>
+            <%= restaurant?.name || "Restoran Adı" %>
+        </h2>
         <a href="/restaurant/dashboard" class="menu-item">
             <i class="fas fa-home"></i> Ana Sayfa
         </a>
@@ -1019,7 +1027,8 @@
                     <div class="slider-wrapper">
                         <span class="slider-label-close">Kapat</span>
                         <div class="switch">
-                            <input type="checkbox" id="restaurant-status" <%= restaurant?.delivery?.case === 'open' ? 'checked' : '' %>>
+                            <input type="checkbox" id="restaurant-status" <%=restaurant?.delivery?.case==='open'
+                                ? 'checked' : '' %>>
                             <label class="slider" for="restaurant-status"></label>
                         </div>
                         <span class="slider-label-open">Aç</span>
@@ -1064,41 +1073,57 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <% if (meals.length === 0) { %>
+                        <% if (meals.length===0) { %>
                             <tr>
                                 <td colspan="7" class="empty-state">Henüz menü öğesi eklenmemiş</td>
                             </tr>
-                        <% } else { %>
-                            <% meals.forEach(meal => { %>
-                                <tr data-meal-id="<%= meal._id %>">
-                                    <td data-label="Resim">
-                                        <img src="<%= meal.imageUrl || '/Uploads/default-meal.jpg' %>" alt="<%= meal.name %>" style="width: 50px; height: 50px; object-fit: cover; border-radius: var(--border-radius);">
-                                    </td>
-                                    <td data-label="Ürün Adı"><%= meal.name %></td>
-                                    <td data-label="Açıklama"><%= meal.description || 'Açıklama yok' %></td>
-                                    <td data-label="Kategori"><%= meal.category %></td>
-                                    <td data-label="Fiyat"><%= meal.price.toFixed(2) %> TL</td>
-                                    <td data-label="Stok Durumu">
-                                        <div style="display: flex; align-items: center; gap: 8px; justify-content: center;">
-                                            <span>Yok</span>
-                                            <label class="switch">
-                                                <input type="checkbox" <%= meal.available ? 'checked' : '' %> onchange="toggleStockStatus('<%= meal._id %>')">
-                                                <span class="slider"></span>
-                                            </label>
-                                            <span>Var</span>
-                                        </div>
-                                    </td>
-                                    <td data-label="İşlemler">
-                                        <div style="display: flex; align-items: center; gap: 10px; justify-content: center;">
-                                            <button type="button" class="btn-edit" onclick="openEditModal('<%- encodeURIComponent(JSON.stringify(meal)) %>')">Düzenle</button>
-                                            <form action="/restaurant/meal/delete/<%= meal._id %>?force=true" method="POST" onsubmit="handleDeleteSubmit(event, '<%= meal._id %>')">
-                                                <button type="submit" class="btn-delete">Sil</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            <% }) %>
-                        <% } %>
+                            <% } else { %>
+                                <% meals.forEach(meal=> { %>
+                                    <tr data-meal-id="<%= meal._id %>">
+                                        <td data-label="Resim">
+                                            <img src="<%= meal.imageUrl || '/Uploads/default-meal.jpg' %>"
+                                                alt="<%= meal.name %>"
+                                                style="width: 50px; height: 50px; object-fit: cover; border-radius: var(--border-radius);">
+                                        </td>
+                                        <td data-label="Ürün Adı">
+                                            <%= meal.name %>
+                                        </td>
+                                        <td data-label="Açıklama">
+                                            <%= meal.description || 'Açıklama yok' %>
+                                        </td>
+                                        <td data-label="Kategori">
+                                            <%= meal.category %>
+                                        </td>
+                                        <td data-label="Fiyat">
+                                            <%= meal.price.toFixed(2) %> TL
+                                        </td>
+                                        <td data-label="Stok Durumu">
+                                            <div
+                                                style="display: flex; align-items: center; gap: 8px; justify-content: center;">
+                                                <span>Yok</span>
+                                                <label class="switch">
+                                                    <input type="checkbox" <%=meal.available ? 'checked' : '' %>
+                                                    onchange="toggleStockStatus('<%= meal._id %>')">
+                                                        <span class="slider"></span>
+                                                </label>
+                                                <span>Var</span>
+                                            </div>
+                                        </td>
+                                        <td data-label="İşlemler">
+                                            <div
+                                                style="display: flex; align-items: center; gap: 10px; justify-content: center;">
+                                                <button type="button" class="btn-edit"
+                                                    onclick="openEditModal('<%- encodeURIComponent(JSON.stringify(meal)) %>')">Düzenle</button>
+                                                <form action="/restaurant/meal/delete/<%= meal._id %>?force=true"
+                                                    method="POST"
+                                                    onsubmit="handleDeleteSubmit(event, '<%= meal._id %>')">
+                                                    <button type="submit" class="btn-delete">Sil</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <% }) %>
+                                        <% } %>
                     </tbody>
                 </table>
             </div>
@@ -1108,7 +1133,8 @@
             <div class="modal-content">
                 <span class="modal-close-btn" onclick="closeAddModal()">×</span>
                 <h3>Yeni Menü Öğesi Ekle</h3>
-                <form id="addMealForm" action="/restaurant/meal/add" method="POST" enctype="multipart/form-data" onsubmit="handleAddSubmit(event)">
+                <form id="addMealForm" action="/restaurant/meal/add" method="POST" enctype="multipart/form-data"
+                    onsubmit="handleAddSubmit(event)">
                     <div class="form-group">
                         <label for="add-name">Ürün Adı</label>
                         <input type="text" name="name" id="add-name" required>
@@ -1215,39 +1241,39 @@
         }
 
 
-async function toggleStockStatus(mealId) {
-    const checkbox = document.querySelector(`tr[data-meal-id="${mealId}"] input[type="checkbox"]`);
-    const available = checkbox.checked;
-    const stockCell = checkbox.closest('td');
-    const yokSpan = stockCell.querySelector('span:first-child');
-    const varSpan = stockCell.querySelector('span:last-child');
+        async function toggleStockStatus(mealId) {
+            const checkbox = document.querySelector(`tr[data-meal-id="${mealId}"] input[type="checkbox"]`);
+            const available = checkbox.checked;
+            const stockCell = checkbox.closest('td');
+            const yokSpan = stockCell.querySelector('span:first-child');
+            const varSpan = stockCell.querySelector('span:last-child');
 
-    if (yokSpan) yokSpan.style.display = 'inline';
-    if (varSpan) varSpan.style.display = 'inline';
+            if (yokSpan) yokSpan.style.display = 'inline';
+            if (varSpan) varSpan.style.display = 'inline';
 
-    try {
-        const response = await fetch(`/restaurant/meal/toggle/${mealId}?force=true`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ available }),
-            credentials: 'include'
-        });
+            try {
+                const response = await fetch(`/restaurant/meal/toggle/${mealId}?force=true`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ available }),
+                    credentials: 'include'
+                });
 
-        const data = await response.json();
-        if (!response.ok) {
-            showNotification(data.error || 'Stok durumu güncellenemedi.', 'error');
-            checkbox.checked = !available;
-            return;
+                const data = await response.json();
+                if (!response.ok) {
+                    showNotification(data.error || 'Stok durumu güncellenemedi.', 'error');
+                    checkbox.checked = !available;
+                    return;
+                }
+
+                showNotification(data.message || 'Stok durumu güncellendi.', 'success');
+                filterTable();
+            } catch (err) {
+                console.error("Stok güncelleme hatası:", err);
+                showNotification("Stok durumu güncellenemedi.", 'error');
+                checkbox.checked = !available;
+            }
         }
-
-        showNotification(data.message || 'Stok durumu güncellendi.', 'success');
-        filterTable();
-    } catch (err) {
-        console.error("Stok güncelleme hatası:", err);
-        showNotification("Stok durumu güncellenemedi.", 'error');
-        checkbox.checked = !available;
-    }
-}
 
 
         function openAddModal() {
@@ -1355,42 +1381,42 @@ async function toggleStockStatus(mealId) {
 
 
         async function handleDeleteSubmit(event, mealId) {
-    event.preventDefault();
-    if (!confirm('Bu menü öğesini silmek istediğinizden emin misiniz? Aktif siparişlerde olsa bile silinecek.')) {
-        return;
-    }
+            event.preventDefault();
+            if (!confirm('Bu menü öğesini silmek istediğinizden emin misiniz? Aktif siparişlerde olsa bile silinecek.')) {
+                return;
+            }
 
-    try {
-        const response = await fetch(`/restaurant/meal/delete/${mealId}?force=true`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            credentials: 'include'
-        });
+            try {
+                const response = await fetch(`/restaurant/meal/delete/${mealId}?force=true`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    credentials: 'include'
+                });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            showNotification(errorData.error || 'Yemek silinirken bir hata oluştu', 'error');
-            return;
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    showNotification(errorData.error || 'Yemek silinirken bir hata oluştu', 'error');
+                    return;
+                }
+
+                showNotification('Menü öğesi başarıyla silindi!');
+                const row = document.querySelector(`tr[data-meal-id="${mealId}"]`);
+                if (row) {
+                    row.remove();
+                }
+
+                const tableBody = document.querySelector('.menu-table tbody');
+                if (tableBody.children.length === 0) {
+                    const emptyRow = document.createElement('tr');
+                    emptyRow.innerHTML = '<td colspan="7" class="empty-state">Henüz menü öğesi eklenmemiş</td>';
+                    tableBody.appendChild(emptyRow);
+                }
+                filterTable();
+            } catch (error) {
+                console.error('Delete meal error:', error);
+                showNotification('Yemek silinirken bir hata oluştu', 'error');
+            }
         }
-
-        showNotification('Menü öğesi başarıyla silindi!');
-        const row = document.querySelector(`tr[data-meal-id="${mealId}"]`);
-        if (row) {
-            row.remove();
-        }
-
-        const tableBody = document.querySelector('.menu-table tbody');
-        if (tableBody.children.length === 0) {
-            const emptyRow = document.createElement('tr');
-            emptyRow.innerHTML = '<td colspan="7" class="empty-state">Henüz menü öğesi eklenmemiş</td>';
-            tableBody.appendChild(emptyRow);
-        }
-        filterTable();
-    } catch (error) {
-        console.error('Delete meal error:', error);
-        showNotification('Yemek silinirken bir hata oluştu', 'error');
-    }
-}
 
 
         function openEditModal(encodedMeal) {

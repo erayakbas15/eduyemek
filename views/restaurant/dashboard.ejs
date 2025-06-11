@@ -88,6 +88,31 @@
             font-size: 16px;
         }
 
+        .notification-flash {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.1);
+            animation: flash 0.5s;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        @keyframes flash {
+
+            0%,
+            100% {
+                opacity: 0;
+            }
+
+            50% {
+                opacity: 1;
+            }
+        }
+
+
         .hamburger-btn {
             display: none;
             position: fixed;
@@ -1035,28 +1060,28 @@
             </div>
         </div>
 
-<div class="stats-section">
-    <div class="stat-card">
-        <h3 class="stats-number">
-            <%= stats?.todayDeliveredOrders || 0 %>
-        </h3>
-        <p class="stats-label">Bugünkü Teslim Edilen Sipariş</p>
-    </div>
-    <div class="stat-card">
-        <h3 class="stats-number">
-            <%= stats?.dailyRevenue?.toFixed(2) || '0.00' %> TL
-        </h3>
-        <p class="stats-label">Bugünkü Ciro</p>
-    </div>
-    <div class="stat-card">
-        <div class="popular">
-            <div class="popular-item-name">
-                <%= popularMeal?.name || 'Veri Yok' %>
+        <div class="stats-section">
+            <div class="stat-card">
+                <h3 class="stats-number">
+                    <%= stats?.todayDeliveredOrders || 0 %>
+                </h3>
+                <p class="stats-label">Bugünkü Teslim Edilen Sipariş</p>
             </div>
-            <div class="popular-item-desc">Bugün En Çok Sipariş Edilen</div>
+            <div class="stat-card">
+                <h3 class="stats-number">
+                    <%= stats?.dailyRevenue?.toFixed(2) || '0.00' %> TL
+                </h3>
+                <p class="stats-label">Bugünkü Ciro</p>
+            </div>
+            <div class="stat-card">
+                <div class="popular">
+                    <div class="popular-item-name">
+                        <%= popularMeal?.name || 'Veri Yok' %>
+                    </div>
+                    <div class="popular-item-desc">Bugün En Çok Sipariş Edilen</div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
 
         <div class="orders-section">
             <div class="table-header">
@@ -1178,8 +1203,9 @@
 
     <div class="notification-container"></div>
 
-    <audio id="notification-sound" preload="auto">
+    <audio id="notification-sound" preload="auto" crossorigin="anonymous">
         <source src="/uploads/notification.wav" type="audio/wav">
+        <source src="/uploads/notification.mp3" type="audio/mpeg">
         <source src="https://www.soundjay.com/buttons/beep-01a.mp3" type="audio/mpeg">
         Ses oynatma desteklenmiyor.
     </audio>
@@ -1187,242 +1213,670 @@
 
     <script src="/socket.io/socket.io.js"></script>
 
-<script>
-    const socket = io();
-    const restaurantId = '<%= restaurantId %>';
-    console.log('Restaurant ID:', restaurantId);
-    if (!restaurantId) {
-        console.error('Hata: restaurantId tanımlı değil!');
-    }
-    socket.emit('joinRestaurant', restaurantId);
-    console.log('joinRestaurant olayı gönderildi:', restaurantId);
-    socket.on('connect', () => {
-        console.log('Socket.IO bağlantısı başarılı, socket ID:', socket.id);
-    });
-    socket.on('connect_error', (error) => {
-        console.error('Socket.IO bağlantı hatası:', error);
-    });
 
-    // Cookie management functions
-    function setCookie(name, value, days) {
-        const expires = new Date();
-        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
-        document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Strict`;
-        console.log(`Cookie set: ${name}=${value}`);
-    }
+    <script>
+        // Socket.IO Bağlantısı
+        const socket = io();
+        const restaurantId = '<%= restaurantId %>';
+        console.log('Restaurant ID:', restaurantId);
 
-    function getCookie(name) {
-        const nameEQ = name + "=";
-        const ca = document.cookie.split(';');
-        for (let i = 0; i < ca.length; i++) {
-            let c = ca[i].trim();
-            if (c.indexOf(nameEQ) === 0) {
-                const value = c.substring(nameEQ.length, c.length);
-                console.log(`Cookie found: ${name}=${value}`);
-                return value;
-            }
+        if (!restaurantId) {
+            console.error('Hata: restaurantId tanımlı değil!');
         }
-        console.log(`Cookie not found: ${name}`);
-        return null;
-    }
 
-    // Initialize sound state from cookie
-    let isSoundEnabled = getCookie('soundEnabled') === 'true';
-    console.log('Initial soundEnabled:', isSoundEnabled);
+        socket.emit('joinRestaurant', restaurantId);
+        console.log('joinRestaurant olayı gönderildi:', restaurantId);
 
-    // Track user interaction
-    let hasInteracted = false;
-    document.addEventListener('click', () => {
-        hasInteracted = true;
-        console.log('User interacted with the page');
-        // Preload audio
-        const audio = new Audio('/uploads/notification.wav');
-        audio.load();
-        console.log('Audio preloaded');
-        const audioElement = document.getElementById('notification-sound');
-        if (audioElement) {
-            audioElement.load();
-            console.log('Audio element preloaded');
-        }
-    }, { once: true });
-
-function playNotificationSound() {
-    if (!isSoundEnabled) {
-        console.log('Bildirim sesi kapalı, ses çalınmadı');
-        return;
-    }
-    if (!hasInteracted) {
-        console.warn('Kullanıcı etkileşimi yok, ses tarayıcı tarafından engellenebilir');
-        showNotification('Bildirim sesi için lütfen sayfayla etkileşime geçin.', 'error');
-        return;
-    }
-    const audioElement = document.getElementById('notification-sound');
-    if (audioElement) {
-        audioElement.currentTime = 0; // Sesin başa sarılmasını sağla
-        audioElement.play()
-            .then(() => {
-                console.log('Bildirim sesi başarıyla çalındı');
-            })
-            .catch(error => {
-                console.error('Ses çalma hatası:', error.message);
-                showNotification(`Bildirim sesi çalınamadı: ${error.message}`, 'error');
-            });
-    } else {
-        console.error('Ses elementi bulunamadı');
-        showNotification('Ses elementi bulunamadı.', 'error');
-    }
-}
-
-
-socket.on('newOrder', (order) => {
-    console.log('Yeni sipariş alındı:', order);
-    if (order.status === 'pending') {
-        playNotificationSound();
-        showNotification('Yeni sipariş alındı!', 'success');
-        setTimeout(() => {
-            window.location.reload();
-        }, 2000); // 2 saniye gecikme
-    } else {
-        console.log('Sipariş durumu pending değil, bildirim çalınmadı:', order.status);
-        window.location.reload();
-    }
-});
-    // Handle order status updates (no sound or notification)
-    socket.on('orderStatusUpdated', (order) => {
-        console.log('Sipariş durumu güncellendi:', order);
-        window.location.reload();
-    });
-
-    function toggleSidebar() {
-        const sidebar = document.getElementById('sidebar');
-        const overlay = document.querySelector('.sidebar-overlay');
-        sidebar.classList.toggle('open');
-        overlay.classList.toggle('active');
-    }
-
-    function showNotification(message, type = 'success') {
-        const container = document.querySelector('.notification-container');
-        const notification = document.createElement('div');
-        notification.className = `notification ${type}`;
-        notification.innerHTML = `<span>${message}</span><button class="close-btn"><i class="fas fa-times"></i></button>`;
-        container.appendChild(notification);
-        notification.querySelector('.close-btn').onclick = () => {
-            notification.style.display = 'none';
-            notification.remove();
-        };
-        setTimeout(() => {
-            notification.style.display = 'none';
-            notification.remove();
-        }, 3000);
-    }
-
-    function openModal(orderId) {
-        const modal = document.getElementById('modal');
-        const form = document.getElementById('status-form');
-        form.action = `/restaurant/update-order-status/${orderId}?redirect=dashboard`;
-        modal.style.display = 'flex';
-    }
-
-    function closeModal() {
-        const modal = document.getElementById('modal');
-        modal.style.display = 'none';
-    }
-
-    function toggleSound() {
-        isSoundEnabled = !isSoundEnabled;
-        setCookie('soundEnabled', isSoundEnabled, 30);
-        const soundIcon = document.getElementById('sound-icon');
-        soundIcon.className = `fas fa-bell${isSoundEnabled ? '' : '-slash'}`;
-        showNotification(`Bildirim sesi ${isSoundEnabled ? 'açıldı' : 'kapatıldı'}.`, 'success');
-        console.log('Sound toggled, new state:', isSoundEnabled);
-    }
-
-    window.onclick = function (event) {
-        const modal = document.getElementById('modal');
-        const sidebar = document.getElementById('sidebar');
-        const toggle = document.querySelector('.hamburger-btn');
-        const overlay = document.querySelector('.sidebar-overlay');
-        if (event.target === modal) {
-            closeModal();
-        }
-        if (!sidebar.contains(event.target) && !toggle.contains(event.target) && sidebar.classList.contains('open')) {
-            toggleSidebar();
-        }
-    };
-
-    document.addEventListener('DOMContentLoaded', function () {
-        const themeToggle = document.querySelector('.theme-toggle');
-        const sunIcon = document.querySelector('.sun');
-        const moonIcon = document.querySelector('.moon');
-        const soundIcon = document.getElementById('sound-icon');
-        soundIcon.className = `fas fa-bell${isSoundEnabled ? '' : '-slash'}`;
-        themeToggle.addEventListener('click', function () {
-            document.body.classList.toggle('dark-theme');
-            sunIcon.classList.toggle('active');
-            moonIcon.classList.toggle('active');
-            localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+        socket.on('connect', () => {
+            console.log('Socket.IO bağlantısı başarılı, socket ID:', socket.id);
         });
-        if (localStorage.getItem('theme') === 'dark') {
-            document.body.classList.add('dark-theme');
-            sunIcon.classList.remove('active');
-            moonIcon.classList.add('active');
-        }
-    });
 
-    async function logout() {
-        try {
-            const response = await fetch('/restaurant/logout', {
-                method: 'POST',
-                credentials: 'include'
-            });
-            if (response.redirected || response.status === 301 || response.status === 302) {
-                console.log('Redirecting to:', response.url);
-                showNotification('Oturum doğrulaması başarısız. Lütfen tekrar giriş yap.');
-                window.location.href = '/account/login';
-                return;
-            }
-            const data = await response.json();
-            if (data.success) {
-                showNotification(data.message || 'Başarıyla çıkış yapıldı.');
-                window.location.href = '/';
-            } else {
-                showNotification(data.message || 'Çıkış yapılamadı.', 'error');
-                console.error('Logout failed:', data.message);
-            }
-        } catch (error) {
-            console.error('Logout error:', error);
-            showNotification('Çıkış yapılırken hata oluştu.', 'error');
-        }
-    }
+        socket.on('connect_error', (error) => {
+            console.error('Socket.IO bağlantı hatası:', error);
+        });
 
-    async function toggleRestaurantStatus() {
-        try {
-            const slider = document.querySelector('.switch input');
-            const newStatus = slider.checked ? 'open' : 'closed';
-            const response = await fetch('/restaurant/toggle-status', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ status: newStatus }),
-                credentials: 'include'
-            });
-            if (response.ok) {
-                showNotification(`Restoran ${newStatus === 'open' ? 'açıldı' : 'kapatıldı'}.`, 'success');
-            } else {
-                const errorData = await response.json();
-                if (errorData?.message === 'Aktif siparişler varken restoran kapatılamaz') {
-                    showNotification('Aktif siparişler varken restoran kapatılamaz.', 'error');
-                } else {
-                    showNotification('Restoran durumu değiştirilemedi.', 'error');
+        // Cookie Yönetimi
+        function setCookie(name, value, days) {
+            const expires = new Date();
+            expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+            document.cookie = `${name}=${value};expires=${expires.toUTCString()};path=/;SameSite=Strict`;
+            console.log(`Cookie set: ${name}=${value}`);
+        }
+
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for (let i = 0; i < ca.length; i++) {
+                let c = ca[i].trim();
+                if (c.indexOf(nameEQ) === 0) {
+                    const value = c.substring(nameEQ.length, c.length);
+                    console.log(`Cookie found: ${name}=${value}`);
+                    return value;
                 }
-                slider.checked = !slider.checked;
             }
-        } catch (error) {
-            console.error('Bağlantı hatası:', error);
-            showNotification('Restoran durumu değiştirilemedi.', 'error');
-            document.querySelector('.switch input').checked = !document.querySelector('.switch input').checked;
+            console.log(`Cookie not found: ${name}`);
+            return null;
         }
-    }
-</script>
+
+        // Gelişmiş Ses Yönetim Sistemi
+        class SoundManager {
+            constructor() {
+                this.isSoundEnabled = getCookie('soundEnabled') === 'true';
+                this.hasInteracted = false;
+                this.audioContext = null;
+                this.audioBuffer = null;
+                this.audioElement = null;
+                this.rawAudioData = null;
+                this.interactionEvents = ['click', 'touchstart', 'keydown', 'mousedown', 'touchend', 'pointerdown'];
+                this.isPreloaded = false;
+
+                this.init();
+            }
+
+            init() {
+                // Ses elementini hazırla
+                this.audioElement = document.getElementById('notification-sound');
+
+                // Çoklu etkileşim eventi dinle
+                this.interactionEvents.forEach(event => {
+                    document.addEventListener(event, this.handleUserInteraction.bind(this), {
+                        once: false,
+                        passive: true,
+                        capture: true
+                    });
+                });
+
+                // Sayfa görünürlük değişikliklerini dinle
+                document.addEventListener('visibilitychange', this.handleVisibilityChange.bind(this));
+
+                // Window focus eventi
+                window.addEventListener('focus', this.handleWindowFocus.bind(this));
+
+                // Ses ikonunu güncelle
+                this.updateSoundIcon();
+
+                // Audio context'i hazırla
+                this.prepareAudioContext();
+
+                // İlk etkileşim kontrolü
+                setTimeout(() => {
+                    if (!this.hasInteracted) {
+                        console.log('Kullanıcı etkileşimi bekleniyor...');
+                    }
+                }, 1000);
+            }
+
+            handleUserInteraction(event) {
+                if (!this.hasInteracted) {
+                    this.hasInteracted = true;
+                    console.log('Kullanıcı etkileşimi algılandı:', event.type);
+
+                    // Audio context'i başlat
+                    this.initAudioContext();
+
+                    // Audio elementini hazırla
+                    this.preloadAudio();
+                }
+
+                // Her etkileşimde ses hazırlığını kontrol et
+                if (this.hasInteracted && !this.isPreloaded) {
+                    this.preloadAudio();
+                }
+            }
+
+            handleVisibilityChange() {
+                if (!document.hidden && this.hasInteracted) {
+                    console.log('Sekme aktif oldu, ses hazırlığı yenileniyor');
+                    setTimeout(() => {
+                        this.preloadAudio();
+                    }, 100);
+                }
+            }
+
+            handleWindowFocus() {
+                if (this.hasInteracted) {
+                    console.log('Window focus - ses hazırlığı yenileniyor');
+                    setTimeout(() => {
+                        this.preloadAudio();
+                    }, 100);
+                }
+            }
+
+            async initAudioContext() {
+                try {
+                    if (!this.audioContext) {
+                        this.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+
+                    if (this.audioContext.state === 'suspended') {
+                        await this.audioContext.resume();
+                        console.log('Audio context resumed');
+                    }
+
+                    console.log('Audio context durumu:', this.audioContext.state);
+                } catch (error) {
+                    console.warn('Audio context başlatılamadı:', error);
+                }
+            }
+
+            async preloadAudio() {
+                if (this.isPreloaded) return;
+
+                try {
+                    if (this.audioElement) {
+                        // Audio element hazırlığı
+                        this.audioElement.load();
+                        this.audioElement.volume = 0.01;
+
+                        const playPromise = this.audioElement.play();
+
+                        if (playPromise !== undefined) {
+                            await playPromise;
+                            this.audioElement.pause();
+                            this.audioElement.currentTime = 0;
+                            this.audioElement.volume = 1;
+                            this.isPreloaded = true;
+                            console.log('Audio element hazırlandı');
+                        }
+                    }
+
+                    // Web Audio API ile buffer hazırlığı
+                    if (this.rawAudioData && this.audioContext) {
+                        try {
+                            this.audioBuffer = await this.audioContext.decodeAudioData(this.rawAudioData.slice(0));
+                            console.log('Audio buffer hazırlandı');
+                        } catch (error) {
+                            console.warn('Audio buffer decode hatası:', error);
+                        }
+                    }
+
+                } catch (error) {
+                    console.warn('Ses ön yükleme hatası:', error);
+                    // Hata durumunda tekrar deneme
+                    setTimeout(() => {
+                        this.isPreloaded = false;
+                    }, 2000);
+                }
+            }
+
+            prepareAudioContext() {
+                // Ses dosyasını önceden fetch et
+                fetch('/uploads/notification.wav')
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Ses dosyası bulunamadı');
+                        }
+                        return response.arrayBuffer();
+                    })
+                    .then(data => {
+                        this.rawAudioData = data;
+                        console.log('Ses verisi hazırlandı');
+                    })
+                    .catch(error => {
+                        console.warn('Ses verisi yüklenemedi:', error);
+                        // Alternatif ses dosyası dene
+                        return fetch('/uploads/notification.mp3');
+                    })
+                    .then(response => {
+                        if (response) {
+                            return response.arrayBuffer();
+                        }
+                    })
+                    .then(data => {
+                        if (data && !this.rawAudioData) {
+                            this.rawAudioData = data;
+                            console.log('Alternatif ses verisi hazırlandı');
+                        }
+                    })
+                    .catch(error => {
+                        console.warn('Hiçbir ses dosyası yüklenemedi:', error);
+                    });
+            }
+
+            async playNotificationSound() {
+                if (!this.isSoundEnabled) {
+                    console.log('Bildirim sesi kapalı');
+                    return false;
+                }
+
+                console.log('Ses çalma girişimi başlatıldı');
+                console.log('hasInteracted:', this.hasInteracted);
+                console.log('isPreloaded:', this.isPreloaded);
+
+                if (!this.hasInteracted) {
+                    console.warn('Kullanıcı etkileşimi yok');
+                    this.showFallbackNotification();
+                    return false;
+                }
+
+                // Çoklu yöntem deneme
+                const methods = [
+                    { name: 'AudioElement', method: () => this.playWithAudioElement() },
+                    { name: 'AudioContext', method: () => this.playWithAudioContext() },
+                    { name: 'NewAudio', method: () => this.playWithNewAudio() }
+                ];
+
+                for (const methodObj of methods) {
+                    try {
+                        console.log(`${methodObj.name} ile ses çalma deneniyor...`);
+                        const result = await methodObj.method();
+                        if (result) {
+                            console.log(`${methodObj.name} ile ses başarıyla çalındı`);
+                            return true;
+                        }
+                    } catch (error) {
+                        console.warn(`${methodObj.name} başarısız:`, error.message);
+                    }
+                }
+
+                console.error('Hiçbir ses çalma metodu çalışmadı');
+                this.showFallbackNotification();
+                return false;
+            }
+
+            async playWithAudioElement() {
+                if (!this.audioElement) {
+                    console.log('Audio element bulunamadı');
+                    return false;
+                }
+
+                try {
+                    this.audioElement.currentTime = 0;
+                    this.audioElement.volume = 1;
+
+                    const playPromise = this.audioElement.play();
+
+                    if (playPromise !== undefined) {
+                        await playPromise;
+                        console.log('Audio element ile çalındı');
+                        return true;
+                    }
+                    return false;
+                } catch (error) {
+                    console.warn('Audio element hatası:', error);
+                    return false;
+                }
+            }
+
+            async playWithAudioContext() {
+                if (!this.audioContext || !this.audioBuffer) {
+                    console.log('AudioContext veya buffer hazır değil');
+                    return false;
+                }
+
+                try {
+                    if (this.audioContext.state === 'suspended') {
+                        await this.audioContext.resume();
+                    }
+
+                    const source = this.audioContext.createBufferSource();
+                    const gainNode = this.audioContext.createGain();
+
+                    source.buffer = this.audioBuffer;
+                    source.connect(gainNode);
+                    gainNode.connect(this.audioContext.destination);
+                    gainNode.gain.value = 1;
+
+                    source.start(0);
+                    console.log('AudioContext ile çalındı');
+                    return true;
+
+                } catch (error) {
+                    console.warn('AudioContext hatası:', error);
+                    return false;
+                }
+            }
+
+            async playWithNewAudio() {
+                try {
+                    const audio = new Audio('/uploads/notification.wav');
+                    audio.volume = 1;
+                    audio.preload = 'auto';
+
+                    await audio.play();
+                    console.log('New Audio ile çalındı');
+                    return true;
+                } catch (error) {
+                    console.warn('New Audio hatası:', error);
+                    return false;
+                }
+            }
+
+            showFallbackNotification() {
+                console.log('Fallback bildirim gösteriliyor');
+
+                // Görsel bildirim
+                if (window.showNotification) {
+                    showNotification('🔔 Yeni sipariş! (Ses çalınamadı)', 'success');
+                }
+
+                // Tarayıcı bildirimi
+                if ('Notification' in window && Notification.permission === 'granted') {
+                    new Notification('Yeni Sipariş!', {
+                        body: 'Restoran panenizde yeni bir sipariş var.',
+                        icon: '/favicon.ico',
+                        requireInteraction: true
+                    });
+                }
+
+                // Sayfa titreşimi (mobile)
+                if ('vibrate' in navigator) {
+                    navigator.vibrate([200, 100, 200]);
+                }
+
+                // Görsel flash efekti
+                this.createVisualFlash();
+            }
+
+            createVisualFlash() {
+                const flash = document.createElement('div');
+                flash.style.cssText = `
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 0, 0, 0.3);
+            z-index: 9999;
+            pointer-events: none;
+            animation: flash 0.5s ease-in-out;
+        `;
+
+                // CSS animation ekle
+                if (!document.getElementById('flash-style')) {
+                    const style = document.createElement('style');
+                    style.id = 'flash-style';
+                    style.textContent = `
+                @keyframes flash {
+                    0%, 100% { opacity: 0; }
+                    50% { opacity: 1; }
+                }
+            `;
+                    document.head.appendChild(style);
+                }
+
+                document.body.appendChild(flash);
+
+                setTimeout(() => {
+                    if (flash.parentNode) {
+                        flash.parentNode.removeChild(flash);
+                    }
+                }, 500);
+            }
+
+            toggleSound() {
+                this.isSoundEnabled = !this.isSoundEnabled;
+                setCookie('soundEnabled', this.isSoundEnabled, 30);
+                this.updateSoundIcon();
+
+                if (window.showNotification) {
+                    showNotification(`Bildirim sesi ${this.isSoundEnabled ? 'açıldı' : 'kapatıldı'}.`, 'success');
+                }
+
+                console.log('Ses durumu değiştirildi:', this.isSoundEnabled);
+
+                // Test sesi çal
+                if (this.isSoundEnabled && this.hasInteracted) {
+                    setTimeout(() => {
+                        this.playNotificationSound();
+                    }, 500);
+                }
+            }
+
+            updateSoundIcon() {
+                const soundIcon = document.getElementById('sound-icon');
+                if (soundIcon) {
+                    soundIcon.className = `fas fa-bell${this.isSoundEnabled ? '' : '-slash'}`;
+                }
+            }
+
+            async requestNotificationPermission() {
+                if ('Notification' in window && Notification.permission === 'default') {
+                    const permission = await Notification.requestPermission();
+                    console.log('Bildirim izni:', permission);
+                    return permission === 'granted';
+                }
+                return Notification.permission === 'granted';
+            }
+        }
+
+        // Global değişkenler
+        let soundManager;
+
+        // Socket Event Handlers
+        socket.on('newOrder', (order) => {
+            console.log('Yeni sipariş alındı:', order);
+            if (order.status === 'pending') {
+                // Başlığı değiştir
+                document.title = "🔔 Sipariş Geldi!!";
+
+                // Ses çal
+                if (soundManager) {
+                    soundManager.playNotificationSound();
+                }
+
+                // Bildirim göster
+                showNotification('Yeni sipariş alındı!', 'success');
+
+                // Sekmeye odaklanıldığında başlığı geri yükle
+                const handleFocus = () => {
+                    document.title = "<%= restaurant?.name || 'Restoran Adı' %> - Dashboard";
+                    window.location.reload();
+                    window.removeEventListener('focus', handleFocus);
+                };
+                window.addEventListener('focus', handleFocus);
+            } else {
+                console.log('Sipariş durumu pending değil:', order.status);
+                window.location.reload();
+            }
+        });
+
+        socket.on('orderStatusUpdated', (order) => {
+            console.log('Sipariş durumu güncellendi:', order);
+            window.location.reload();
+        });
+
+        // UI Functions
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.querySelector('.sidebar-overlay');
+            sidebar.classList.toggle('open');
+            overlay.classList.toggle('active');
+        }
+
+        function showNotification(message, type = 'success') {
+            const container = document.querySelector('.notification-container');
+            if (!container) return;
+
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `<span>${message}</span><button class="close-btn"><i class="fas fa-times"></i></button>`;
+
+            container.appendChild(notification);
+
+            const closeBtn = notification.querySelector('.close-btn');
+            if (closeBtn) {
+                closeBtn.onclick = () => {
+                    notification.style.display = 'none';
+                    if (notification.parentNode) {
+                        notification.parentNode.removeChild(notification);
+                    }
+                };
+            }
+
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.style.display = 'none';
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 5000);
+        }
+
+        function openModal(orderId) {
+            const modal = document.getElementById('modal');
+            const form = document.getElementById('status-form');
+            if (modal && form) {
+                form.action = `/restaurant/update-order-status/${orderId}?redirect=dashboard`;
+                modal.style.display = 'flex';
+            }
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('modal');
+            if (modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function toggleSound() {
+            if (soundManager) {
+                soundManager.toggleSound();
+            }
+        }
+
+        // Restaurant Status Toggle
+        async function toggleRestaurantStatus() {
+            try {
+                const slider = document.querySelector('.switch input');
+                if (!slider) return;
+
+                const newStatus = slider.checked ? 'open' : 'closed';
+
+                const response = await fetch('/restaurant/toggle-status', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ status: newStatus }),
+                    credentials: 'include'
+                });
+
+                if (response.ok) {
+                    showNotification(`Restoran ${newStatus === 'open' ? 'açıldı' : 'kapatıldı'}.`, 'success');
+                } else {
+                    const errorData = await response.json();
+                    if (errorData?.message === 'Aktif siparişler varken restoran kapatılamaz') {
+                        showNotification('Aktif siparişler varken restoran kapatılamaz.', 'error');
+                    } else {
+                        showNotification('Restoran durumu değiştirilemedi.', 'error');
+                    }
+                    slider.checked = !slider.checked;
+                }
+            } catch (error) {
+                console.error('Bağlantı hatası:', error);
+                showNotification('Restoran durumu değiştirilemedi.', 'error');
+                const slider = document.querySelector('.switch input');
+                if (slider) {
+                    slider.checked = !slider.checked;
+                }
+            }
+        }
+
+        // Logout Function
+        async function logout() {
+            try {
+                const response = await fetch('/restaurant/logout', {
+                    method: 'POST',
+                    credentials: 'include'
+                });
+
+                if (response.redirected || response.status === 301 || response.status === 302) {
+                    console.log('Redirecting to:', response.url);
+                    showNotification('Oturum doğrulaması başarısız. Lütfen tekrar giriş yap.');
+                    window.location.href = '/account/login';
+                    return;
+                }
+
+                const data = await response.json();
+                if (data.success) {
+                    showNotification(data.message || 'Başarıyla çıkış yapıldı.');
+                    window.location.href = '/';
+                } else {
+                    showNotification(data.message || 'Çıkış yapılamadı.', 'error');
+                    console.error('Logout failed:', data.message);
+                }
+            } catch (error) {
+                console.error('Logout error:', error);
+                showNotification('Çıkış yapılırken hata oluştu.', 'error');
+            }
+        }
+
+        // Event Listeners
+        window.onclick = function (event) {
+            const modal = document.getElementById('modal');
+            const sidebar = document.getElementById('sidebar');
+            const toggle = document.querySelector('.hamburger-btn');
+
+            if (event.target === modal) {
+                closeModal();
+            }
+
+            if (sidebar && toggle && !sidebar.contains(event.target) && !toggle.contains(event.target) && sidebar.classList.contains('open')) {
+                toggleSidebar();
+            }
+        };
+
+        // DOM Content Loaded
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log('DOM Content Loaded');
+
+            // Ses yöneticisini başlat
+            soundManager = new SoundManager();
+
+            // Bildirim iznini iste
+            soundManager.requestNotificationPermission();
+
+            // Sayfa başlığını ayarla
+            document.title = "<%= restaurant?.name || 'Restoran Adı' %> - Dashboard";
+
+            // Tema kontrolü
+            const themeToggle = document.querySelector('.theme-toggle');
+            const sunIcon = document.querySelector('.sun');
+            const moonIcon = document.querySelector('.moon');
+
+            if (themeToggle && sunIcon && moonIcon) {
+                themeToggle.addEventListener('click', function () {
+                    document.body.classList.toggle('dark-theme');
+                    sunIcon.classList.toggle('active');
+                    moonIcon.classList.toggle('active');
+                    localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
+                });
+
+                // Kaydedilmiş tema ayarını yükle
+                if (localStorage.getItem('theme') === 'dark') {
+                    document.body.classList.add('dark-theme');
+                    sunIcon.classList.remove('active');
+                    moonIcon.classList.add('active');
+                }
+            }
+
+            console.log('Tüm event listener\'lar kuruldu');
+        });
+
+        // Page Visibility API - Sekme değişimlerini takip et
+        document.addEventListener('visibilitychange', function () {
+            if (!document.hidden) {
+                console.log('Sayfa tekrar görünür oldu');
+                // Eğer başlık değişmişse, geri yükle
+                if (document.title.includes('🔔')) {
+                    document.title = "<%= restaurant?.name || 'Restoran Adı' %> - Dashboard";
+                }
+            }
+        });
+
+        // Service Worker kaydı (opsiyonel - gelecekte push notification için)
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function () {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(function (registration) {
+                        console.log('ServiceWorker kayıt başarılı:', registration.scope);
+                    })
+                    .catch(function (error) {
+                        console.log('ServiceWorker kayıt hatası:', error);
+                    });
+            });
+        }
+
+        console.log('Restaurant Dashboard Script yüklendi');
+    </script>
 
 
 </body>

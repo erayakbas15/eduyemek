@@ -41,6 +41,8 @@ const upload = multer({
 // Export multer upload middleware for use in routes
 exports.upload = upload;
 
+
+
 module.exports.getRestaurantDashboard = async (req, res) => {
   try {
     const userId = req.user._id;
@@ -65,7 +67,6 @@ module.exports.getRestaurantDashboard = async (req, res) => {
     const todayEnd = new Date(todayStart);
     todayEnd.setHours(23, 59, 59, 999);
 
-    // Bugünkü Teslim Edilen Sipariş Sayısı
     const todayDeliveredOrders = await Order.countDocuments({
       restaurantId: restaurant._id,
       createdAt: { $gte: todayStart, $lte: todayEnd },
@@ -80,7 +81,6 @@ module.exports.getRestaurantDashboard = async (req, res) => {
       status: "preparing",
     });
 
-    // Calculate daily revenue
     const dailyRevenue = await Order.aggregate([
       {
         $match: {
@@ -121,7 +121,7 @@ module.exports.getRestaurantDashboard = async (req, res) => {
       })
       .lean();
 
-    console.log("Recent orders:", JSON.stringify(recentOrders, null, 2)); // Debug log
+    console.log("Recent orders:", JSON.stringify(recentOrders, null, 2));
 
     const recentMeals = await Meal.find({ restaurantId: restaurant._id })
       .sort({ createdAt: -1 })
@@ -1319,57 +1319,33 @@ module.exports.restaurantLogout = async (req, res) => {
   }
 };
 
-// Toggle restaurant status
+// Sadece manuel kullanımlı restoran durumu güncelleme
 module.exports.toggleRestaurantStatus = async (req, res) => {
   try {
     const userId = req.user._id;
-    const { status } = req.body;
+    const { status } = req.body; // 'open' veya 'closed'
 
-    // Validate status
-    if (!["open", "closed"].includes(status)) {
-      return res.status(400).json({ message: "Geçersiz durum" });
-    }
-
-    // Find restaurant
     const restaurant = await Restaurant.findOne({ ownerId: userId });
     if (!restaurant) {
       return res.status(404).json({ message: "Restoran bulunamadı" });
     }
 
-    // Check for active orders if closing
-    if (status === "closed") {
-      const activeOrders = await Order.countDocuments({
-        restaurantId: restaurant._id,
-        status: { $in: ["pending", "preparing", "on_the_way"] },
-      });
-    }
-
-    // Update delivery status
+    // Aktif sipariş kontrolü YOK, istediği zaman durumu değiştirebilir
+    restaurant.manualOverride = true;
     restaurant.delivery.case = status;
     await restaurant.save();
 
-    // Log the action
-    await Log.create({
-      action: `Restoran ${status === "open" ? "Açıldı" : "Kapatıldı"}`,
-      actionType: "updated",
-      description: `${restaurant.name} restoranı ${
-        status === "open" ? "açıldı" : "kapatıldı"
-      } by ${req.user.email}`,
-      user: req.user.email,
-      role: req.user.role,
-    });
-
     res.status(200).json({
-      message: `Restoran ${status === "open" ? "açıldı" : "kapatıldı"}`,
+      message: `Restoran durumu '${status}' olarak güncellendi`,
+      status: restaurant.delivery.case,
+      manualOverride: restaurant.manualOverride,
     });
   } catch (error) {
     console.error("Toggle restaurant status error:", error);
-    res.status(500).json({
-      message: "Sunucu hatası",
-      error: process.env.NODE_ENV !== "production" ? error.message : undefined,
-    });
+    res.status(500).json({ message: "Sunucu hatası" });
   }
 };
+
 
 module.exports.replyComment = async (req, res) => {
   try {
@@ -1408,3 +1384,4 @@ module.exports.replyComment = async (req, res) => {
     res.status(500).json({ message: "Sunucu hatası" });
   }
 };
+
