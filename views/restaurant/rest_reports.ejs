@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -537,6 +538,7 @@
                 transform: translateX(100%);
                 opacity: 0;
             }
+
             to {
                 transform: translateX(0);
                 opacity: 1;
@@ -747,6 +749,7 @@
         }
     </style>
 </head>
+
 <body>
     <button class="hamburger-btn" onclick="toggleSidebar()">
         <i class="fas fa-bars"></i>
@@ -756,7 +759,9 @@
         <button class="sidebar-close-btn" onclick="toggleSidebar()">
             <i class="fas fa-times"></i>
         </button>
-        <h2><%= restaurant?.name || "Restoran Paneli" %></h2>
+        <h2>
+            <%= restaurant?.name || "Restoran Paneli" %>
+        </h2>
         <a href="/restaurant/dashboard" class="menu-item">
             <i class="fas fa-home"></i> Ana Sayfa
         </a>
@@ -794,14 +799,15 @@
                     <div class="slider-wrapper">
                         <span class="slider-label-close">Kapat</span>
                         <label class="switch">
-                            <input type="checkbox" <%= restaurant?.delivery?.case === 'open' ? 'checked' : '' %> onclick="toggleRestaurantStatus()">
+                            <input type="checkbox" <%=restaurant?.delivery?.case==='open' ? 'checked' : '' %>
+                            onclick="toggleRestaurantStatus()">
                             <span class="slider"></span>
                         </label>
                         <span class="slider-label-open">Aç</span>
                     </div>
                 </div>
                 <button class="theme-toggle">
-                    <i class="fas fa-sun sun"></i>
+                    <i class="fas fa-sun sun active"></i>
                     <i class="fas fa-moon moon"></i>
                 </button>
             </div>
@@ -830,28 +836,36 @@
                 <div class="stats-grid">
                     <% if (stats.noData) { %>
                         <div class="empty-state">Seçilen tarih aralığında veri bulunamadı.</div>
-                    <% } else { %>
-                        <div class="stat-card">
-                            <h3 class="stat-value"><%= stats.totalRevenue %> TL</h3>
-                            <p class="stat-title">Toplam Ciro</p>
-                            <p class="stat-subtitle">(<%= stats.totalRevenuePeriod %>)</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3 class="stat-value"><%= stats.totalOrderCount %> Sipariş</h3>
-                            <p class="stat-title">Toplam Sipariş</p>
-                            <p class="stat-subtitle">(<%= stats.totalOrderPeriod %>)</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3 class="stat-value"><%= stats.popularMeal.name %></h3>
-                            <p class="stat-title">En Popüler Ürün</p>
-                            <p class="stat-subtitle">(<%= stats.popularMeal.orderCount %> adet satıldı)</p>
-                        </div>
-                        <div class="stat-card">
-                            <h3 class="stat-value"><%= stats.customerSatisfaction %>/5</h3>
-                            <p class="stat-title">Müşteri Memnuniyeti</p>
-                            <p class="stat-subtitle">(<%= stats.reviewCount %> değerlendirme)</p>
-                        </div>
-                    <% } %>
+                        <% } else { %>
+                            <div class="stat-card">
+                                <h3 class="stat-value">
+                                    <%= stats.totalRevenue %> TL
+                                </h3>
+                                <p class="stat-title">Toplam Ciro</p>
+                                <p class="stat-subtitle">(<%= stats.totalRevenuePeriod %>)</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3 class="stat-value">
+                                    <%= stats.totalOrderCount %> Sipariş
+                                </h3>
+                                <p class="stat-title">Toplam Sipariş</p>
+                                <p class="stat-subtitle">(<%= stats.totalOrderPeriod %>)</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3 class="stat-value">
+                                    <%= stats.popularMeal.name %>
+                                </h3>
+                                <p class="stat-title">En Popüler Ürün</p>
+                                <p class="stat-subtitle">(<%= stats.popularMeal.orderCount %> adet satıldı)</p>
+                            </div>
+                            <div class="stat-card">
+                                <h3 class="stat-value">
+                                    <%= stats.customerSatisfaction %>/5
+                                </h3>
+                                <p class="stat-title">Müşteri Memnuniyeti</p>
+                                <p class="stat-subtitle">(<%= stats.reviewCount %> değerlendirme)</p>
+                            </div>
+                            <% } %>
                 </div>
             </div>
         </div>
@@ -859,47 +873,31 @@
             <div class="section-header">
                 <h2 class="section-title">En Popüler Ürünler</h2>
             </div>
-<div class="popular-items">
-    <% if (Array.isArray(popularItems) && popularItems.length > 0) { %>
-        <% popularItems.forEach(function(item) { %>
-            <div class="popular-item">
-                <div>
-                    <div class="item-name"><%= item.name %></div>
-                    <div class="item-orders"><%= item.orderCount %> adet satıldı</div>
-                </div>
-                <div class="item-count"><%= item.orderCount %></div>
+            <div class="popular-items">
+                <% if (Array.isArray(popularItems) && popularItems.length> 0) { %>
+                    <% popularItems.forEach(function(item) { %>
+                        <div class="popular-item">
+                            <div>
+                                <div class="item-name">
+                                    <%= item.name %>
+                                </div>
+                                <div class="item-orders">
+                                    <%= item.orderCount %> adet satıldı
+                                </div>
+                            </div>
+                            <div class="item-count">
+                                <%= item.orderCount %>
+                            </div>
+                        </div>
+                        <% }); %>
+                            <% } else { %>
+                                <div class="empty-state">Popüler ürün bulunmamaktadır.</div>
+                                <% } %>
             </div>
-        <% }); %>
-    <% } else { %>
-        <div class="empty-state">Popüler ürün bulunmamaktadır.</div>
-    <% } %>
-</div>
         </div>
     </div>
     <div class="notification-container"></div>
     <script>
-        // Cookie yardımcı fonksiyonları
-        function setCookie(name, value, days) {
-            let expires = "";
-            if (days) {
-                const date = new Date();
-                date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-                expires = "; expires=" + date.toUTCString();
-            }
-            document.cookie = name + "=" + (value || "") + expires + "; path=/";
-        }
-
-        function getCookie(name) {
-            const nameEQ = name + "=";
-            const ca = document.cookie.split(';');
-            for (let i = 0; i < ca.length; i++) {
-                let c = ca[i];
-                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
-            }
-            return null;
-        }
-
         function toggleSidebar() {
             const sidebar = document.getElementById('sidebar');
             const overlay = document.querySelector('.sidebar-overlay');
@@ -988,17 +986,17 @@
             const startDate = today.toISOString().split('T')[0]; // Bugünün tarihi (YYYY-MM-DD)
             const endOfMonth = new Date(today.getFullYear(), today.getMonth() + 1, 0).toISOString().split('T')[0]; // Ayın son günü
 
-            // Cookie'den tarihleri al veya varsayılanları kullan
-            startDateInput.value = getCookie('startDate') || startDate;
-            endDateInput.value = getCookie('endDate') || endOfMonth;
+            // Tarihleri localStorage'dan al veya varsayılanları kullan
+            startDateInput.value = localStorage.getItem('startDate') || startDate;
+            endDateInput.value = localStorage.getItem('endDate') || endOfMonth;
 
-            // Tema ayarlarını cookie'den al
-            const theme = getCookie('theme') || 'light';
-            if (theme === 'dark') {
+            // Tema ayarlarını localStorage'dan al
+            if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-theme');
                 sunIcon.classList.remove('active');
                 moonIcon.classList.add('active');
             } else {
+                document.body.classList.remove('dark-theme');
                 sunIcon.classList.add('active');
                 moonIcon.classList.remove('active');
             }
@@ -1006,10 +1004,9 @@
             // Tema değiştirme
             themeToggle.addEventListener('click', function () {
                 document.body.classList.toggle('dark-theme');
-                const isDark = document.body.classList.contains('dark-theme');
-                sunIcon.classList.toggle('active', !isDark);
-                moonIcon.classList.toggle('active', isDark);
-                setCookie('theme', isDark ? 'dark' : 'light', 365);
+                sunIcon.classList.toggle('active');
+                moonIcon.classList.toggle('active');
+                localStorage.setItem('theme', document.body.classList.contains('dark-theme') ? 'dark' : 'light');
             });
 
             // Filtre butonu
@@ -1020,8 +1017,8 @@
                     showNotification('Başlangıç tarihi bitiş tarihinden sonra olamaz.', 'error');
                     return;
                 }
-                setCookie('startDate', startDate, 7);
-                setCookie('endDate', endDate, 7);
+                localStorage.setItem('startDate', startDate);
+                localStorage.setItem('endDate', endDate);
                 window.location.href = `/restaurant/rest_reports?startDate=${startDate}&endDate=${endDate}`;
             });
 
@@ -1043,4 +1040,5 @@
         });
     </script>
 </body>
+
 </html>
