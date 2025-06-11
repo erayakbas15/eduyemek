@@ -314,7 +314,6 @@
         color: #ffffff !important;
       }
 
-
       .restaurant-card p {
         color: #cccccc !important;
       }
@@ -507,7 +506,6 @@
         color: #ffffff !important;
       }
 
-
       #basketPanel h2 {
         color: #F97316 !important;
       }
@@ -578,7 +576,6 @@
         color: #eab308 !important;
       }
     }
-
 
     @media (max-width: 1024px) {
       .hero-section h1 {
@@ -705,10 +702,15 @@
 <body class="bg-gray-50 font-sans min-h-screen text-gray-900">
   <header class="glass-card shadow-lg sticky top-0 z-40 transform transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-2">
-      <a href="/user/usermain"
-        class="header-logo text-2xl font-bold text-gray-800 hover:text-indigo-600 transition-all duration-300 flex items-center">
-        <i class="fas fa-utensils mr-2 text-orange-500 animate-pulse-fast"></i>eduyemek
-      </a>
+      <div class="flex items-center justify-between w-full md:w-auto">
+        <button id="hamburgerBtn" class="md:hidden flex items-center p-2" aria-label="Menüyü aç">
+          <i class="fas fa-bars text-2xl text-gray-700"></i>
+        </button>
+        <a href="/user/usermain"
+          class="header-logo text-2xl font-bold text-gray-800 hover:text-indigo-600 transition-all duration-300 flex items-center">
+          <i class="fas fa-utensils mr-2 text-orange-500 animate-pulse-fast"></i>eduyemek
+        </a>
+      </div>
 
       <div class="flex-1 w-full md:mx-4">
         <div class="relative">
@@ -725,7 +727,7 @@
         </div>
       </div>
 
-      <div class="header-buttons flex items-center space-x-3 w-full md:w-auto flex-wrap justify-center gap-2">
+      <div class="header-buttons hidden md:flex items-center space-x-3 w-full md:w-auto flex-wrap justify-center gap-2">
         <div class="relative w-full md:w-auto">
           <button id="addressBtn"
             class="address-btn flex items-center space-x-1 bg-white px-4 py-2 rounded-full text-gray-800 border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all duration-300 w-full md:w-auto justify-center group">
@@ -802,6 +804,39 @@
       </div>
     </div>
   </header>
+
+  <div id="hamburgerMenu"
+    class="fixed top-0 left-0 w-3/4 max-w-sm h-full bg-white shadow-xl transform -translate-x-full transition-transform duration-300 z-50">
+    <div class="p-4 border-b">
+      <h2 class="text-xl font-bold text-purple-600">Menü</h2>
+      <button id="closeHamburgerBtn" class="absolute top-4 right-4 text-gray-500 hover:text-red-500"
+        aria-label="Menüyü kapat">✖</button>
+    </div>
+    <nav class="p-4 space-y-2">
+      <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600">Ana Sayfa</a>
+      <a href="/user/usermain/account" class="block text-gray-700 hover:text-indigo-600">Hesabım</a>
+      <a href="/user/usermain/orders" class="block text-gray-700 hover:text-indigo-600">Siparişlerim</a>
+      <a href="/user/usermain/addresses" class="block text-gray-700 hover:text-indigo-600">Adreslerim</a>
+      <a href="/user/usermain/userinfo" class="block text-gray-700 hover:text-indigo-600">Kullanıcı Bilgilerim</a>
+      <a href="/" onclick="logout()" class="block text-red-600 hover:text-red-700">Çıkış Yap</a>
+    </nav>
+  </div>
+  <div id="hamburgerOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+  <button id="mobileCartBtn"
+    class="fixed bottom-4 right-4 md:hidden btn-secondary p-4 rounded-full shadow-lg flex items-center justify-center z-30"
+    aria-label="Sepeti aç" onclick="toggleBasketPanel(true)">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 10a1 1 0 102 0 1 1 0 00-2 0zm10 0a1 1 0 102 0 1 1 0 00-2 0z" />
+    </svg>
+    <% if (cartCount> 0) { %>
+      <span
+        class="notification-badge absolute -top-2 -right-2 w-6 h-6 text-xs font-bold rounded-full flex items-center justify-center">
+        <%= cartCount %>
+      </span>
+      <% } %>
+  </button>
 
   <div class="text-center pt-8 animate-fade-in">
     <h2 class="text-3xl font-bold text-gray-800">👤 Hesabım</h2>
@@ -928,7 +963,7 @@
                 aria-label="Şifre göster/gizle" onclick="togglePasswordVisibility('newPassword', this)">
                 <svg class="eye-open w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                   stroke-width="2" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round"(Hamburger Menu ve Mobile Cart Button eklendi) d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
@@ -1065,17 +1100,55 @@
       if (spinner) spinner.style.display = show ? 'block' : 'none';
     }
 
+    function setupHamburgerMenu() {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const hamburgerMenu = document.getElementById('hamburgerMenu');
+      const hamburgerOverlay = document.getElementById('hamburgerOverlay');
+      const closeHamburgerBtn = document.getElementById('closeHamburgerBtn');
 
+      if (!hamburgerBtn || !hamburgerMenu || !hamburgerOverlay || !closeHamburgerBtn) return;
 
+      hamburgerBtn.addEventListener('click', () => {
+        hamburgerMenu.classList.add('open');
+        hamburgerOverlay.classList.add('show');
+        document.body.classList.add('menu-open');
+        hamburgerBtn.setAttribute('aria-expanded', 'true');
+      });
 
+      closeHamburgerBtn.addEventListener('click', () => {
+        hamburgerMenu.classList.remove('open');
+        hamburgerOverlay.classList.remove('show');
+        document.body.classList.remove('menu-open');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+      });
 
+      hamburgerOverlay.addEventListener('click', () => {
+        hamburgerMenu.classList.remove('open');
+        hamburgerOverlay.classList.remove('show');
+        document.body.classList.remove('menu-open');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+      });
+
+      hamburgerMenu.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          hamburgerMenu.classList.remove('open');
+          hamburgerOverlay.classList.remove('show');
+          document.body.classList.remove('menu-open');
+          hamburgerBtn.setAttribute('aria-expanded', 'false');
+          hamburgerBtn.focus();
+        }
+      });
+    }
 
     function setupBasketPanel() {
       const basketPanel = document.getElementById('basketPanel');
       const basketOverlay = document.getElementById('basketOverlay');
       const closeBasketBtn = document.getElementById('closeBasketBtn');
       const cartBtn = document.querySelector('.cart-btn');
+      const mobileCartBtn = document.getElementById('mobileCartBtn');
       const confirmBasketBtn = document.getElementById('confirmBasketBtn');
+
+      if (!basketPanel || !basketOverlay || !closeBasketBtn || !cartBtn || !mobileCartBtn || !confirmBasketBtn) return;
 
       window.toggleBasketPanel = function (show) {
         if (show) {
@@ -1093,13 +1166,12 @@
       basketPanel.addEventListener('click', (e) => e.stopPropagation());
       closeBasketBtn.addEventListener('click', () => toggleBasketPanel(false));
       cartBtn.addEventListener('click', () => toggleBasketPanel(true));
+      mobileCartBtn.addEventListener('click', () => toggleBasketPanel(true));
 
       confirmBasketBtn.addEventListener('click', () => {
         window.location.href = '/user/usermain/checkout';
       });
     }
-
-
 
     async function loadBasketItems() {
       const basketStats = document.getElementById('basketStats');
@@ -1107,6 +1179,7 @@
       const basketContainer = document.getElementById('basketContainer');
       const basketSummary = document.getElementById('basketSummary');
       const confirmBasketBtn = document.getElementById('confirmBasketBtn');
+      const mobileCartBadge = document.querySelector('#mobileCartBtn .notification-badge');
 
       basketContainer.innerHTML = '<p class="text-sm text-gray-400">Yükleniyor...</p>';
 
@@ -1130,6 +1203,7 @@
           basketSummary.classList.add('hidden');
           confirmBasketBtn.classList.add('hidden');
           updateCartBadge(0);
+          if (mobileCartBadge) mobileCartBadge.classList.add('hidden');
           return;
         }
 
@@ -1144,10 +1218,9 @@
           div.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-purple-50 transition-colors duration-200';
           div.innerHTML = `
           <div class="flex items-center gap-4 flex-1">
-<div class="w-16 h-16 rounded-lg overflow-hidden shadow-md">
-  <img src="/uploads/lahmacun.png" alt="Açıklama" class="w-full h-full object-cover" />
-</div>
-
+            <div class="w-16 h-16 rounded-lg overflow-hidden shadow-md">
+              <img src="/uploads/lahmacun.png" alt="${item.name}" class="w-full h-full object-cover" />
+            </div>
             <div class="flex-1">
               <h3 class="font-semibold text-gray-800">${item.name}</h3>
               <p class="text-gray-600">Birim Fiyat: ${item.price.toFixed(2)}₺</p>
@@ -1189,14 +1262,16 @@
 
         confirmBasketBtn.classList.remove('hidden');
         updateCartBadge(totalQuantity);
+        if (mobileCartBadge) {
+          mobileCartBadge.textContent = totalQuantity;
+          mobileCartBadge.classList.toggle('hidden', totalQuantity === 0);
+        }
       } catch (err) {
         basketContainer.innerHTML = '<p class="text-sm text-red-500">Sepet yüklenemedi.</p>';
         console.error(err);
         showNotification(err.message || 'Sepet yüklenirken hata oluştu.', 'error');
       }
     }
-
-
 
     async function updateBasket(mealId, action) {
       try {
@@ -1226,13 +1301,12 @@
     }
 
     function updateCartBadge(count) {
-      const badge = document.querySelector('.notification-badge');
+      const badge = document.querySelector('.cart-btn .notification-badge');
       if (badge) {
         badge.textContent = count;
         badge.style.display = count > 0 ? 'flex' : 'none';
       }
     }
-
 
     // Şifre görünürlük toggle fonksiyonu
     function togglePasswordVisibility(inputId, button) {
@@ -1376,11 +1450,10 @@
     }
 
     document.addEventListener('DOMContentLoaded', async () => {
-      // Initialize basket panel
+      setupHamburgerMenu();
       setupBasketPanel();
       loadBasketItems();
       setupSearch();
-
 
       // Check for error query parameter
       const urlParams = new URLSearchParams(window.location.search);
@@ -1388,7 +1461,6 @@
       if (errorMessage) {
         showNotification(errorMessage, 'error');
       }
-
 
       // Fetch addresses
       try {
@@ -1422,9 +1494,6 @@
         document.getElementById('addressList').innerHTML = '<li class="text-red-500 text-sm">Adresler yüklenemedi</li>';
       }
     });
-
-
-
 
     const addressBtn = document.getElementById('addressBtn');
     const addressDropdown = document.getElementById('addressDropdown');
@@ -1473,8 +1542,6 @@
       }
     });
 
-
-
     function setupSearch() {
       const searchInput = document.getElementById('searchInput');
       const searchSuggestions = document.getElementById('searchSuggestions');
@@ -1519,9 +1586,6 @@
       });
     }
 
-
-
-
     // Çıkış yapma fonksiyonu
     async function logout() {
       try {
@@ -1560,15 +1624,12 @@
   <footer class="glass-card shadow-inner mt-auto py-4 relative z-10">
     <div class="max-w-3xl mx-auto px-2">
       <div class="text-center">
-
-        <!-- Ortalanmış logo + gap -->
         <div
           class="flex justify-center items-center text-base font-bold text-gray-800 hover:text-indigo-600 transition-all duration-300 cursor-pointer mb-2">
           <i class="fas fa-utensils mr-2 text-orange-500 animate-pulse-fast"></i>
           eduyemek
         </div>
         <div class="text-[10px] text-gray-500">© 2025 eduyemek - Tüm hakları saklıdır.</div>
-
       </div>
     </div>
   </footer>

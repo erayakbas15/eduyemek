@@ -689,7 +689,7 @@
 
 <body class="bg-gray-50 font-sans min-h-screen text-gray-900 flex flex-col">
   <!-- Loading Overlay -->
-  <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+  <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex给他们center justify-center z-50 hidden">
     <div class="glass-card p-8 rounded-lg shadow-xl border border-white border-opacity-60">
       <div class="loading-spinner mx-auto mb-4"></div>
       <p class="text-gray-700 text-sm">Siparişler yükleniyor...</p>
@@ -704,15 +704,20 @@
   <!-- Header -->
   <header class="glass-card shadow-lg sticky top-0 z-40 transform transition-all duration-300">
     <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-2">
-      <a href="/user/usermain"
-        class="header-logo text-2xl font-bold text-gray-800 hover:text-indigo-600 transition-all duration-300 flex items-center">
-        <i class="fas fa-utensils mr-2 text-orange-500 animate-pulse-fast"></i>eduyemek
-      </a>
-
+      <div class="flex items-center justify-between w-full md:w-auto">
+        <button id="hamburgerBtn" class="md:hidden flex items-center p-2" aria-label="Menüyü aç">
+          <i class="fas fa-bars text-2xl text-gray-700"></i>
+        </button>
+        <a href="/user/usermain"
+          class="header-logo text-2xl font-bold text-gray-800 hover:text-indigo-600 transition-all duration-300 flex items-center">
+          <i class="fas fa-utensils mr-2 text-orange-500 animate-pulse-fast"></i>eduyemek
+        </a>
+      </div>
       <div class="flex-1 w-full md:mx-4">
         <div class="relative">
           <input type="text" id="searchInput" placeholder="Restoran, mutfak veya yemek ara..."
-            class="search-input w-full px-5 py-2 pl-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700 shadow-sm transition-all duration-300" />
+            class="search-input w-full px-5 py-2 pl-10 border border-gray-300 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 text-gray-700 shadow-sm transition-all duration-300"
+            aria-label="Restoran veya yemek ara" />
           <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" fill="none"
             stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -723,11 +728,11 @@
           </div>
         </div>
       </div>
-
-      <div class="header-buttons flex items-center space-x-3 w-full md:w-auto flex-wrap justify-center gap-2">
+      <div class="header-buttons hidden md:flex items-center space-x-3 w-full md:w-auto flex-wrap justify-center gap-2">
         <div class="relative w-full md:w-auto">
           <button id="addressBtn"
-            class="address-btn flex items-center space-x-1 bg-white px-4 py-2 rounded-full text-gray-800 border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all duration-300 w-full md:w-auto justify-center group">
+            class="address-btn flex items-center space-x-1 bg-white px-4 py-2 rounded-full text-gray-800 border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all duration-300 w-full md:w-auto justify-center group"
+            aria-label="Teslimat adresini seç" aria-expanded="false">
             <svg class="w-4 h-4 text-indigo-500 group-hover:text-indigo-600 transition-colors duration-300" fill="none"
               stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -744,18 +749,16 @@
           <div id="addressDropdown"
             class="address-dropdown absolute hidden mt-1 w-full md:w-64 rounded-lg shadow-md z-50">
             <div class="p-3">
-              <div class="text-xs font-semibold text-gray-700 mb-2">Teslimat Adresi</div>
-              <ul id="addressList" class="space-y-1">
-                <!-- Addresses will be populated dynamically -->
-              </ul>
+              <div class="teslimat-adresi text-xs font-semibold text-gray-700 mb-2">Teslimat Adresi</div>
+              <ul id="addressList" class="space-y-1"></ul>
             </div>
           </div>
         </div>
-
         <div class="relative inline-block text-left group w-full md:w-auto">
           <a href="/user/usermain/account">
             <button
-              class="account-btn flex items-center space-x-1 bg-white px-4 py-2 rounded-full text-gray-800 border border-gray-200 hover:bg-gray-50 hover:shadow-md transition-all duration-300 w-full md:w-auto justify-center">
+              class="account-btn flex items-center space-x-1 bg-white px-4 py-2 rounded-full text-gray-800 border border-gray-200 hover:bg-gray-50 hover:shadow-md transition-all duration-300 w-full md:w-auto justify-center"
+              aria-label="Hesap menüsünü aç" aria-expanded="false">
               <svg class="w-4 h-4 text-indigo-500 transition-colors duration-300" fill="none" stroke="currentColor"
                 viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -772,7 +775,11 @@
           <div
             class="absolute left-0 mt-2 w-full md:w-48 glass-card border border-gray-200 rounded-lg shadow-xl z-50 hidden group-hover:block origin-top transform transition-all duration-300 ease-out scale-y-0 opacity-0 group-hover:scale-y-100 group-hover:opacity-100">
             <a href="/user/usermain/orders"
-              class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-t-lg text-sm transition-colors duration-200">Siparişlerim</a>
+              class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 rounded-t-lg text-sm transition-colors duration-200 relative">
+              Siparişlerim
+              <span id="orderBadge"
+                class="notification-badge absolute top-2 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
+            </a>
             <a href="/user/usermain/addresses"
               class="block px-4 py-2 text-gray-700 hover:bg-indigo-50 hover:text-indigo-700 text-sm transition-colors duration-200">Adreslerim</a>
             <a href="/user/usermain/userinfo"
@@ -783,9 +790,8 @@
               Yap</a>
           </div>
         </div>
-
         <button onclick="toggleBasketPanel(true)"
-          class="cart-btn relative flex items-center space-x-2 btn-secondary px-4 py-2 rounded-full font-semibold w-full md:w-auto justify-center hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
+          class="cart-btn flex items-center space-x-2 btn-secondary px-4 py-2 rounded-full font-semibold w-full md:w-auto justify-center hover:shadow-lg transform hover:-translate-y-1 transition-all duration-300">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
               d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 10a1 1 0 102 0 1 1 0 00-2 0zm10 0a1 1 0 102 0 1 1 0 00-2 0z" />
@@ -798,10 +804,59 @@
             </div>
             <% } %>
         </button>
-
       </div>
     </div>
   </header>
+
+
+  <div id="hamburgerMenu"
+    class="fixed top-0 left-0 w-3/4 max-w-sm h-full bg-white shadow-xl transform -translate-x-full transition-transform duration-300 z-50">
+    <div class="p-4 border-b">
+      <h2 class="text-xl font-bold text-purple-600">Menü</h2>
+      <button id="closeHamburgerBtn" class="absolute top-4 right-4 text-gray-500 hover:text-red-500"
+        aria-label="Menüyü kapat">✖</button>
+    </div>
+    <nav class="p-4 space-y-2">
+      <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600 relative">
+        Ana Sayfa
+        <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
+      </a>
+      <a href="/user/usermain/account" class="block text-gray-700 hover:text-indigo-600 relative">
+        Hesabım
+        <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
+      </a>
+      <a href="/user/usermain/orders" class="block text-gray-700 hover:text-indigo-600 relative">
+        Siparişlerim
+        <span id="mobileOrderBadge"
+          class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
+      </a>
+      <a href="/user/usermain/addresses" class="block text-gray-700 hover:text-indigo-600">Adreslerim</a>
+
+      <a href="/user/usermain/userinfo" class="block text-gray-700 hover:text-indigo-600 relative">
+        Kullanıcı Bilgilerim
+        <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
+      </a>
+      <a href="/" onclick="logout()" class="block text-red-600 hover:text-red-700">Çıkış Yap</a>
+    </nav>
+  </div>
+  <div id="hamburgerOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
+
+
+  <!-- Mobile Cart Button -->
+  <button id="mobileCartBtn"
+    class="fixed bottom-4 right-4 md:hidden btn-secondary p-4 rounded-full shadow-lg flex items-center justify-center z-30"
+    onclick="toggleBasketPanel(true)" aria-label="Sepeti aç">
+    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+        d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 10a1 1 0 102 0 1 1 0 00-2 0zm10 0a1 1 0 102 0 1 1 0 00-2 0z" />
+    </svg>
+    <% if (cartCount > 0) { %>
+      <span
+        class="notification-badge absolute -top-2 -right-2 w-6 h-6 text-xs font-bold rounded-full flex items-center justify-center">
+        <%= cartCount %>
+      </span>
+      <% } %>
+  </button>
 
   <main class="min-h-screen py-8 px-4 relative z-10">
     <div class="max-w-4xl mx-auto animate-fade-in">
@@ -1029,13 +1084,13 @@
       </div>
       <button id="confirmBasketBtn"
         class="w-full bg-orange-500 hover:bg-orange-600 text-white font-semibold px-4 py-2 rounded mt-4 hidden">Sepeti
-        Onayla</button>
+        Mulea</button>
     </main>
   </div>
 
   <script>
     document.addEventListener('DOMContentLoaded', async () => {
-      // Initialize basket panel
+      setupHamburgerMenu();
       setupBasketPanel();
       setupSearch();
       setupOrderFilters(); // New function to handle order filters
@@ -1153,12 +1208,55 @@
       }
     }
 
+        function setupHamburgerMenu() {
+      const hamburgerBtn = document.getElementById('hamburgerBtn');
+      const hamburgerMenu = document.getElementById('hamburgerMenu');
+      const hamburgerOverlay = document.getElementById('hamburgerOverlay');
+      const closeHamburgerBtn = document.getElementById('closeHamburgerBtn');
+
+      if (!hamburgerBtn || !hamburgerMenu || !hamburgerOverlay || !closeHamburgerBtn) return;
+
+      hamburgerBtn.addEventListener('click', () => {
+        hamburgerMenu.classList.add('open');
+        hamburgerOverlay.classList.add('show');
+        document.body.classList.add('menu-open');
+        hamburgerBtn.setAttribute('aria-expanded', 'true');
+      });
+
+      closeHamburgerBtn.addEventListener('click', () => {
+        hamburgerMenu.classList.remove('open');
+        hamburgerOverlay.classList.remove('show');
+        document.body.classList.remove('menu-open');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+      });
+
+      hamburgerOverlay.addEventListener('click', () => {
+        hamburgerMenu.classList.remove('open');
+        hamburgerOverlay.classList.remove('show');
+        document.body.classList.remove('menu-open');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+      });
+
+      hamburgerMenu.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+          hamburgerMenu.classList.remove('open');
+          hamburgerOverlay.classList.remove('show');
+          document.body.classList.remove('menu-open');
+          hamburgerBtn.setAttribute('aria-expanded', 'false');
+          hamburgerBtn.focus();
+        }
+      });
+    }
+
+
+
     // Basket panel setup
     function setupBasketPanel() {
       const basketPanel = document.getElementById('basketPanel');
       const basketOverlay = document.getElementById('basketOverlay');
       const closeBasketBtn = document.getElementById('closeBasketBtn');
       const cartBtn = document.querySelector('.cart-btn');
+      const mobileCartBtn = document.getElementById('mobileCartBtn');
       const confirmBasketBtn = document.getElementById('confirmBasketBtn');
 
       window.toggleBasketPanel = function (show) {
@@ -1177,6 +1275,7 @@
       basketPanel.addEventListener('click', (e) => e.stopPropagation());
       closeBasketBtn.addEventListener('click', () => toggleBasketPanel(false));
       cartBtn.addEventListener('click', () => toggleBasketPanel(true));
+      mobileCartBtn.addEventListener('click', () => toggleBasketPanel(true));
 
       confirmBasketBtn.addEventListener('click', () => {
         window.location.href = '/user/usermain/checkout';
@@ -1189,6 +1288,7 @@
       const basketContainer = document.getElementById('basketContainer');
       const basketSummary = document.getElementById('basketSummary');
       const confirmBasketBtn = document.getElementById('confirmBasketBtn');
+      const mobileCartBadge = document.querySelector('#mobileCartBtn .notification-badge');
 
       basketContainer.innerHTML = '<p class="text-sm text-gray-400">Yükleniyor...</p>';
 
@@ -1212,6 +1312,7 @@
           basketSummary.classList.add('hidden');
           confirmBasketBtn.classList.add('hidden');
           updateCartBadge(0);
+          if (mobileCartBadge) mobileCartBadge.classList.add('hidden');
           return;
         }
 
@@ -1270,6 +1371,10 @@
 
         confirmBasketBtn.classList.remove('hidden');
         updateCartBadge(totalQuantity);
+        if (mobileCartBadge) {
+          mobileCartBadge.textContent = totalQuantity;
+          mobileCartBadge.classList.toggle('hidden', totalQuantity === 0);
+        }
       } catch (err) {
         basketContainer.innerHTML = '<p class="text-sm text-red-500">Sepet yüklenemedi.</p>';
         console.error(err);
@@ -1305,7 +1410,7 @@
     }
 
     function updateCartBadge(count) {
-      const badge = document.querySelector('.notification-badge');
+      const badge = document.querySelector('.cart-btn .notification-badge');
       if (badge) {
         badge.textContent = count;
         badge.style.display = count > 0 ? 'flex' : 'none';
