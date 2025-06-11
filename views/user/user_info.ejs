@@ -418,6 +418,10 @@
         color: #cccccc !important;
       }
 
+      .info-badge {
+        color: #000000 !important;
+      }
+
       h1,
       h2,
       h3,
@@ -836,13 +840,13 @@
 
           <div class="form-group">
             <label class="block text-sm font-semibold mb-2 text-gray-700" for="email">
-              İTÜ Mail
+              Üniversite Mail
               <span
                 class="info-badge bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full ml-2 font-medium">Değiştirilemez</span>
             </label>
             <input id="email" name="email" type="email" value="<%= user.email || '' %>" disabled
               class="input-glass w-full rounded-lg px-4 py-3 cursor-not-allowed bg-gray-100 text-gray-600" />
-            <p class="text-xs text-gray-500 mt-1">Bu alan İTÜ sisteminden gelmektedir ve değiştirilemez.</p>
+            <p class="text-xs text-gray-500 mt-1">Bu alan üniversite sisteminden gelmektedir ve değiştirilemez.</p>
           </div>
 
           <div class="form-group">
@@ -1404,7 +1408,7 @@
             li.dataset.addressId = addr._id;
             li.innerHTML = `
               <div class="font-medium text-sm">${addr.title}</div>
-              <div class="text-xs text-gray-500">${addr.formatted_address}</div>
+              <div class="text-xs text-gray-500">${addr.address}</div>
             `;
             if (addr._id === selectedAddressId) {
               li.classList.add('bg-blue-100');
@@ -1556,11 +1560,15 @@
   <footer class="glass-card shadow-inner mt-auto py-4 relative z-10">
     <div class="max-w-3xl mx-auto px-2">
       <div class="text-center">
-        <div class="text-base font-bold text-purple-600 mb-2">
-          🍽️ eduyemek
+
+        <!-- Ortalanmış logo + gap -->
+        <div
+          class="flex justify-center items-center text-base font-bold text-gray-800 hover:text-indigo-600 transition-all duration-300 cursor-pointer mb-2">
+          <i class="fas fa-utensils mr-2 text-orange-500 animate-pulse-fast"></i>
+          eduyemek
         </div>
-        <p class="text-gray-600 text-xs mb-2">Edu, kampüsün Sofrası</p>
-        <div class="text-[10px] text-gray-500">© 2025 eduyemek. Tüm hakları saklıdır.</div>
+        <div class="text-[10px] text-gray-500">© 2025 eduyemek - Tüm hakları saklıdır.</div>
+
       </div>
     </div>
   </footer>

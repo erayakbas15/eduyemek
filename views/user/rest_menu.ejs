@@ -496,7 +496,15 @@
         border-color: #404040 !important;
       }
 
+      #addressDropdown .adres-dropdown {
+        color: #cccccc !important;
+      }
+
       #addressDropdown .text-xs {
+        color: #000000 !important;
+      }
+
+      #addressDropdown .teslimat-adresi {
         color: #cccccc !important;
       }
 
@@ -966,7 +974,7 @@
         </div>
 
         <p class="text-gray-600 text-xs mb-2">Edu, kampüsün Sofrası</p>
-        <div class="text-[10px] text-gray-500">© 2025 eduyemek.com - Tüm hakları saklıdır.</div>
+        <div class="text-[10px] text-gray-500">© 2025 eduyemek. Tüm hakları saklıdır.</div>
 
       </div>
     </div>
@@ -1144,7 +1152,7 @@
           div.innerHTML = `
           <div class="flex items-center gap-4 flex-1">
             <div class="w-16 h-16 rounded-lg overflow-hidden shadow-md">
-              <img src="/Uploads/lahmacun.png" alt="${item.name}" class="w-full h-full object-cover" loading="lazy" draggable="false" oncontextmenu="return false;" />
+              <img src="/Uploads/lahmacun.png" class="w-full h-full object-cover" loading="lazy" draggable="false" oncontextmenu="return false;" />
             </div>
             <div class="flex-1">
               <h3 class="font-semibold text-gray-800">${item.name}</h3>
@@ -1451,7 +1459,7 @@
         const container = document.getElementById('restaurantInfoContainer');
         container.innerHTML = `
           <div class="restaurant-card ${restaurantData.delivery.case === 'closed' ? 'closed' : ''} bg-white rounded-lg shadow-md max-w-xs mx-auto flex flex-col overflow-hidden">
-            <img src="/Uploads/lahmacun.png" alt="${item.name}" class="w-full h-full object-cover" loading="lazy" draggable="false" oncontextmenu="return false;" />
+            <img src="/Uploads/lahmacun.png" class="w-full h-full object-cover" loading="lazy" draggable="false" oncontextmenu="return false;" />
             <div class="flex flex-col justify-center items-center p-4 flex-grow text-center">
 <h3 class="">${restaurantData.name || 'İsimsiz Restoran'}</h3>
               <p class="text-gray-600 text-xs line-clamp-1 mt-1">${restaurantData.description || 'Henüz açıklama yok.'}</p>

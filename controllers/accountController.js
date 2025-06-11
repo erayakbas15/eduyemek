@@ -12,14 +12,16 @@ const verificationData = new Map();
 // Initialize resetTokens Map for password reset
 const resetTokens = new Map();
 
-// Initialize nodemailer transporter
 const transporter = nodemailer.createTransport({
-  service: "gmail",
+  host: "smtp.zoho.eu",  // Zoho SMTP sunucusu
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
   },
 });
+
 
 // Function to generate verification code
 function generateVerificationCode() {
