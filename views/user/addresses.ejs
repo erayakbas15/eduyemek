@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="tr" class="h-full">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
@@ -208,8 +209,15 @@
         }
 
         @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-3px); }
+
+            0%,
+            100% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-3px);
+            }
         }
 
         .loading-spinner {
@@ -222,8 +230,13 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         header.shrunk {
@@ -322,8 +335,8 @@
             pointer-events: none;
         }
 
-        .floating-label input:not(:placeholder-shown) + label,
-        .floating-label textarea:not(:placeholder-shown) + label {
+        .floating-label input:not(:placeholder-shown)+label,
+        .floating-label textarea:not(:placeholder-shown)+label {
             top: -8px;
             left: 8px;
             font-size: clamp(10px, 1.5vw, 12px);
@@ -333,7 +346,9 @@
         }
 
         @media (prefers-color-scheme: dark) {
-            body, .bg-gray-50 {
+
+            body,
+            .bg-gray-50 {
                 background: #1a1a1a !important;
                 color: #ffffff !important;
             }
@@ -439,28 +454,35 @@
             }
 
             #addressDropdown .adres-dropdown {
-                color: #cccccc !important;
+                color: #000000 !important;
             }
 
             #addressDropdown .text-xs {
-                color: #999999 !important;
+                color: #000000 !important;
             }
 
             #addressDropdown .teslimat-adresi {
                 color: #cccccc !important;
             }
 
-            h1, h2, h3, h4, h5, h6 {
+            h1,
+            h2,
+            h3,
+            h4,
+            h5,
+            h6 {
                 color: #ffffff !important;
             }
 
-            p, span, div {
+            p,
+            span,
+            div {
                 color: #ffffff !important;
             }
 
             .address-item .font-medium,
             .address-item .text-xs {
-                color: #cccccc !important;
+                color: #000000 !important;
             }
 
             .text-gray-600 {
@@ -475,7 +497,9 @@
                 color: #666666 !important;
             }
 
-            .text-gray-700, .text-gray-800, .text-gray-900 {
+            .text-gray-700,
+            .text-gray-800,
+            .text-gray-900 {
                 color: #ffffff !important;
             }
 
@@ -489,7 +513,9 @@
                 color: #ffffff !important;
             }
 
-            input, textarea, select {
+            input,
+            textarea,
+            select {
                 background: #2d2d2d !important;
                 color: #ffffff !important;
                 border-color: #404040 !important;
@@ -513,7 +539,7 @@
             }
 
             #basketPanel h2 {
-                color: #F97316 !important;
+                color: #ffffff !important;
             }
 
             #restaurantName {
@@ -524,7 +550,8 @@
                 color: #ffffff !important;
             }
 
-            #basketContainer, #basketSummary {
+            #basketContainer,
+            #basketSummary {
                 background: #2d2d2d !important;
                 border: 1px solid #404040 !important;
             }
@@ -597,27 +624,41 @@
 
         @media (max-width: 768px) {
             header {
-                padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 2.5vw, 1rem);
+                padding: 0.5rem 1rem;
             }
 
             .header-logo {
-                font-size: clamp(1rem, 3vw, 1.25rem);
+                font-size: 1.25rem;
             }
 
             .search-input {
-                font-size: clamp(12px, 2vw, 14px);
-                padding: clamp(0.5rem, 2vw, 0.75rem) clamp(0.75rem, 2.5vw, 1rem) clamp(0.5rem, 2vw, 0.75rem) clamp(2rem, 5vw, 2.5rem);
+                font-size: 0.875rem;
+                padding: 0.5rem 0.75rem 0.5rem 2rem;
             }
 
-            .search-input + svg {
-                width: clamp(12px, 2vw, 14px);
-                height: clamp(12px, 2vw, 14px);
-                left: clamp(0.5rem, 2vw, 0.75rem);
+            .search-input+svg {
+                width: 0.875rem;
+                height: 0.875rem;
+                left: 0.75rem;
             }
 
             .address-dropdown {
                 width: 100%;
                 max-width: clamp(14rem, 90%, 16rem);
+            }
+
+            .header-buttons {
+                flex-direction: column;
+                gap: clamp(0.25rem, 2vw, 0.5rem);
+            }
+
+            .address-btn,
+            .account-btn,
+            .cart-btn {
+                width: 100%;
+                justify-content: center;
+                padding: clamp(8px, 2.5vw, 10px) clamp(12px, 3vw, 16px);
+                font-size: clamp(12px, 2vw, 14px);
             }
 
             .hero-section {
@@ -668,10 +709,6 @@
                 gap: clamp(1rem, 3vw, 1.5rem);
             }
 
-            .glass-card {
-                padding: clamp(1rem, 3vw, 1.5rem);
-            }
-
             .address-card {
                 padding: clamp(0.75rem, 2vw, 1rem);
             }
@@ -714,10 +751,6 @@
                 font-size: clamp(11px, 2vw, 12px);
             }
 
-            #basketPanel {
-                width: clamp(260px, 90%, 320px);
-            }
-
             .address-card h3 {
                 font-size: clamp(12px, 2vw, 14px);
             }
@@ -732,12 +765,14 @@
                 display: flex !important;
             }
 
-            #hamburgerBtn, #mobileCartBtn {
+            #hamburgerBtn,
+            #mobileCartBtn {
                 display: none;
             }
         }
     </style>
 </head>
+
 <body class="bg-gray-50 font-sans min-h-screen text-gray-900 flex flex-col">
     <header class="glass-card shadow-lg sticky top-0 z-40 transform transition-all duration-300">
         <div class="max-w-7xl mx-auto px-4 py-3 flex flex-col md:flex-row justify-between items-center gap-2">
@@ -765,13 +800,14 @@
                     </div>
                 </div>
             </div>
-            <div class="header-buttons hidden md:flex items-center space-x-3 w-full md:w-auto flex-wrap justify-center gap-2">
+            <div
+                class="header-buttons hidden md:flex items-center space-x-3 w-full md:w-auto flex-wrap justify-center gap-2">
                 <div class="relative w-full md:w-auto">
                     <button id="addressBtn"
                         class="address-btn flex items-center space-x-1 bg-white px-4 py-2 rounded-full text-gray-800 border border-gray-200 hover:border-indigo-300 hover:shadow-md transition-all duration-300 w-full md:w-auto justify-center group"
                         aria-label="Teslimat adresini seç" aria-expanded="false">
-                        <svg class="w-4 h-4 text-indigo-500 group-hover:text-indigo-600 transition-colors duration-300" fill="none"
-                            stroke="currentColor" viewBox="0 0 24 24">
+                        <svg class="w-4 h-4 text-indigo-500 group-hover:text-indigo-600 transition-colors duration-300"
+                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                 d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -796,15 +832,16 @@
                         <button
                             class="account-btn flex items-center space-x-1 bg-white px-4 py-2 rounded-full text-gray-800 border border-gray-200 hover:bg-gray-50 hover:shadow-md transition-all duration-300 w-full md:w-auto justify-center"
                             aria-label="Hesap menüsünü aç" aria-expanded="false">
-                            <svg class="w-4 h-4 text-indigo-500 transition-colors duration-300" fill="none" stroke="currentColor"
-                                viewBox="0 0 24 24">
+                            <svg class="w-4 h-4 text-indigo-500 transition-colors duration-300" fill="none"
+                                stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                     d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                             </svg>
                             <span class="font-medium">Hesabım</span>
                             <svg class="w-3 h-3 text-gray-500 transform group-hover:rotate-180 transition-transform duration-300"
                                 fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M19 9l-7 7-7-7" />
                             </svg>
                         </button>
                     </a>
@@ -834,12 +871,12 @@
                             d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 10a1 1 0 102 0 1 1 0 00-2 0zm10 0a1 1 0 102 0 1 1 0 00-2 0z" />
                     </svg>
                     <span>Sepetim</span>
-                    <% if (cartCount > 0) { %>
+                    <% if (cartCount> 0) { %>
                         <div
                             class="notification-badge absolute -top-1 -right-1 bg-red-500 w-5 h-5 text-white text-xs font-bold rounded-full flex items-center justify-center animate-bounce-once">
                             <%= cartCount %>
                         </div>
-                    <% } %>
+                        <% } %>
                 </button>
             </div>
         </div>
@@ -854,7 +891,7 @@
         </div>
         <nav class="p-4 space-y-2">
             <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600 relative">
-                Ana Sayfa
+                Restoranlar
                 <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
             </a>
             <a href="/user/usermain/account" class="block text-gray-700 hover:text-indigo-600 relative">
@@ -883,12 +920,12 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                 d="M3 3h2l.4 2M7 13h10l4-8H5.4m.6 10a1 1 0 102 0 1 1 0 00-2 0zm10 0a1 1 0 102 0 1 1 0 00-2 0z" />
         </svg>
-        <% if (cartCount > 0) { %>
+        <% if (cartCount> 0) { %>
             <span
                 class="notification-badge absolute -top-2 -right-2 w-6 h-6 text-xs font-bold rounded-full flex items-center justify-center">
                 <%= cartCount %>
             </span>
-        <% } %>
+            <% } %>
     </button>
 
     <div class="min-h-screen py-4 px-2 relative z-10">
@@ -922,21 +959,21 @@
                                         </div>
                                     </div>
                                 </div>
-                            <% } else { %>
-                                <div class="address-empty">
-                                    <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor"
-                                        viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                    </svg>
-                                    <p>Henüz seçili bir adresiniz bulunmamaktadır.</p>
-                                    <p class="text-xs mt-1 opacity-75">Aşağıdan bir adres seçebilir veya yeni bir
-                                        adres
-                                        ekleyebilirsiniz.</p>
-                                </div>
-                            <% } %>
+                                <% } else { %>
+                                    <div class="address-empty">
+                                        <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor"
+                                            viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <p>Henüz seçili bir adresiniz bulunmamaktadır.</p>
+                                        <p class="text-xs mt-1 opacity-75">Aşağıdan bir adres seçebilir veya yeni bir
+                                            adres
+                                            ekleyebilirsiniz.</p>
+                                    </div>
+                                    <% } %>
                         </div>
                     </div>
 
@@ -966,8 +1003,8 @@
                     class="glass-card p-6 flex-1 animate-fade-in shadow-xl border-2 border-gray-400 border-opacity-40 flex flex-col">
                     <h2 class="text-3xl font-bold text-gray-800 mb-6">🏠 Kayıtlı Adreslerim</h2>
                     <div id="addressList" class="space-y-3 flex-1 overflow-auto">
-                        <% if (addresses && addresses.length > 0) { %>
-                            <% addresses.forEach((addr, index) => { %>
+                        <% if (addresses && addresses.length> 0) { %>
+                            <% addresses.forEach((addr, index)=> { %>
                                 <div class="address-card p-4 animate-fade-in" data-address-id="<%= addr._id %>">
                                     <div class="flex items-start justify-between">
                                         <div class="flex-1">
@@ -986,7 +1023,7 @@
                                                         d="M8 7V3a2 2 0 012-2h4a2 2 0 012 2v4m-6 4v10a2 2 0 002 2h4a2 2 0 002-2V11m-6 0h8" />
                                                 </svg>
                                                 <%= new Date(addr.createdAt).toLocaleDateString('tr-TR', {
-                                                    day: 'numeric', month: 'long', year: 'numeric' }) %>
+                                                    day: 'numeric' , month: 'long' , year: 'numeric' }) %>
                                             </div>
                                         </div>
                                         <div class="ml-3 flex space-x-2 flex-wrap gap-2">
@@ -1009,22 +1046,22 @@
                                         </div>
                                     </div>
                                 </div>
-                            <% }) %>
-                        <% } else { %>
-                            <div class="address-empty">
-                                <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor"
-                                    viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                        d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
-                                </svg>
-                                <p>Henüz kayıtlı adresiniz bulunmamaktadır.</p>
-                                <p class="text-xs mt-1 opacity-75">Yukarıdaki formu kullanarak yeni bir
-                                    adres
-                                    ekleyebilirsiniz.</p>
-                            </div>
-                        <% } %>
+                                <% }) %>
+                                    <% } else { %>
+                                        <div class="address-empty">
+                                            <svg class="w-12 h-12 mx-auto mb-2" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                            </svg>
+                                            <p>Henüz kayıtlı adresiniz bulunmamaktadır.</p>
+                                            <p class="text-xs mt-1 opacity-75">Yukarıdaki formu kullanarak yeni bir
+                                                adres
+                                                ekleyebilirsiniz.</p>
+                                        </div>
+                                        <% } %>
                     </div>
                 </div>
             </div>
@@ -1362,7 +1399,7 @@
                         li.tabIndex = 0;
                         li.innerHTML = `
                             <div class="font-medium text-sm">${address.title}</div>
-                            <div class="adres-dropdown text-xs text-gray-500">${address.formatted_address}</div>
+                            <div class="adres-dropdown text-xs text-gray-500">${address.address}</div>
                         `;
                         if (address._id === selectedAddressId) {
                             li.classList.add('bg-blue-100');
@@ -1641,25 +1678,6 @@
 
             let lastScrollY = window.scrollY;
             let ticking = false;
-
-            window.addEventListener('scroll', () => {
-                if (!ticking) {
-                    window.requestAnimationFrame(() => {
-                        const header = document.querySelector('header');
-                        const currentScrollY = window.scrollY;
-
-                        if (currentScrollY > 50) {
-                            header.classList.add('shrunk');
-                        } else {
-                            header.classList.remove('shrunk');
-                        }
-
-                        lastScrollY = currentScrollY;
-                        ticking = false;
-                    });
-                    ticking = true;
-                }
-            });
 
             if ('serviceWorker' in navigator) {
                 navigator.serviceWorker.register('/service-worker.js').catch(error => {

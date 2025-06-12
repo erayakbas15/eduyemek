@@ -810,7 +810,7 @@
     </div>
     <nav class="p-4 space-y-2">
       <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600 relative">
-        Ana Sayfa
+        Restoranlar
         <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
       </a>
       <a href="/user/usermain/account" class="block text-gray-700 hover:text-indigo-600 relative">
@@ -1441,25 +1441,6 @@
 
       let lastScrollY = window.scrollY;
       let ticking = false;
-
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const header = document.querySelector('header');
-            const currentScrollY = window.scrollY;
-
-            if (currentScrollY > 50) {
-              header.classList.add('shrunk');
-            } else {
-              header.classList.remove('shrunk');
-            }
-
-            lastScrollY = currentScrollY;
-            ticking = false;
-          });
-          ticking = true;
-        }
-      });
 
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js').catch(error => {

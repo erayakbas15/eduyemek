@@ -494,7 +494,7 @@
 
 
       #basketPanel h2 {
-        color: #F97316 !important;
+        color: #ffffff !important;
       }
 
       #restaurantName {
@@ -818,7 +818,7 @@
     </div>
     <nav class="p-4 space-y-2">
       <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600 relative">
-        Ana Sayfa
+        Restoranlar
         <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
       </a>
       <a href="/user/usermain/account" class="block text-gray-700 hover:text-indigo-600 relative">
@@ -913,9 +913,9 @@
                       </div>
                       <% const statusMap={ 'delivered' : { class: 'bg-green-100 text-green-800' ,
                         text: '✅ Teslim Edildi' }, 'preparing' : { class: 'bg-yellow-100 text-yellow-800' ,
-                        text: '👨‍🍳 Hazırlanıyor' }, 'on_the_way' : { class: 'bg-blue-100 text-blue-800' ,
+                        text: '👨‍🍳 Hazırlanıyor' }, 'on_the_way' : { class: 'bg-yellow-100 text-yellow-800' ,
                         text: '🚗 Yolda' }, 'cancelled' : { class: 'bg-red-100 text-red-800' , text: '❌ İptal Edildi'
-                        }, 'pending' : { class: 'bg-purple-100 text-purple-800' , text: '📤 İletildi' } }; const
+                        }, 'pending' : { class: 'bg-yellow-100 text-yellow-800' , text: '📤 İletildi' } }; const
                         statusInfo=statusMap[order.status] || { class: 'bg-gray-100 text-gray-800' , text: order.status
                         }; %>
                         <span class="inline-block px-3 py-1 rounded-full text-xs font-medium <%= statusInfo.class %>">

@@ -507,7 +507,7 @@
       }
 
       #basketPanel h2 {
-        color: #F97316 !important;
+        color: #ffffff !important;
       }
 
       #restaurantName {
@@ -813,7 +813,7 @@
         aria-label="Menüyü kapat">✖</button>
     </div>
     <nav class="p-4 space-y-2">
-      <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600">Ana Sayfa</a>
+      <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600">Restoranlar</a>
       <a href="/user/usermain/account" class="block text-gray-700 hover:text-indigo-600">Hesabım</a>
       <a href="/user/usermain/orders" class="block text-gray-700 hover:text-indigo-600">Siparişlerim</a>
       <a href="/user/usermain/addresses" class="block text-gray-700 hover:text-indigo-600">Adreslerim</a>
@@ -963,7 +963,7 @@
                 aria-label="Şifre göster/gizle" onclick="togglePasswordVisibility('newPassword', this)">
                 <svg class="eye-open w-5 h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                   stroke-width="2" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round"(Hamburger Menu ve Mobile Cart Button eklendi) d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                   <path stroke-linecap="round" stroke-linejoin="round"
                     d="M2.458 12C3.732 7.943 7.523 5 12 5c4.477 0 8.268 2.943 9.542 7-1.274 4.057-5.065 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                 </svg>
@@ -1219,7 +1219,7 @@
           div.innerHTML = `
           <div class="flex items-center gap-4 flex-1">
             <div class="w-16 h-16 rounded-lg overflow-hidden shadow-md">
-              <img src="/uploads/lahmacun.png" alt="${item.name}" class="w-full h-full object-cover" />
+              <img src="/Uploads/lahmacun.png" alt="${item.name}" class="w-full h-full object-cover" />
             </div>
             <div class="flex-1">
               <h3 class="font-semibold text-gray-800">${item.name}</h3>
@@ -1366,7 +1366,7 @@
 
         const result = await response.json();
         if (response.ok) {
-          showMessage('userMessage', result.message || 'Bilgileriniz başarıyla güncellendi!', 'success');
+          showNotification(result.message || 'Bilgileriniz başarıyla güncellendi!', 'success');
         } else {
           showMessage('userMessage', result.error || 'Bilgiler güncellenirken bir hata oluştu.', 'error');
         }
@@ -1421,7 +1421,7 @@
           showMessage('passwordMessage', result.message || 'Şifreniz başarıyla güncellendi!', 'success');
           document.getElementById('passwordChangeForm').reset();
         } else {
-          showMessage('passwordMessage', result.message || 'Şifre güncellenirken bir hata oluştu.', 'error');
+          showMessage('passwordMessage', result.message || 'Şifre güncellenirken hata oluştu.', 'error');
         }
       } catch (error) {
         console.error('Error updating password:', error);

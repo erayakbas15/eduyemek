@@ -12,7 +12,6 @@
   <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
   <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
   <link rel="manifest" href="/manifest.json">
-
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
@@ -216,7 +215,6 @@
         transform: rotate(0deg);
       }
 
-
       100% {
         transform: rotate(360deg);
       }
@@ -319,7 +317,6 @@
         color: #ffffff !important;
       }
 
-
       .restaurant-card p {
         color: #cccccc !important;
       }
@@ -364,7 +361,6 @@
         border-top-color: #667eea !important;
       }
 
-      /* Header ve nav bileşenleri */
       .header-logo {
         color: #ffffff !important;
       }
@@ -382,7 +378,6 @@
         color: #667eea !important;
       }
 
-      /* Adres ve hesap butonları */
       .address-btn,
       .account-btn {
         background: #2d2d2d !important;
@@ -395,7 +390,6 @@
         background: #404040 !important;
       }
 
-      /* Dropdown menüler */
       #addressDropdown,
       .group-hover\:block {
         background: #2d2d2d !important;
@@ -458,24 +452,20 @@
         color: #ffffff !important;
       }
 
-      /* Footer ve diğer bölümler */
       footer {
         background: #1a1a1a !important;
         color: #ffffff !important;
       }
 
-      /* Menü ve navigasyon */
       nav {
         background: #1a1a1a !important;
         color: #ffffff !important;
       }
 
-      /* Kartlar içindeki tüm yazılar */
       .restaurant-card * {
         color: inherit !important;
       }
 
-      /* Form elementleri */
       input,
       textarea,
       select {
@@ -484,7 +474,6 @@
         border-color: #404040 !important;
       }
 
-      /* Link renkleri */
       a {
         color: #667eea !important;
       }
@@ -493,17 +482,14 @@
         color: #5a6dd8 !important;
       }
 
-      /* SVG ikonları */
       svg {
         color: inherit !important;
       }
 
-      /* Sepet paneli */
       #basketPanel {
         background: #262121 !important;
         color: #ffffff !important;
       }
-
 
       #basketPanel h2 {
         color: #F97316 !important;
@@ -530,14 +516,12 @@
         color: #000000 !important;
       }
 
-      /* Arama önerileri */
       #searchSuggestions {
         background: #2d2d2d !important;
         border-color: #404040 !important;
         color: #ffffff !important;
       }
 
-      /* Özellik kartları */
       .feature {
         color: #ffffff !important;
       }
@@ -550,7 +534,6 @@
         color: #cccccc !important;
       }
 
-      /* Rozet ve durumlar */
       .bg-green-100 {
         background: rgba(34, 197, 94, 0.2) !important;
       }
@@ -575,7 +558,6 @@
         color: #eab308 !important;
       }
     }
-
 
     @media (max-width: 1024px) {
       .hero-section h1 {
@@ -697,6 +679,7 @@
       }
     }
   </style>
+</head>
 
 <body class="bg-gray-50 font-sans min-h-screen text-gray-900 flex flex-col">
   <header class="glass-card shadow-lg sticky top-0 z-40 transform transition-all duration-300">
@@ -756,8 +739,8 @@
             <button
               class="account-btn flex items-center space-x-1 bg-white px-4 py-2 rounded-full text-gray-800 border border-gray-200 hover:bg-gray-50 hover:shadow-md transition-all duration-300 w-full md:w-auto justify-center"
               aria-label="Hesap menüsünü aç" aria-expanded="false">
-              <svg class="w-4 h-4 text-indigo-500 transition-colors duration-300" fill="none" stroke="currentColor"
-                viewBox="0 0 24 24">
+              <svg class="w-4 h-4 text-indigo-500 transition-colors duration-300" 话题: none; stroke: currentColor;
+                viewBox: 0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                   d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
               </svg>
@@ -804,7 +787,6 @@
       </div>
     </div>
   </header>
-
   <div id="hamburgerMenu"
     class="fixed top-0 left-0 w-3/4 max-w-sm h-full bg-white shadow-xl transform -translate-x-full transition-transform duration-300 z-50">
     <div class="p-4 border-b">
@@ -814,7 +796,7 @@
     </div>
     <nav class="p-4 space-y-2">
       <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600 relative">
-        Ana Sayfa
+        Restoranlar
         <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
       </a>
       <a href="/user/usermain/account" class="block text-gray-700 hover:text-indigo-600 relative">
@@ -827,7 +809,6 @@
           class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
       </a>
       <a href="/user/usermain/addresses" class="block text-gray-700 hover:text-indigo-600">Adreslerim</a>
-
       <a href="/user/usermain/userinfo" class="block text-gray-700 hover:text-indigo-600 relative">
         Kullanıcı Bilgilerim
         <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
@@ -836,7 +817,6 @@
     </nav>
   </div>
   <div id="hamburgerOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
-
   <button id="mobileCartBtn"
     class="fixed bottom-4 right-4 md:hidden btn-secondary p-4 rounded-full shadow-lg flex items-center justify-center z-30"
     aria-label="Sepeti aç">
@@ -851,7 +831,6 @@
       </span>
       <% } %>
   </button>
-
   <section class="hero-section py-6 relative z-10">
     <div class="max-w-5xl mx-auto px-4 text-center">
       <h1 class="text-2xl md:text-3xl font-bold text-white mb-2 animate__animated animate__fadeInUp">
@@ -887,7 +866,6 @@
       </div>
     </div>
   </section>
-
   <main class="max-w-3xl mx-auto p-4 flex-grow relative z-10">
     <section class="mb-8">
       <div class="flex justify-between items-center mb-4 flex-wrap gap-2">
@@ -906,64 +884,74 @@
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-auto">
         <% restaurants.forEach(r=> { %>
-          <a href="<%= r.delivery && r.delivery.case === 'open' ? '/user/usermain/restaurant/' + r._id : '#' %>"
-            class="restaurant-card <%= r.delivery && r.delivery.case === 'closed' ? 'closed' : '' %> bg-white rounded-lg shadow-md"
-            data-restaurant-id="<%= r._id %>" <%=r.delivery && r.delivery.case==='closed'
-            ? 'onclick="event.preventDefault();"' : '' %>>
-            <% if (r.promotion) { %>
-              <div class="promotion-badge">İndirim!</div>
-              <% } %>
-                <img src="<%= r.imageUrl || '/Uploads/default-meal.png' %>" alt="<%= r.name %> resmi"
-                  class="w-full object-cover rounded-t-lg" loading="lazy" onerror="this.src='/Uploads/default-meal.png'"
-                  draggable="false" oncontextmenu="return false;">
-                <div class="flex-1 flex flex-col justify-between p-3 overflow-hidden">
-                  <div class="flex flex-col items-center justify-center text-center space-y-1">
-                    <h3 class="font-bold">
-                      <%= r.name || 'İsimsiz Restoran' %>
-                    </h3>
-                    <p class="text-gray-600 text-xs line-clamp-1">
-                      <%= r.description || 'Henüz açıklama yok.' %>
-                    </p>
-                  </div>
-                  <div class="flex flex-wrap gap-1.5 text-xs mt-2 justify-center">
-                    <div
-                      class="flex items-center space-x-1 <%= r.delivery && r.delivery.case === 'open' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' %> px-1.5 py-0.5 rounded-full text-[10px]">
-                      <span>
-                        <%= r.delivery && r.delivery.case ? (r.delivery.case==='open' ? 'Açık' : 'Kapalı' )
-                          : 'Bilinmiyor' %>
-                      </span>
-                    </div>
-                    <% if (r.delivery && r.delivery.case==='closed' ) { %>
-                      <div class="flex items-center text-red-600 text-[10px]">
-                        <strong class="mr-1">⚠️</strong> Restoran şu anda kapalı
-                      </div>
+          <% if (r.delivery && r.delivery.case==='open' ) { %>
+            <a href="/user/usermain/restaurant/<%= r._id %>" class="restaurant-card bg-white rounded-lg shadow-md"
+              data-restaurant-id="<%= r._id %>">
+              <% } else { %>
+                <div class="restaurant-card closed bg-white rounded-lg shadow-md" data-restaurant-id="<%= r._id %>">
+                  <% } %>
+                    <% if (r.promotion) { %>
+                      <div class="promotion-badge">İndirim!</div>
                       <% } %>
-                        <div class="flex items-center space-x-1 bg-yellow-100 px-1.5 py-0.5 rounded-full text-[10px]">
-                          <span>⭐ <%= r.rating && r.rating.average ? r.rating.average.toFixed(1) : '0.0' %></span>
+                        <img src="<%= r.imageUrl || '/Uploads/default-meal.png' %>" alt="<%= r.name %> resmi"
+                          class="w-full object-cover rounded-t-lg" loading="lazy"
+                          onerror="this.src='/Uploads/default-meal.png'" draggable="false"
+                          oncontextmenu="return false;">
+                        <div class="flex-1 flex flex-col justify-between p-3 overflow-hidden">
+                          <div class="flex flex-col items-center justify-center text-center space-y-1">
+                            <h3 class="font-bold">
+                              <%= r.name || 'İsimsiz Restoran' %>
+                            </h3>
+                            <p class="text-gray-600 text-xs line-clamp-1">
+                              <%= r.description || 'Henüz açıklama yok.' %>
+                            </p>
+                          </div>
+                          <div class="flex flex-wrap gap-1.5 text-xs mt-2 justify-center">
+                            <div
+                              class="flex items-center space-x-1 <%= r.delivery && r.delivery.case === 'open' ? 'bg-green-100 text-green-600' : 'bg-red-100 text-red-600' %> px-1.5 py-0.5 rounded-full text-[10px]">
+                              <span>
+                                <%= r.delivery && r.delivery.case ? (r.delivery.case==='open' ? 'Açık' : 'Kapalı' )
+                                  : 'Bilinmiyor' %>
+                              </span>
+                            </div>
+                            <% if (r.delivery && r.delivery.case==='closed' ) { %>
+                              <div class="flex items-center text-red-600 text-[10px]">
+                                <strong class="mr-1">⚠️</strong> Restoran şu anda kapalı
+                              </div>
+                              <% } %>
+                                <div
+                                  class="flex items-center space-x-1 bg-yellow-100 px-1.5 py-0.5 rounded-full text-[10px]">
+                                  <span>⭐ <%= r.rating && r.rating.average ? r.rating.average.toFixed(1) : '0.0' %>
+                                      </span>
+                                </div>
+                                <div class="flex items-center text-gray-700 text-[10px]">
+                                  <strong class="mr-1">💰</strong> Min. <%= r.delivery && r.delivery.minOrderAmount ?
+                                    r.delivery.minOrderAmount : 0 %> TL
+                                </div>
+                                <div class="flex items-center text-gray-700 text-[10px]">
+                                  <strong class="mr-1">🚚</strong>
+                                  <%= r.delivery && r.delivery.estimatedTime ? r.delivery.estimatedTime : 'Bilinmiyor'
+                                    %>
+                                </div>
+                                <div class="flex items-center text-gray-700 text-[10px]">
+                                  <strong class="mr-1">📍</strong> <span class="distance">
+                                    <%= r.distance ? r.distance + ' km' : 'Mesafe bilinmiyor' %>
+                                  </span>
+                                </div>
+                                <div class="flex items-center text-gray-700 text-[10px]">
+                                  <strong class="mr-1">⏰</strong>
+                                  <%= r.openingHours ? r.openingHours.open + ' - ' + r.openingHours.close
+                                    : 'Saatler bilinmiyor' %>
+                                </div>
+                          </div>
                         </div>
-                        <div class="flex items-center text-gray-700 text-[10px]">
-                          <strong class="mr-1">💰</strong> Min. <%= r.delivery && r.delivery.minOrderAmount ?
-                            r.delivery.minOrderAmount : 0 %> TL
-                        </div>
-                        <div class="flex items-center text-gray-700 text-[10px]">
-                          <strong class="mr-1">🚚</strong>
-                          <%= r.delivery && r.delivery.estimatedTime ? r.delivery.estimatedTime : 'Bilinmiyor' %>
-                        </div>
-                        <div class="flex items-center text-gray-700 text-[10px]">
-                          <strong class="mr-1">📍</strong> <span class="distance">
-                            <%= r.distance ? r.distance + ' km' : 'Mesafe bilinmiyor' %>
-                          </span>
-                        </div>
-                        <div class="flex items-center text-gray-700 text-[10px]">
-                          <strong class="mr-1">⏰</strong>
-                          <%= r.openingHours ? r.openingHours.open + ' - ' + r.openingHours.close : 'Saatler bilinmiyor'
-                            %>
-                        </div>
-                  </div>
-                </div>
-          </a>
-          <% }) %>
+                        <% if (r.delivery && r.delivery.case==='open' ) { %>
+            </a>
+            <% } else { %>
       </div>
+      <% } %>
+        <% }) %>
+          </div>
     </section>
     <section class="mb-6">
       <div class="glass-card p-4 rounded-xl">
@@ -988,25 +976,18 @@
       </div>
     </section>
   </main>
-
   <footer class="glass-card shadow-inner mt-auto py-4 relative z-10">
     <div class="max-w-3xl mx-auto px-2">
       <div class="text-center">
-
-        <!-- Ortalanmış logo + gap -->
         <div
           class="flex justify-center items-center text-base font-bold text-gray-800 hover:text-indigo-600 transition-all duration-300 cursor-pointer mb-2">
           <i class="fas fa-utensils mr-2 text-orange-500 animate-pulse-fast"></i>
           eduyemek
         </div>
         <div class="text-[10px] text-gray-500">© 2025 eduyemek - Tüm hakları saklıdır.</div>
-
       </div>
     </div>
   </footer>
-
-
-
   <div id="basketOverlay" class="fixed inset-0 bg-black bg-opacity-50 z-30 hidden" onclick="toggleBasketPanel(false)">
   </div>
   <div id="basketPanel"
@@ -1044,23 +1025,20 @@
         aria-label="Sepeti onayla">Sepeti Onayla</button>
     </main>
   </div>
-
-
   <script>
     let cartItems = [];
     const API_BASE_URL = '';
-
     function showNotification(message, type = 'success') {
       const existing = document.querySelector('.notification');
       if (existing) existing.remove();
       const notification = document.createElement('div');
       notification.className = `notification ${type === 'error' ? 'error' : type === 'info' ? 'info' : 'success'}`;
       notification.innerHTML = `
-    <div style="display: flex; align-items: center; gap: 12px;">
-      <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
-      <span>${message}</span>
-    </div>
-  `;
+        <div style="display: flex; align-items: center; gap: 12px;">
+          <i class="fas ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+          <span>${message}</span>
+        </div>
+      `;
       document.body.appendChild(notification);
       setTimeout(() => notification.classList.add('show'), 100);
       setTimeout(() => {
@@ -1068,41 +1046,34 @@
         setTimeout(() => notification.remove(), 300);
       }, 2000);
     }
-
     function toggleSpinner(show) {
       const spinner = document.getElementById('spinner');
       if (spinner) spinner.style.display = show ? 'block' : 'none';
     }
-
     function setupHamburgerMenu() {
       const hamburgerBtn = document.getElementById('hamburgerBtn');
       const hamburgerMenu = document.getElementById('hamburgerMenu');
       const hamburgerOverlay = document.getElementById('hamburgerOverlay');
       const closeHamburgerBtn = document.getElementById('closeHamburgerBtn');
-
       if (!hamburgerBtn || !hamburgerMenu || !hamburgerOverlay || !closeHamburgerBtn) return;
-
       hamburgerBtn.addEventListener('click', () => {
         hamburgerMenu.classList.add('open');
         hamburgerOverlay.classList.add('show');
         document.body.classList.add('menu-open');
         hamburgerBtn.setAttribute('aria-expanded', 'true');
       });
-
       closeHamburgerBtn.addEventListener('click', () => {
         hamburgerMenu.classList.remove('open');
         hamburgerOverlay.classList.remove('show');
         document.body.classList.remove('menu-open');
         hamburgerBtn.setAttribute('aria-expanded', 'false');
       });
-
       hamburgerOverlay.addEventListener('click', () => {
         hamburgerMenu.classList.remove('open');
         hamburgerOverlay.classList.remove('show');
         document.body.classList.remove('menu-open');
         hamburgerBtn.setAttribute('aria-expanded', 'false');
       });
-
       hamburgerMenu.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           hamburgerMenu.classList.remove('open');
@@ -1113,7 +1084,6 @@
         }
       });
     }
-
     function setupBasketPanel() {
       const basketPanel = document.getElementById('basketPanel');
       const basketOverlay = document.getElementById('basketOverlay');
@@ -1121,9 +1091,7 @@
       const cartBtn = document.querySelector('.cart-btn');
       const mobileCartBtn = document.getElementById('mobileCartBtn');
       const confirmBasketBtn = document.getElementById('confirmBasketBtn');
-
       if (!basketPanel || !basketOverlay || !closeBasketBtn || !cartBtn || !mobileCartBtn || !confirmBasketBtn) return;
-
       window.toggleBasketPanel = function (show) {
         if (show) {
           basketPanel.classList.remove('translate-x-full');
@@ -1136,16 +1104,13 @@
           basketOverlay.classList.add('hidden');
         }
       };
-
       basketPanel.addEventListener('click', (e) => e.stopPropagation());
       closeBasketBtn.addEventListener('click', () => toggleBasketPanel(false));
       cartBtn.addEventListener('click', () => toggleBasketPanel(true));
       mobileCartBtn.addEventListener('click', () => toggleBasketPanel(true));
-
       confirmBasketBtn.addEventListener('click', () => {
         window.location.href = '/user/usermain/checkout';
       });
-
       basketPanel.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
           toggleBasketPanel(false);
@@ -1153,7 +1118,6 @@
         }
       });
     }
-
     async function loadBasketItems() {
       const basketStats = document.getElementById('basketStats');
       const restaurantInfo = document.getElementById('restaurantInfo');
@@ -1161,11 +1125,8 @@
       const basketSummary = document.getElementById('basketSummary');
       const confirmBasketBtn = document.getElementById('confirmBasketBtn');
       const mobileCartBadge = document.querySelector('#mobileCartBtn .notification-badge');
-
       if (!basketContainer) return;
-
       basketContainer.innerHTML = '<p class="text-sm text-gray-400">Yükleniyor...</p>';
-
       try {
         const res = await fetch('/basket/adds', { headers: { 'Accept': 'application/json' } });
         if (!res.ok) {
@@ -1173,56 +1134,51 @@
           throw new Error(errorData.message || `Sepet bilgileri yüklenemedi: ${res.status}`);
         }
         const data = await res.json();
-
         if (!data.basket || !data.basket.items || data.basket.items.length === 0) {
           basketStats.innerHTML = '';
           restaurantInfo.classList.add('hidden');
           basketContainer.innerHTML = `
-        <div class="text-center py-12">
-          <i class="fas fa-shopping-cart text-4xl text-orange-500 mb-4"></i>
-          <h3 class="text-xl font-medium text-gray-500 mb-2">Sepetiniz boş</h3>
-          <p class="text-gray-400">Restorana geri dönerek ürün ekleyebilirsiniz.</p>
-        </div>`;
+            <div class="text-center py-12">
+              <i class="fas fa-shopping-cart text-4xl text-orange-500 mb-4"></i>
+              <h3 class="text-xl font-medium text-gray-500 mb-2">Sepetiniz boş</h3>
+              <p class="text-gray-400">Restorana geri dönerek ürün ekleyebilirsiniz.</p>
+            </div>`;
           basketSummary.classList.add('hidden');
           confirmBasketBtn.classList.add('hidden');
           updateCartBadge(0);
           return;
         }
-
         const { items, itemCount, totalQuantity, totalPrice, restaurantName } = data.basket;
-
         restaurantInfo.classList.remove('hidden');
         document.getElementById('restaurantName').textContent = restaurantName;
-
         basketContainer.innerHTML = '';
         items.forEach(item => {
           const div = document.createElement('div');
           div.className = 'flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-purple-50 transition-colors duration-200';
           div.innerHTML = `
-        <div class="flex items-center gap-4 flex-1">
-          <div class="w-16 h-16 rounded-lg overflow-hidden shadow-md">
-            <img src="/Uploads/lahmacun.png" alt="${item.name}" class="w-full h-full object-cover" loading="lazy" />
-          </div>
-          <div class="flex-1">
-            <h3 class="font-semibold text-gray-800">${item.name}</h3>
-            <p class="text-gray-600">Birim Fiyat: ${item.price.toFixed(2)}₺</p>
-            <p class="text-sm text-gray-500">Toplam: ${(item.price * item.quantity).toFixed(2)}₺</p>
-          </div>
-        </div>
-        <div class="flex items-center gap-3">
-          <div class="flex items-center gap-2 bg-white rounded-lg border border-gray-300 px-3 py-2">
-            <button class="quantity-btn decrease-btn text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center hover:bg-red-50 rounded transition-colors duration-200" data-meal-id="${item.mealId}" data-action="decrease" aria-label="Miktarı azalt">−</button>
-            <span class="quantity-display mx-3 font-semibold text-white-800 min-w-[2rem] text-center">${item.quantity}</span>
-            <button class="quantity-btn increase-btn text-green-500 hover:text-green-700 font-bold text-lg w-6 h-6 flex items-center justify-center hover:bg-green-50 rounded transition-colors duration-200" data-meal-id="${item.mealId}" data-action="increase" aria-label="Miktarı artır">+</button>
-          </div>
-          <button class="remove-item-btn text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-full transition-colors duration-200" data-meal-id="${item.mealId}" title="Sepetten Kaldır" aria-label="Ürünü sepetten kaldır">
-            <i class="fas fa-trash"></i>
-          </button>
-        </div>
-      `;
+            <div class="flex items-center gap-4 flex-1">
+              <div class="w-16 h-16 rounded-lg overflow-hidden shadow-md">
+                <img src="/Uploads/lahmacun.png" alt="${item.name}" class="w-full h-full object-cover" loading="lazy" />
+              </div>
+              <div class="flex-1">
+                <h3 class="font-semibold text-gray-800">${item.name}</h3>
+                <p class="text-gray-600">Birim Fiyat: ${item.price.toFixed(2)}₺</p>
+                <p class="text-sm text-gray-500">Toplam: ${(item.price * item.quantity).toFixed(2)}₺</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-2 bg-white rounded-lg border border-gray-300 px-3 py-2">
+                <button class="quantity-btn decrease-btn text-red-500 hover:text-red-700 font-bold text-lg w-6 h-6 flex items-center justify-center hover:bg-red-50 rounded transition-colors duration-200" data-meal-id="${item.mealId}" data-action="decrease" aria-label="Miktarı azalt">−</button>
+                <span class="quantity-display mx-3 font-semibold text-white-800 min-w-[2rem] text-center">${item.quantity}</span>
+                <button class="quantity-btn increase-btn text-green-500 hover:text-green-700 font-bold text-lg w-6 h-6 flex items-center justify-center hover:bg-green-50 rounded transition-colors duration-200" data-meal-id="${item.mealId}" data-action="increase" aria-label="Miktarı artır">+</button>
+              </div>
+              <button class="remove-item-btn text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-full transition-colors duration-200" data-meal-id="${item.mealId}" title="Sepetten Kaldır" aria-label="Ürünü sepetten kaldır">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          `;
           basketContainer.appendChild(div);
         });
-
         document.querySelectorAll('.quantity-btn').forEach(button => {
           button.addEventListener('click', async () => {
             const mealId = button.dataset.mealId;
@@ -1230,18 +1186,15 @@
             await updateBasket(mealId, action);
           });
         });
-
         document.querySelectorAll('.remove-item-btn').forEach(button => {
           button.addEventListener('click', async () => {
             const mealId = button.dataset.mealId;
             await updateBasket(mealId, 'remove');
           });
         });
-
         basketSummary.classList.remove('hidden');
         document.getElementById('subtotal').textContent = `${totalPrice.toFixed(2)}₺`;
         document.getElementById('finalTotal').textContent = `${totalPrice.toFixed(2)}₺`;
-
         confirmBasketBtn.classList.remove('hidden');
         updateCartBadge(totalQuantity);
         if (mobileCartBadge) {
@@ -1254,7 +1207,6 @@
         showNotification(err.message || 'Sepet yüklenirken hata oluştu.', 'error');
       }
     }
-
     async function updateBasket(mealId, action) {
       try {
         toggleSpinner(true);
@@ -1281,7 +1233,6 @@
         toggleSpinner(false);
       }
     }
-
     function updateCartBadge(count) {
       const badge = document.querySelector('.cart-btn .notification-badge');
       if (badge) {
@@ -1289,7 +1240,6 @@
         badge.classList.toggle('hidden', count === 0);
       }
     }
-
     async function loadAddresses() {
       try {
         const response = await fetch('/user/usermain/addresses', {
@@ -1308,9 +1258,9 @@
             li.dataset.addressId = address._id;
             li.tabIndex = 0;
             li.innerHTML = `
-          <div class="font-medium text-sm">${address.title}</div>
-          <div class="adres-dropdown text-xs text-gray-500">${address.formatted_address}</div>
-        `;
+              <div class="font-medium text-sm">${address.title}</div>
+              <div class="adres-dropdown text-xs text-gray-500">${address.address}</div>
+            `;
             if (address._id === selectedAddressId) {
               li.classList.add('bg-blue-100');
               document.getElementById('selectedAddress').textContent = address.title;
@@ -1324,27 +1274,22 @@
         showNotification(error.message || 'Adresler yüklenirken hata oluştu', 'error');
       }
     }
-
     function setupAddressDropdown() {
       const addressBtn = document.getElementById('addressBtn');
       const addressDropdown = document.getElementById('addressDropdown');
       const addressList = document.getElementById('addressList');
       const selectedAddress = document.getElementById('selectedAddress');
-
       if (!addressBtn || !addressDropdown || !addressList || !selectedAddress) return;
-
       addressBtn.addEventListener('click', () => {
         addressDropdown.classList.toggle('hidden');
         addressBtn.setAttribute('aria-expanded', addressDropdown.classList.contains('hidden') ? 'false' : 'true');
       });
-
       document.addEventListener('click', e => {
         if (!addressBtn.contains(e.target) && !addressDropdown.contains(e.target)) {
           addressDropdown.classList.add('hidden');
           addressBtn.setAttribute('aria-expanded', 'false');
         }
       });
-
       addressList.addEventListener('click', async e => {
         const addressItem = e.target.closest('.address-item');
         if (addressItem) {
@@ -1364,7 +1309,6 @@
             const data = await response.json();
             if (data.message) {
               showNotification('Adres seçildi!', 'success');
-              // Removed setFilterState call since filtering is handled server-side
             } else {
               showNotification(data.error || 'Adres seçilemedi', 'error');
             }
@@ -1374,7 +1318,6 @@
           }
         }
       });
-
       addressList.addEventListener('keydown', e => {
         const items = Array.from(addressList.querySelectorAll('.address-item'));
         const current = document.activeElement;
@@ -1393,7 +1336,6 @@
         }
       });
     }
-
     function debounce(func, wait) {
       let timeout;
       return function (...args) {
@@ -1401,13 +1343,10 @@
         timeout = setTimeout(() => func.apply(this, args), wait);
       };
     }
-
     function setupSearch() {
       const searchInput = document.getElementById('searchInput');
       const searchSuggestions = document.getElementById('searchSuggestions');
-
       if (!searchInput || !searchSuggestions) return;
-
       searchInput.addEventListener('input', debounce(async e => {
         const query = e.target.value.trim();
         if (query.length > 0) {
@@ -1437,11 +1376,9 @@
           searchSuggestions.classList.add('hidden');
         }
       }, 100));
-
       searchInput.addEventListener('blur', () => {
         setTimeout(() => searchSuggestions.classList.add('hidden'), 150);
       });
-
       searchInput.addEventListener('keydown', e => {
         if (e.key === 'Enter') {
           const firstSuggestion = searchSuggestions.querySelector('div');
@@ -1449,23 +1386,19 @@
         }
       });
     }
-
     function setFilterState(state) {
       const filterState = new URLSearchParams(window.location.search).get('filter') || 'all';
       if (filterState === state) return;
       history.pushState({}, '', `?filter=${state}`);
       document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
       document.querySelector(`.filter-btn[data-filter="${state}"]`).classList.add('active');
-      // Removed loadMoreRestaurants call since initial restaurants are loaded server-side
     }
-
     document.addEventListener('DOMContentLoaded', async () => {
       setupHamburgerMenu();
       setupBasketPanel();
       setupAddressDropdown();
       setupSearch();
       await loadAddresses();
-
       document.querySelectorAll('.filter-btn').forEach(button => {
         button.addEventListener('click', (e) => {
           const filter = e.target.dataset.filter;
@@ -1473,42 +1406,19 @@
           window.location.href = `/user/usermain?filter=${filter}`;
         });
       });
-
       new Swiper('.swiper-container', {
         slidesPerView: 'auto',
         spaceBetween: 8,
         freeMode: true,
       });
-
-      let lastScrollY = window.scrollY; // Son kaydırma konumunu sakla
+      let lastScrollY = window.scrollY;
       let ticking = false;
-
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const header = document.querySelector('header');
-            const currentScrollY = window.scrollY;
-
-            if (currentScrollY > 50) {
-              header.classList.add('shrunk');
-            } else {
-              header.classList.remove('shrunk');
-            }
-
-            lastScrollY = currentScrollY; // Son kaydırma konumunu güncelle
-            ticking = false;
-          });
-          ticking = true; // Tekrarlanan olayları engelle
-        }
-      });
-
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js').catch(error => {
           console.error('Service Worker kaydı başarısız:', error);
         });
       }
     });
-
     window.addEventListener('resize', () => {
       const addressDropdown = document.getElementById('addressDropdown');
       const searchSuggestions = document.getElementById('searchSuggestions');

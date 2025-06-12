@@ -219,6 +219,157 @@
                 width: 100%;
             }
         }
+
+        @media (prefers-color-scheme: dark) {
+
+            body,
+            #main-content {
+                background: #1a1a1a !important;
+                color: #ffffff !important;
+            }
+
+            .bg-gradient-to-br {
+                background: linear-gradient(135deg, #2d2d2d, #1a1a1a) !important;
+            }
+
+            .glass-card {
+                background: rgba(30, 30, 30, 0.95) !important;
+                border: 1px solid rgba(255, 255, 255, 0.1) !important;
+                color: #ffffff !important;
+            }
+
+            header {
+                background: #1a1a1a !important;
+                color: #ffffff !important;
+            }
+
+            .header-logo {
+                color: #ffffff !important;
+            }
+
+            .text-gray-800 {
+                color: #ffffff !important;
+            }
+
+            .text-gray-700 {
+                color: #cccccc !important;
+            }
+
+            .text-gray-600 {
+                color: #999999 !important;
+            }
+
+            .text-gray-500 {
+                color: #666666 !important;
+            }
+
+            .text-gray-900 {
+                color: #ffffff !important;
+            }
+
+            .text-green-700 {
+                color: #22c55e !important;
+            }
+
+            .text-red-600 {
+                color: #ef4444 !important;
+            }
+
+            .payment-method-card {
+                background: #2d2d2d !important;
+                border: 1px solid #404040 !important;
+                color: #ffffff !important;
+            }
+
+            .payment-method-card:hover {
+                background: #404040 !important;
+            }
+
+            .payment-method-card:has(input[name="paymentMethod"]:checked) {
+                background: rgba(99, 102, 241, 0.1) !important;
+                border-color: #6366f1 !important;
+            }
+
+            textarea,
+            input {
+                background: #2d2d2d !important;
+                color: #ffffff !important;
+                border-color: #404040 !important;
+            }
+
+            textarea::placeholder,
+            input::placeholder {
+                color: #999999 !important;
+            }
+
+            .bg-gray-100 {
+                background: #2d2d2d !important;
+            }
+
+            .bg-white {
+                background: #2d2d2d !important;
+            }
+
+            .border-gray-200 {
+                border-color: #404040 !important;
+            }
+
+            .text-sm {
+                color: #cccccc !important;
+            }
+
+            .notification {
+                box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3) !important;
+            }
+
+            .notification.success {
+                background: linear-gradient(135deg, #10b981, #059669) !important;
+            }
+
+            .notification.error {
+                background: linear-gradient(135deg, #ef4444, #dc2626) !important;
+            }
+
+            footer {
+                background: #1a1a1a !important;
+                color: #ffffff !important;
+            }
+
+            .spinner {
+                border-color: rgba(99, 102, 241, 0.3) !important;
+                border-top-color: #6366f1 !important;
+            }
+
+            #loading-screen {
+                background: #1a1a1a !important;
+            }
+
+            /* Ödeme yöntemi ikonları */
+            .fa-money-bill-wave {
+                color: #22c55e !important;
+            }
+
+            .fa-credit-card {
+                color: #3b82f6 !important;
+            }
+
+            .fa-laptop-code {
+                color: #666666 !important;
+            }
+
+            /* Scrollbar özelleştirme */
+            #main-content::-webkit-scrollbar-track {
+                background: #2d2d2d !important;
+            }
+
+            #main-content::-webkit-scrollbar-thumb {
+                background: #6366f1 !important;
+            }
+
+            #main-content::-webkit-scrollbar-thumb:hover {
+                background: #4f46e5 !important;
+            }
+        }
     </style>
 </head>
 
@@ -246,7 +397,7 @@
                     <span class="hidden sm:flex items-center gap-1 text-xs text-gray-500 italic">
                         <i class="fas fa-lock"></i> SSL 256-bit şifreleme
                     </span>
-                    <img src="/Uploads/secure.jpg" alt="SSL Secure" class="w-[80px] h-auto object-contain ml-2"
+                    <img src="/Uploads/secure.png" alt="SSL Secure" class="w-[80px] h-auto object-contain ml-2"
                         loading="lazy">
                 </div>
             </div>
@@ -329,8 +480,7 @@
                             <i class="fas fa-wallet text-green-500"></i> Ödeme
                         </h2>
                         <div class="space-y-2">
-                            <label
-                                class="payment-method-card flex p-2 rounded-lg cursor-pointer bg-white shadow hover:shadow-md
+                            <label class="payment-method-card flex p-2 rounded-lg cursor-pointer bg-white shadow hover:shadow-md
 
 ">
                                 <input type="radio" name="paymentMethod" value="cash"
@@ -370,21 +520,21 @@
             </div>
         </main>
 
-  <footer class="glass-card shadow-inner mt-auto py-4 relative z-10">
-    <div class="max-w-3xl mx-auto px-2">
-      <div class="text-center">
+        <footer class="glass-card shadow-inner mt-auto py-4 relative z-10">
+            <div class="max-w-3xl mx-auto px-2">
+                <div class="text-center">
 
-        <!-- Ortalanmış logo + gap -->
-        <div
-          class="flex justify-center items-center text-base font-bold text-gray-800 hover:text-indigo-600 transition-all duration-300 cursor-pointer mb-2">
-          <i class="fas fa-utensils mr-2 text-orange-500 animate-pulse-fast"></i>
-          eduyemek
-        </div>
-        <div class="text-[10px] text-gray-500">© 2025 eduyemek - Tüm hakları saklıdır.</div>
+                    <!-- Ortalanmış logo + gap -->
+                    <div
+                        class="flex justify-center items-center text-base font-bold text-gray-800 hover:text-indigo-600 transition-all duration-300 cursor-pointer mb-2">
+                        <i class="fas fa-utensils mr-2 text-orange-500 animate-pulse-fast"></i>
+                        eduyemek
+                    </div>
+                    <div class="text-[10px] text-gray-500">© 2025 eduyemek - Tüm hakları saklıdır.</div>
 
-      </div>
-    </div>
-  </footer>
+                </div>
+            </div>
+        </footer>
     </div>
 
     <script>
