@@ -42,6 +42,12 @@
       box-sizing: border-box;
     }
 
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
     .header-container {
       background: linear-gradient(135deg, #667eea, #764ba2);
       box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
@@ -867,7 +873,11 @@
     </div>
     <nav class="p-4 space-y-2">
       <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600 relative">
-        Ana Sayfa
+        Restoranlar
+        <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
+      </a>
+      <a href="/user/usermain/account" class="block text-gray-700 hover:text-indigo-600 relative">
+        Hesabım
         <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
       </a>
       <a href="/user/usermain/orders" class="block text-gray-700 hover:text-indigo-600 relative">
@@ -876,6 +886,11 @@
           class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
       </a>
       <a href="/user/usermain/addresses" class="block text-gray-700 hover:text-indigo-600">Adreslerim</a>
+
+      <a href="/user/usermain/userinfo" class="block text-gray-700 hover:text-indigo-600 relative">
+        Kullanıcı Bilgilerim
+        <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
+      </a>
       <a href="/" onclick="logout()" class="block text-red-600 hover:text-red-700">Çıkış Yap</a>
     </nav>
   </div>
@@ -1645,33 +1660,6 @@
 
       let lastScrollY = window.scrollY;
       let ticking = false;
-
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const header = document.querySelector('header');
-            const currentScrollY = window.scrollY;
-
-            if (window.innerWidth < 768) {
-              if (currentScrollY > lastScrollY && currentScrollY > 100) {
-                header.classList.add('hidden');
-              } else if (currentScrollY < lastScrollY) {
-                header.classList.remove('hidden');
-              }
-            } else {
-              if (currentScrollY > 50) {
-                header.classList.add('shrunk');
-              } else {
-                header.classList.remove('shrunk');
-              }
-            }
-
-            lastScrollY = currentScrollY;
-            ticking = false;
-          });
-          ticking = true;
-        }
-      });
 
       window.addEventListener('resize', () => {
         const addressDropdown = document.getElementById('addressDropdown');

@@ -814,7 +814,7 @@
     </div>
     <nav class="p-4 space-y-2">
       <a href="/user/usermain" class="block text-gray-700 hover:text-indigo-600 relative">
-        Ana Sayfa
+        Restoranlar
         <span class="notification-badge absolute top-1 right-2 w-4 h-4 text-xs rounded-full hidden"></span>
       </a>
       <a href="/user/usermain/account" class="block text-gray-700 hover:text-indigo-600 relative">
@@ -1309,7 +1309,7 @@
             li.tabIndex = 0;
             li.innerHTML = `
           <div class="font-medium text-sm">${address.title}</div>
-          <div class="adres-dropdown text-xs text-gray-500">${address.formatted_address}</div>
+          <div class="adres-dropdown text-xs text-gray-500">${address.address}</div>
         `;
             if (address._id === selectedAddressId) {
               li.classList.add('bg-blue-100');
@@ -1482,25 +1482,6 @@
 
       let lastScrollY = window.scrollY; // Son kaydırma konumunu sakla
       let ticking = false;
-
-      window.addEventListener('scroll', () => {
-        if (!ticking) {
-          window.requestAnimationFrame(() => {
-            const header = document.querySelector('header');
-            const currentScrollY = window.scrollY;
-
-            if (currentScrollY > 50) {
-              header.classList.add('shrunk');
-            } else {
-              header.classList.remove('shrunk');
-            }
-
-            lastScrollY = currentScrollY; // Son kaydırma konumunu güncelle
-            ticking = false;
-          });
-          ticking = true; // Tekrarlanan olayları engelle
-        }
-      });
 
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/service-worker.js').catch(error => {
