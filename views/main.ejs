@@ -3,11 +3,12 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Ana Sayfa - eduyemek</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="icon" href="/ituyemek_logo.png" type="image/png">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <script>
     tailwind.config = {
       theme: {
@@ -23,40 +24,38 @@
             'float': 'float 6s ease-in-out infinite',
             'glow': 'glow 2s ease-in-out infinite alternate',
             'slide-up': 'slideUp 0.8s ease-out',
-          }
+          },
+          fontFamily: {
+            poppins: ['Poppins', 'sans-serif'],
+          },
         },
       },
     };
   </script>
   <style>
     @keyframes float {
-
-      0%,
-      100% {
+      0%, 100% {
         transform: translateY(0px);
       }
-
       50% {
-        transform: translateY(-15px);
+        transform: translateY(-10px);
       }
     }
 
     @keyframes glow {
       from {
-        box-shadow: 0 0 10px rgba(102, 126, 234, 0.5);
+        box-shadow: 0 0 8px rgba(102, 126, 234, 0.5);
       }
-
       to {
-        box-shadow: 0 0 20px rgba(102, 126, 234, 0.7);
+        box-shadow: 0 0 16px rgba(102, 126, 234, 0.7);
       }
     }
 
     @keyframes slideUp {
       from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(20px);
       }
-
       to {
         opacity: 1;
         transform: translateY(0);
@@ -68,18 +67,18 @@
     }
 
     .glass-card {
-      backdrop-filter: blur(10px);
+      backdrop-filter: blur(8px);
       background: rgba(255, 255, 255, 0.1);
       border: 1px solid rgba(255, 255, 255, 0.2);
     }
 
-    .feature-card {
+    .feature-card, .step-card {
       transition: transform 0.3s ease, box-shadow 0.3s ease;
     }
 
-    .feature-card:hover {
-      transform: translateY(-8px);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    .feature-card:hover, .step-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
     }
 
     .floating-shapes {
@@ -97,20 +96,20 @@
     }
 
     .shape:nth-child(1) {
-      top: 20%;
-      left: 10%;
+      top: 15%;
+      left: 5%;
       animation-delay: 0s;
     }
 
     .shape:nth-child(2) {
-      top: 60%;
-      right: 10%;
+      top: 50%;
+      right: 5%;
       animation-delay: 2s;
     }
 
     .shape:nth-child(3) {
-      bottom: 20%;
-      left: 20%;
+      bottom: 15%;
+      left: 15%;
       animation-delay: 4s;
     }
 
@@ -121,7 +120,7 @@
 
     .btn-primary:hover {
       transform: translateY(-2px);
-      box-shadow: 0 8px 15px rgba(102, 126, 234, 0.3);
+      box-shadow: 0 6px 12px rgba(102, 126, 234, 0.3);
     }
 
     .scroll-indicator {
@@ -129,382 +128,419 @@
     }
 
     @keyframes bounce {
-
-      0%,
-      20%,
-      50%,
-      80%,
-      100% {
+      0%, 20%, 50%, 80%, 100% {
         transform: translateY(0);
       }
-
       40% {
-        transform: translateY(-10px);
+        transform: translateY(-8px);
       }
-
       60% {
-        transform: translateY(-5px);
+        transform: translateY(-4px);
+      }
+    }
+
+    /* Accordion için CSS */
+    .accordion-content {
+      transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+    }
+
+    .accordion-content.open {
+      max-height: 250px;
+      opacity: 1;
+    }
+
+    .accordion-icon {
+      transition: transform 0.3s ease;
+    }
+
+    .accordion-content.open ~ h3 .accordion-icon {
+      transform: rotate(180deg);
+    }
+
+    /* Responsive medya sorguları */
+    @media (max-width: 1280px) {
+      .hero-title {
+        font-size: 2.75rem;
+      }
+      .feature-card, .step-card {
+        padding: 1.25rem;
       }
     }
 
     @media (max-width: 1024px) {
       .hero-title {
-        font-size: 3rem;
+        font-size: 2.5rem;
       }
-
-      .feature-card {
-        padding: 1.5rem;
+      .hero-section p {
+        font-size: 1rem;
+      }
+      .feature-card, .step-card {
+        padding: 1rem;
+      }
+      .accordion-content {
+        font-size: 0.95rem;
       }
     }
 
     @media (max-width: 768px) {
       .hero-title {
-        font-size: 2.5rem;
+        font-size: 2rem;
       }
-
       .hero-section p {
-        font-size: 1rem;
+        font-size: 0.95rem;
+        line-height: 1.5;
       }
-
       .stats-counter {
-        padding: 1.5rem;
+        padding: 1rem;
       }
-
-      .feature-card {
-        padding: 1.25rem;
+      .feature-card, .step-card {
+        padding: 0.875rem;
+      }
+      .accordion-content {
+        font-size: 0.9rem;
+      }
+      .btn-primary, .btn-secondary {
+        padding: 0.75rem 1.25rem;
+        font-size: 0.9rem;
+      }
+      .footer .grid {
+        grid-template-columns: 1fr;
       }
     }
 
-    @media (max-width: 640px) {
+    @media (max-width: 480px) {
       .hero-title {
-        font-size: 2rem;
+        font-size: 1.75rem;
       }
-
       .hero-section p {
-        font-size: 0.9rem;
+        font-size: 0.875rem;
       }
-
-      .btn-primary,
-      .btn-secondary {
-        padding: 0.75rem 1.5rem;
-        font-size: 0.9rem;
+      .btn-primary, .btn-secondary {
+        padding: 0.625rem 1rem;
+        font-size: 0.85rem;
       }
-
       .stats-counter {
-        padding: 1rem;
+        padding: 0.75rem;
       }
-
-      .feature-card {
-        padding: 1rem;
+      .feature-card, .step-card {
+        padding: 0.75rem;
       }
-
+      .accordion-content {
+        font-size: 0.85rem;
+      }
       .shape {
         display: none;
+      }
+      .header-nav {
+        flex-direction: column;
+        gap: 0.5rem;
+      }
+    }
+
+    @media (max-width: 360px) {
+      .hero-title {
+        font-size: 1.5rem;
+      }
+      .hero-section p {
+        font-size: 0.8rem;
+      }
+      .btn-primary, .btn-secondary {
+        padding: 0.5rem 0.875rem;
+        font-size: 0.8rem;
+      }
+      .feature-card, .step-card {
+        padding: 0.625rem;
+      }
+      .accordion-content {
+        font-size: 0.8rem;
       }
     }
   </style>
 </head>
 
-<body class="font-sans min-h-screen text-gray-900">
-  <!-- Header -->
-  <header class="bg-white/95 backdrop-blur-md shadow-md fixed w-full top-0 z-50" id="header">
+<body class="gradient-bg min-h-screen flex flex-col font-sans text-gray-900">
+  <header class="bg-white/95 backdrop-blur-md shadow-md fixed w-[calc(100%+15px)] top-0 z-50 -left-[15px]">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4">
       <div class="flex justify-between items-center">
         <a href="/"
           class="text-2xl font-bold text-gray-800 hover:text-primary transition-colors duration-300">
           <i class="fas fa-utensils mr-2 text-orange-500"></i>eduyemek
         </a>
-        <nav class="hidden md:flex items-center space-x-6">
-          <a href="#features"
-            class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Özellikler</a>
-          <a href="#how-it-works"
-            class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Nasıl Çalışır</a>
-          <a href="#stats"
-            class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">İstatistikler</a>
-          <a href="/faq" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium">SSS</a>
+        <nav class="hidden md:flex items-center space-x-4 lg:space-x-6">
+          <a href="#features" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium text-sm lg:text-base">Özellikler</a>
+          <a href="#how-it-works" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium text-sm lg:text-base">Nasıl Çalışır</a>
+          <a href="#stats" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium text-sm lg:text-base">İstatistikler</a>
+          <a href="/faq" class="text-gray-700 hover:text-primary transition-colors duration-300 font-medium text-sm lg:text-base">SSS</a>
         </nav>
-        <div class="flex items-center space-x-3">
-          <a href="/account/login"
-            class="px-4 py-2 text-gray-700 hover:text-primary transition-colors duration-300 font-medium">Giriş
-            Yap</a>
-          <a href="/account/register"
-            class="btn-primary text-white px-4 py-2 rounded-lg font-medium hover:scale-105">Kayıt Ol</a>
+        <div class="flex items-center space-x-2 sm:space-x-3">
+          <a href="/account/login" class="px-3 py-1.5 sm:px-4 sm:py-2 text-gray-700 hover:text-primary transition-colors duration-300 font-medium text-sm sm:text-base">Giriş Yap</a>
+          <a href="/account/register" class="btn-primary text-white px-3 py-1.5 sm:px-4 sm:py-2 rounded-lg font-medium text-sm sm:text-base hover:scale-105">Kayıt Ol</a>
         </div>
         <button class="md:hidden text-gray-700" onclick="toggleMobileMenu()">
-          <i class="fas fa-bars text-xl"></i>
+          <i class="fas fa-bars text-lg sm:text-xl"></i>
         </button>
       </div>
-      <div id="mobileMenu" class="md:hidden hidden mt-4 pb-4 border-t border-gray-200">
-        <div class="flex flex-col space-y-3 pt-4">
-          <a href="#features" class="text-gray-700 hover:text-primary transition-colors">Özellikler</a>
-          <a href="#how-it-works" class="text-gray-700 hover:text-primary transition-colors">Nasıl Çalışır</a>
-          <a href="#stats" class="text-gray-700 hover:text-primary transition-colors">İstatistikler</a>
-          <a href="/faq" class="text-gray-700 hover:text-primary transition-colors">SSS</a>
+      <div id="mobileMenu" class="md:hidden hidden mt-3 pb-3 border-t border-gray-200">
+        <div class="flex flex-col space-y-2 pt-3">
+          <a href="#features" class="text-gray-700 hover:text-primary transition-colors text-sm">Özellikler</a>
+          <a href="#how-it-works" class="text-gray-700 hover:text-primary transition-colors text-sm">Nasıl Çalışır</a>
+          <a href="#stats" class="text-gray-700 hover:text-primary transition-colors text-sm">İstatistikler</a>
+          <a href="/faq" class="text-gray-700 hover:text-primary transition-colors text-sm">SSS</a>
         </div>
       </div>
     </div>
   </header>
 
   <!-- Hero Section -->
-  <section class="hero-gradient min-h-screen flex items-center justify-center relative pt-16 sm:pt-20 pb-8">
+  <section class="hero-gradient min-h-[80vh] sm:min-h-screen flex items-center justify-center relative pt-8 sm:pt-10 pb-8">
     <div class="floating-shapes hidden sm:block">
-      <div class="shape w-40 h-40 sm:w-48 sm:h-48 bg-white rounded-full"></div>
-      <div class="shape w-32 h-32 sm:w-36 sm:h-36 bg-yellow-200 rounded-full"></div>
-      <div class="shape w-20 h-20 sm:w-24 sm:h-24 bg-pink-200 rounded-full"></div>
+      <div class="shape w-32 h-32 sm:w-40 sm:h-40 md:w-48 md:h-48 bg-white rounded-full"></div>
+      <div class="shape w-28 h-28 sm:w-32 sm:h-32 md:w-36 md:h-36 bg-yellow-200 rounded-full"></div>
+      <div class="shape w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 bg-pink-200 rounded-full"></div>
     </div>
     <div class="text-center z-10 px-4 sm:px-6 max-w-4xl mx-auto">
       <div class="animate-slide-up">
-        <h1 class="hero-title text-3xl sm:text-4xl md:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
+        <h1 class="hero-title text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 leading-tight">
           eduyemek'de Yemek Siparişi
-          <span class="block text-yellow-300 mt-2">Artık Çok Kolay!</span>
+          <span class="block text-neon-yellow mt-2">Artık Çok Kolay!</span>
         </h1>
-        <p class="text-base sm:text-lg md:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed">
-          Öğrenci dostu restoranlardan uygun fiyatlarla sipariş verin. Kampüste hızlı teslimat, güvenli ödeme ve
-          lezzetli yemekler sizi bekliyor!
+        <p class="text-sm sm:text-base md:text-lg lg:text-xl text-white/90 mb-6 sm:mb-8 max-w-2xl mx-auto leading-relaxed font-light">
+          Öğrenci dostu restoranlardan uygun fiyatlarla sipariş verin. Kampüste hızlı teslimat, güvenli ödeme ve lezzetli yemekler sizi bekliyor!
         </p>
-        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center items-center mb-8 sm:mb-12">
-          <a href="/account/register"
-            class="btn-primary text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold text-sm sm:text-base hover:scale-105">Hemen
-            Başla</a>
-          <a href="/account/login"
-            class="bg-white/20 backdrop-blur text-white border-2 border-white/30 px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold text-sm sm:text-base hover:bg-white/30">Giriş
-            Yap</a>
-        </div>
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-          <div class="glass-card p-3 sm:p-4 rounded-lg text-center">
-            <div class="text-xl sm:text-2xl font-bold text-white mb-2">10+</div>
-            <div class="text-white/80 text-xs sm:text-sm">Restoran</div>
+          <div class="glass-card p-2 sm:p-3 md:p-4 rounded-lg text-center">
+            <div class="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2">10+</div>
+            <div class="text-white/80 text-xs sm:text-sm font-light">Restoran</div>
           </div>
-          <div class="glass-card p-3 sm:p-4 rounded-lg text-center">
-            <div class="text-xl sm:text-2xl font-bold text-white mb-2">100+</div>
-            <div class="text-white/80 text-xs sm:text-sm">Mutlu Öğrenci</div>
+          <div class="glass-card p-2 sm:p-3 md:p-4 rounded-lg text-center">
+            <div class="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2">100+</div>
+            <div class="text-white/80 text-xs sm:text-sm font-light">Öğrenci</div>
           </div>
-          <div class="glass-card p-3 sm:p-4 rounded-lg text-center">
-            <div class="text-xl sm:text-2xl font-bold text-white mb-2">%30</div>
-            <div class="text-white/80 text-xs sm:text-sm">Daha Ucuz</div>
+          <div class="glass-card p-2 sm:p-3 md:p-4 rounded-lg text-center">
+            <div class="text-lg sm:text-xl md:text-2xl font-bold text-white mb-2">%30</div>
+            <div class="text-white/80 text-xs sm:text-sm font-light">Daha Ucuz</div>
           </div>
         </div>
-      </div>
-    </div>
-    <div class="absolute bottom-4 sm:bottom-8 left-1/2 transform -translate-x-1/2 scroll-indicator">
-      <div class="w-5 h-8 sm:w-6 sm:h-10 border-2 border-white/50 rounded-full flex justify-center">
-        <div class="w-1 h-2 sm:h-3 bg-white/70 rounded-full mt-2 animate-bounce"></div>
       </div>
     </div>
   </section>
 
   <!-- Features Section -->
-  <section id="features" class="py-12 sm:py-16 bg-gray-50">
+  <section id="features" class="py-8 sm:py-12 md:py-16 bg-gray-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8 sm:mb-12">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-3 sm:mb-4">Neden eduyemek?</h2>
-        <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">Öğrenci hayatını kolaylaştıran
-          özelliklerimizle tanışın</p>
+      <div class="text-center mb-6 sm:mb-8 md:mb-12">
+        <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2 sm:mb-3 md:mb-4">Neden eduyemek?</h2>
+        <p class="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto font-light">Öğrenci hayatını kolaylaştıran özelliklerimizle tanışın</p>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6">
-        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
-          <div
-            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-            <i class="fas fa-percentage text-lg sm:text-xl text-white"></i>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+        <div class="feature-card bg-white p-3 sm:p-4 md:p-5 rounded-lg shadow-md cursor-pointer" onclick="toggleAccordion(this)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-blue-500 to-purple-500 rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4 mx-auto">
+            <i class="fas fa-percentage text-base sm:text-lg md:text-xl text-white"></i>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Öğrenci İndirimleri</h3>
-          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Üniversite öğrencilerine özel %30’a varan indirim fırsatları! Öğrenci mailinizle kaydolun, avantajları kaçırmayın!</p>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1 sm:mb-2 md:mb-3 text-center">
+            Öğrenci İndirimleri
+            <i class="fas fa-chevron-down ml-1 sm:ml-2 accordion-icon"></i>
+          </h3>
+          <div class="accordion-content text-gray-600 text-xs sm:text-sm md:text-base text-center font-light">
+            Üniversite öğrencilerine özel %30’a varan indirim fırsatları! Öğrenci mailinizle kaydolun, avantajları kaçırmayın!
+          </div>
         </div>
-        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
-          <div
-            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-            <i class="fas fa-shipping-fast text-lg sm:text-xl text-white"></i>
+        <div class="feature-card bg-white p-3 sm:p-4 md:p-5 rounded-lg shadow-md cursor-pointer" onclick="toggleAccordion(this)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-green-500 to-teal-500 rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4 mx-auto">
+            <i class="fas fa-shipping-fast text-base sm:text-lg md:text-xl text-white"></i>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Hızlı Teslimat</h3>
-          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Kampüs içi lokasyonlara hızlı teslimat.
-            Ders aralarında bile sipariş verebilirsiniz!</p>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1 sm:mb-2 md:mb-3 text-center">
+            Hızlı Teslimat
+            <i class="fas fa-chevron-down ml-1 sm:ml-2 accordion-icon"></i>
+          </h3>
+          <div class="accordion-content text-gray-600 text-xs sm:text-sm md:text-base text-center font-light">
+            Kampüs içi lokasyonlara hızlı teslimat. Ders aralarında bile sipariş verebilirsiniz!
+          </div>
         </div>
-        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
-          <div
-            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-            <i class="fas fa-utensils text-lg sm:text-xl text-white"></i>
+        <div class="feature-card bg-white p-3 sm:p-4 md:p-5 rounded-lg shadow-md cursor-pointer" onclick="toggleAccordion(this)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4 mx-auto">
+            <i class="fas fa-utensils text-base sm:text-lg md:text-xl text-white"></i>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Kaliteli Yemekler</h3>
-          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Seçilmiş restoranlardan taze ve lezzetli
-            yemekler. Her damak zevkine uygun seçenekler!</p>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1 sm:mb-2 md:mb-3 text-center">
+            Kaliteli Yemekler
+            <i class="fas fa-chevron-down ml-1 sm:ml-2 accordion-icon"></i>
+          </h3>
+          <div class="accordion-content text-gray-600 text-xs sm:text-sm md:text-base text-center font-light">
+            Seçilmiş restoranlardan taze ve lezzetli yemekler. Her damak zevkine uygun seçenekler!
+          </div>
         </div>
-        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
-          <div
-            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-            <i class="fas fa-credit-card text-lg sm:text-xl text-white"></i>
+        <div class="feature-card bg-white p-3 sm:p-4 md:p-5 rounded-lg shadow-md cursor-pointer" onclick="toggleAccordion(this)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-pink-500 to-rose-500 rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4 mx-auto">
+            <i class="fas fa-credit-card text-base sm:text-lg md:text-xl text-white"></i>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Güvenli Ödeme(Yakında)</h3>
-          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Kredi kartı, banka kartı veya dijital
-            cüzdan ile güvenli ödeme. 256-bit SSL şifreleme!</p>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1 sm:mb-2 md:mb-3 text-center">
+            Güvenli Ödeme (Yakında)
+            <i class="fas fa-chevron-down ml-1 sm:ml-2 accordion-icon"></i>
+          </h3>
+          <div class="accordion-content text-gray-600 text-xs sm:text-sm md:text-base text-center font-light">
+            Kredi kartı, banka kartı veya dijital cüzdan ile güvenli ödeme. 256-bit SSL şifreleme!
+          </div>
         </div>
-        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
-          <div
-            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-            <i class="fas fa-star text-lg sm:text-xl text-white"></i>
+        <div class="feature-card bg-white p-3 sm:p-4 md:p-5 rounded-lg shadow-md cursor-pointer" onclick="toggleAccordion(this)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4 mx-auto">
+            <i class="fas fa-star text-base sm:text-lg md:text-xl text-white"></i>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">Puan Sistemi</h3>
-          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Her siparişinde ve yorum yaparak puan
-            kazan. Sadık müşteri olmak ödüllendiriliyor!</p>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1 sm:mb-2 md:mb-3 text-center">
+            Puan Sistemi
+            <i class="fas fa-chevron-down ml-1 sm:ml-2 accordion-icon"></i>
+          </h3>
+          <div class="accordion-content text-gray-600 text-xs sm:text-sm md:text-base text-center font-light">
+            Her siparişinde ve yorum yaparak puan kazan. Sadık müşteri olmak ödüllendiriliyor!
+          </div>
         </div>
-        <div class="feature-card bg-white p-4 sm:p-5 rounded-lg shadow-md">
-          <div
-            class="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center mb-3 sm:mb-4 mx-auto">
-            <i class="fas fa-headset text-lg sm:text-xl text-white"></i>
+        <div class="feature-card bg-white p-3 sm:p-4 md:p-5 rounded-lg shadow-md cursor-pointer" onclick="toggleAccordion(this)">
+          <div class="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 bg-gradient-to-r from-cyan-500 to-blue-500 rounded-lg flex items-center justify-center mb-2 sm:mb-3 md:mb-4 mx-auto">
+            <i class="fas fa-headset text-base sm:text-lg md:text-xl text-white"></i>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3 text-center">7/24 Destek</h3>
-          <p class="text-gray-600 text-xs sm:text-sm md:text-base text-center">Herhangi bir sorunuz olduğunda 7/24
-            müşteri destek ekibimiz sizinle.</p>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1 sm:mb-2 md:mb-3 text-center">
+            7/24 Destek
+            <i class="fas fa-chevron-down ml-1 sm:ml-2 accordion-icon"></i>
+          </h3>
+          <div class="accordion-content text-gray-600 text-xs sm:text-sm md:text-base text-center font-light">
+            Herhangi bir sorunuz olduğunda 7/24 müşteri destek ekibimiz sizinle.
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- How It Works Section -->
-  <section id="how-it-works" class="py-12 sm:py-16 bg-white">
+  <section id="how-it-works" class="py-8 sm:py-12 md:py-16 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8 sm:mb-12">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-3 sm:mb-4">Nasıl Çalışır?</h2>
-        <p class="text-base sm:text-lg md:text-xl text-gray-600 max-w-2xl mx-auto">Sadece 3 adımda sipariş verin,
-          keyfini çıkarın!</p>
+      <div class="text-center mb-6 sm:mb-8 md:mb-12">
+        <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2 sm:mb-3 md:mb-4">Nasıl Çalışır?</h2>
+        <p class="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-2xl mx-auto font-light">Sadece 3 adımda sipariş verin, keyfini çıkarın!</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-        <div class="text-center group">
-          <div class="relative mb-4 sm:mb-6">
-            <div
-              class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-105 transition-transform duration-300">
-              <i class="fas fa-search text-xl sm:text-2xl text-white"></i>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6">
+        <div class="step-card bg-white p-3 sm:p-4 md:p-5 rounded-lg shadow-md cursor-pointer" onclick="toggleAccordion(this)">
+          <div class="relative mb-2 sm:mb-3 md:mb-4">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mx-auto hover:scale-105 transition-transform duration-300">
+              <i class="fas fa-search text-base sm:text-lg md:text-xl lg:text-2xl text-white"></i>
             </div>
-            <div
-              class="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">
-              1</div>
-          </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Restoran Seç</h3>
-          <p class="text-gray-600 text-xs sm:text-sm md:text-base">Kampüsünüze yakın restoranları keşfedin. Menüleri
-            inceleyin, yorumları okuyun ve favorinizi seçin.</p>
-        </div>
-        <div class="text-center group">
-          <div class="relative mb-4 sm:mb-6">
-            <div
-              class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-105 transition-transform duration-300">
-              <i class="fas fa-shopping-cart text-xl sm:text-2xl text-white"></i>
+            <div class="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-neon-yellow rounded-full flex items-center justify-center text-white font-bold text-xs">
+              1
             </div>
-            <div
-              class="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">
-              2</div>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Sipariş Ver</h3>
-          <p class="text-gray-600 text-xs sm:text-sm md:text-base">Yemeklerinizi seçin, sepete ekleyin. Özel notlarınızı
-            yazın ve ödeme bilgilerinizi girin.</p>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1 sm:mb-2 md:mb-3 text-center">
+            Restoran Seç
+            <i class="fas fa-chevron-down ml-1 sm:ml-2 accordion-icon"></i>
+          </h3>
+          <div class="accordion-content text-gray-600 text-xs sm:text-sm md:text-base text-center font-light">
+            Kampüsünüze yakın restoranları keşfedin. Menüleri inceleyin, yorumları okuyun ve favorinizi seçin.
+          </div>
         </div>
-        <div class="text-center group">
-          <div class="relative mb-4 sm:mb-6">
-            <div
-              class="w-12 h-12 sm:w-14 sm:h-14 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto group-hover:scale-105 transition-transform duration-300">
-              <i class="fas fa-smile text-xl sm:text-2xl text-white"></i>
+        <div class="step-card bg-white p-3 sm:p-4 md:p-5 rounded-lg shadow-md cursor-pointer" onclick="toggleAccordion(this)">
+          <div class="relative mb-2 sm:mb-3 md:mb-4">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-r from-green-500 to-teal-500 rounded-full flex items-center justify-center mx-auto hover:scale-105 transition-transform duration-300">
+              <i class="fas fa-shopping-cart text-base sm:text-lg md:text-xl lg:text-2xl text-white"></i>
             </div>
-            <div
-              class="absolute -top-1 -right-1 w-5 h-5 sm:w-6 sm:h-6 bg-yellow-400 rounded-full flex items-center justify-center text-white font-bold text-xs sm:text-sm">
-              3</div>
+            <div class="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-neon-yellow rounded-full flex items-center justify-center text-white font-bold text-xs">
+              2
+            </div>
           </div>
-          <h3 class="text-base sm:text-lg font-bold text-gray-800 mb-2 sm:mb-3">Keyfini Çıkar</h3>
-          <p class="text-gray-600 text-xs sm:text-sm md:text-base">Siparişinizi takip edin, kapınıza teslim alın.
-            Lezzetli yemeklerinizin tadını çıkarın!</p>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1 sm:mb-2 md:mb-3 text-center">
+            Sipariş Ver
+            <i class="fas fa-chevron-down ml-1 sm:ml-2 accordion-icon"></i>
+          </h3>
+          <div class="accordion-content text-gray-600 text-xs sm:text-sm md:text-base text-center font-light">
+            Yemeklerinizi seçin, sepete ekleyin. Özel notlarınızı yazın ve ödeme bilgilerinizi girin.
+          </div>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Stats Section -->
-  <section id="stats" class="fi py-12 sm:py-16 hero-gradient">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-8 sm:mb-12">
-        <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-3 sm:mb-4">Rakamlarla eduyemek</h2>
-        <p class="text-base sm:text-lg md:text-xl text-white/90 max-w-2xl mx-auto">Büyüyen topluluğumuzun bir parçası
-          olun</p>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <div class="stats-counter text-center glass-card p-4 sm:p-5 rounded-lg">
-          <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" data-target="100">0</div>
-          <div class="text-white/80 text-xs sm:text-sm">Mutlu Müşteri</div>
-        </div>
-        <div class="stats-counter text-center glass-card p-4 sm:p-5 rounded-lg">
-          <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" data-target="10">0</div>
-          <div class="text-white/80 text-xs sm:text-sm">Partner Restoran</div>
-        </div>
-        <div class="stats-counter text-center glass-card p-4 sm:p-5 rounded-lg">
-          <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" data-target="500">0</div>
-          <div class="text-white/80 text-xs sm:text-sm">Teslim Edilen Sipariş</div>
-        </div>
-        <div class="stats-counter text-center glass-card p-4 sm:p-5 rounded-lg">
-          <div class="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2" data-target="98">0</div>
-          <div class="text-white/80 text-xs sm:text-sm">Memnuniyet Oranı</div>
+        <div class="step-card bg-white p-3 sm:p-4 md:p-5 rounded-lg shadow-md cursor-pointer" onclick="toggleAccordion(this)">
+          <div class="relative mb-2 sm:mb-3 md:mb-4">
+            <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-r from-yellow-500 to-orange-500 rounded-full flex items-center justify-center mx-auto hover:scale-105 transition-transform duration-300">
+              <i class="fas fa-smile text-base sm:text-lg md:text-xl lg:text-2xl text-white"></i>
+            </div>
+            <div class="absolute -top-1 -right-1 w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 bg-neon-yellow rounded-full flex items-center justify-center text-white font-bold text-xs">
+              3
+            </div>
+          </div>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-1 sm:mb-2 md:mb-3 text-center">
+            Keyfini Çıkar
+            <i class="fas fa-chevron-down ml-1 sm:ml-2 accordion-icon"></i>
+          </h3>
+          <div class="accordion-content text-gray-600 text-xs sm:text-sm md:text-base text-center font-light">
+            Siparişinizi takip edin, kapınıza teslim alın. Lezzetli yemeklerinizin tadını çıkarın!
+          </div>
         </div>
       </div>
     </div>
   </section>
 
   <!-- CTA Section -->
-  <section class="py-12 sm:py-16 bg-gray-50">
+  <section class="py-8 sm:py-12 md:py-16 bg-gray-50">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-      <h2 class="text-2xl sm:text-3xl md:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">Hemen Başlayın!</h2>
-      <p class="text-base sm:text-lg md:text-xl text-gray-600 mb-6 sm:mb-8">Binlerce öğrenci gibi siz de eduyemek'in
-        ayrıcalıklarından yararlanın.</p>
-      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center">
-        <a href="/account/register"
-          class="btn-primary text-white px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold text-sm sm:text-base hover:scale-105">Ücretsiz
-          Kayıt Ol</a>
-        <a href="/faq"
-          class="bg-white border-2 border-primary text-primary px-5 sm:px-6 py-2.5 sm:py-3 rounded-lg font-bold text-sm sm:text-base hover:bg-primary hover:text-white">Daha
-          Fazla Bilgi</a>
+      <h2 class="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-primary mb-2 sm:mb-3 md:mb-4">Hemen Başlayın!</h2>
+      <p class="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 mb-4 sm:mb-6 md:mb-8 font-light">Binlerce öğrenci gibi siz de eduyemek'in ayrıcalıklarından yararlanın.</p>
+      <div class="flex flex-col sm:flex-row gap-2 sm:gap-3 md:gap-4 justify-center">
+        <a href="/account/register" class="btn-primary text-white px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-bold text-sm sm:text-base hover:scale-105">Ücretsiz Kayıt Ol</a>
+        <a href="/faq" class="bg-white border-2 border-primary text-primary px-4 sm:px-5 py-2 sm:py-2.5 rounded-lg font-bold text-sm sm:text-base hover:bg-primary hover:text-white">Daha Fazla Bilgi</a>
       </div>
     </div>
   </section>
 
   <!-- Footer -->
-  <footer class="bg-gray-800 text-white py-12">
-    <div class="max-w-7xl mx-auto px-6">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div class="md:col-span-2">
-          <div class="flex items-center mb-4">
-            <i class="fas fa-utensils text-2xl text-orange-500 mr-2"></i>
-            <span class="text-2xl font-bold">eduyemek</span>
+  <footer class="bg-gray-800 text-white py-8 sm:py-10 md:py-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+        <div class="sm:col-span-2">
+          <div class="flex items-center mb-3 sm:mb-4">
+            <i class="fas fa-utensils text-xl sm:text-2xl text-orange-500 mr-2"></i>
+            <span class="text-xl sm:text-2xl font-bold">eduyemek</span>
           </div>
-          <p class="text-gray-300 mb-4 leading-relaxed">
-            Üniversite öğrencileri için özel olarak tasarlanan yemek sipariş platformu. Uygun fiyatlar, hızlı teslimat ve
-            kaliteli hizmet.
+          <p class="text-gray-300 text-xs sm:text-sm md:text-base mb-3 sm:mb-4 leading-relaxed font-light">
+            Üniversite öğrencileri için özel olarak tasarlanan yemek sipariş platformu. Uygun fiyatlar, hızlı teslimat ve kaliteli hizmet.
           </p>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4">Hızlı Bağlantılar</h3>
-          <ul class="space-y-2">
-            <li><a href="/account/login" class="text-gray-300 hover:text-primary transition-colors">Giriş Yap</a></li>
-            <li><a href="/account/register" class="text-gray-300 hover:text-primary transition-colors">Kayıt Ol</a></li>
-            <li><a href="/faq" class="text-gray-300 hover:text-primary transition-colors">SSS</a></li>
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-3 sm:mb-4">Hızlı Bağlantılar</h3>
+          <ul class="space-y-2 text-xs sm:text-sm md:text-base">
+            <li><a href="/account/login" class="text-gray-300 hover:text-primary transition-colors font-light">Giriş Yap</a></li>
+            <li><a href="/account/register" class="text-gray-300 hover:text-primary transition-colors font-light">Kayıt Ol</a></li>
+            <li><a href="/faq" class="text-gray-300 hover:text-primary transition-colors font-light">SSS</a></li>
           </ul>
         </div>
         <div>
-          <h3 class="text-lg font-semibold mb-4">İletişim</h3>
-          <ul class="space-y-2 text-gray-300">
-            <li class="flex items-center">
+          <h3 class="text-sm sm:text-base md:text-lg font-semibold text-primary mb-3 sm:mb-4">İletişim</h3>
+          <ul class="space-y-2 text-xs sm:text-sm md:text-base text-gray-300">
+            <li class="flex items-center font-light">
               <i class="fas fa-map-marker-alt mr-2 text-primary"></i> Üniversite Kampüsleri
             </li>
-            <li class="flex items-center">
+            <li class="flex items-center font-light">
               <i class="fas fa-envelope mr-2 text-primary"></i>
               <a href="mailto:info@eduyemek.com" class="hover:text-primary">info@eduyemek.com</a>
             </li>
           </ul>
         </div>
       </div>
-      <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-        <p>© 2025  eduyemek. Tüm hakları saklıdır.</p>
+      <div class="border-t border-gray-700 mt-6 sm:mt-8 pt-6 sm:pt-8 text-center text-gray-300 text-xs sm:text-sm font-light">
+        <p>© 2025 eduyemek. Tüm hakları saklıdır.</p>
       </div>
     </div>
   </footer>
 
   <script>
+    function setBodyPadding() {
+      const header = document.getElementById('header');
+      const headerHeight = header.offsetHeight;
+      document.body.style.paddingTop = headerHeight + 'px';
+    }
+
+    window.addEventListener('load', setBodyPadding);
+    window.addEventListener('resize', setBodyPadding);
+
     function toggleMobileMenu() {
       const menu = document.getElementById('mobileMenu');
       menu.classList.toggle('hidden');
+      setBodyPadding();
     }
 
     window.addEventListener('scroll', () => {
@@ -523,46 +559,29 @@
           const mobileMenu = document.getElementById('mobileMenu');
           if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
             mobileMenu.classList.add('hidden');
+            setBodyPadding();
           }
         }
       });
     });
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const counters = document.querySelectorAll('.stats-counter [data-target]');
-      const speed = 200;
+    function toggleAccordion(element) {
+      const content = element.querySelector('.accordion-content');
+      const icon = element.querySelector('.accordion-icon');
+      const isOpen = content.classList.contains('open');
 
-      const animateCounter = (counter) => {
-        const target = +counter.getAttribute('data-target');
-        const count = +counter.innerText;
-        const increment = target / speed;
-        if (count < target) {
-          counter.innerText = Math.ceil(count + increment);
-          setTimeout(() => animateCounter(counter), 10);
-        } else {
-          counter.innerText = target.toLocaleString('tr-TR');
-        }
-      };
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const counter = entry.target.querySelector('[data-target]');
-              if (counter && !counter.classList.contains('counted')) {
-                counter.classList.add('counted');
-                animateCounter(counter);
-              }
-            }
-          });
-        },
-        { threshold: 0.5 }
-      );
-
-      document.querySelectorAll('.stats-counter').forEach((section) => {
-        observer.observe(section);
-      });
-    });
+      if (isOpen) {
+        content.classList.remove('open');
+        content.style.maxHeight = '0';
+        content.style.opacity = '0';
+        icon.classList.remove('rotate-180');
+      } else {
+        content.classList.add('open');
+        content.style.maxHeight = content.scrollHeight + 'px';
+        content.style.opacity = '1';
+        icon.classList.add('rotate-180');
+      }
+    }
   </script>
 </body>
 

@@ -100,6 +100,28 @@
             z-index: 9999;
         }
 
+        .btn-print {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-left: 5px;
+            font-size: 12px;
+        }
+
+        .btn-print:hover {
+            background: #218838;
+        }
+
+        .btn-print i {
+            margin-right: 4px;
+        }
+
+
+
+
         @keyframes flash {
 
             0%,
@@ -1105,81 +1127,105 @@
                             <th>Not</th>
                             <th>Durum</th>
                             <th>İşlemler</th>
+                            <th>Yazdır</th>
+
                         </tr>
                     </thead>
-                    <tbody>
-                        <% if (Array.isArray(recentOrders) && recentOrders.length> 0) { %>
-                            <% recentOrders.forEach(function(order) { %>
-                                <% if (['pending', 'preparing' , 'on_the_way' ].includes(order.status)) { %>
-                                    <tr>
-                                        <td data-property="Sipariş Tarihi">
-                                            <% const date=new Date(order.createdAt); const
-                                                formattedDate=date.toLocaleString('tr-TR', { day: '2-digit' ,
-                                                month: 'long' , year: 'numeric' , hour: '2-digit' , minute: '2-digit'
-                                                }); %>
-                                                <%= formattedDate %>
-                                        </td>
-                                        <td data-property="Müşteri">
-                                            <% if (order.userId) { %>
-                                                <%= order.userId.firstName || '' %>
-                                                    <%= order.userId.lastName || '' %>
-                                                        <% if (order.userId.phone) { %>
-                                                            <br><small
-                                                                style="color: var(--primary-text); font-weight: bold;">
-                                                                <%= order.userId.phone %>
-                                                            </small>
-                                                            <% } %>
-                                                                <% } else { %>
-                                                                    Bilinmeyen Kullanıcı
-                                                                    <% } %>
-                                        </td>
-                                        <td data-property="Adres">
-                                            <%= order.deliveryAddressDetails?.formatted_address || 'Adres Yok' %>
-                                        </td>
-                                        <td data-property="Ürünler">
-                                            <% if (order.items && Array.isArray(order.items)) { %>
-                                                <%= order.items.map(function(item) { const itemName=item.name ||
-                                                    (item.mealId && item.mealId.name) || 'Bilinmeyen Ürün' ; const
-                                                    qty=item.quantity || 1; return `${itemName} (${qty}x)`; }).join(', ') %>
-                                            <% } else { %>
-                                                Veri Yok
-                                            <% } %>
-                                        </td>
-                                        <td data-property="Tutar">
-                                            <%= order.totalPrice ? order.totalPrice.toFixed(2) : ' 0.00' %> TL
-                                        </td>
-                                        <td data-property="Ödeme">
-                                            <% const paymentMethods={ 'credit_card' : 'Kredi Kartı' , 'cash' : 'Nakit'
-                                                , 'online_payment' : 'Online Ödeme' , 'wallet' : 'Cüzdan' }; %>
-                                                <% const paymentMethod=order.paymentMethod || 'bilinmeyen' ; %>
-                                                    <%= paymentMethods[paymentMethod] || 'Bilinmeyen' %>
-                                        </td>
-                                        <td data-property="Not">
-                                            <%= order.note || 'Not bulunmamaktadır.' %>
-                                        </td>
-                                        <td data-property="Durum">
-                                            <span class="status status-<%= order.status || 'bilinmeyen' %>">
-                                                <%= order.status==='pending' ? 'Beklemede' : order.status==='preparing'
-                                                    ? 'Hazırlanıyor' : order.status==='on_the_way' ? 'Yolda'
-                                                    : 'Bilinmeyen' %>
-                                            </span>
-                                        </td>
-                                        <td data-property="İşlemler">
-                                            <button type="button" class="btn-update"
-                                                onclick="openModal('<%= order._id %>')">
-                                                Güncelle
-                                            </button>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-                                        <% }); %>
-                                            <% } else { %>
-                                                <tr>
-                                                    <td colspan="9" class="empty-state">Aktif sipariş bulunmamaktadır.
-                                                    </td>
-                                                </tr>
-                                                <% } %>
-                    </tbody>
+<tbody>
+    <% if (Array.isArray(recentOrders) && recentOrders.length > 0) { %>
+        <% recentOrders.forEach(function(order) { %>
+            <% if (['pending', 'preparing', 'on_the_way'].includes(order.status)) { %>
+                <tr>
+                    <td data-property="Sipariş Tarihi">
+                        <% const date = new Date(order.createdAt); %>
+                        <% const formattedDate = date.toLocaleString('tr-TR', {
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit'
+                        }); %>
+                        <%= formattedDate %>
+                    </td>
+
+                    <td data-property="Müşteri">
+                        <% if (order.userId) { %>
+                            <%= order.userId.firstName || '' %> <%= order.userId.lastName || '' %>
+                            <% if (order.userId.phone) { %>
+                                <br>
+                                <small style="color: var(--primary-text); font-weight: bold;">
+                                    <%= order.userId.phone %>
+                                </small>
+                            <% } %>
+                        <% } else { %>
+                            Bilinmeyen Kullanıcı
+                        <% } %>
+                    </td>
+
+                    <td data-property="Adres">
+                        <%= order.deliveryAddressDetails?.formatted_address || 'Adres Yok' %>
+                    </td>
+
+                    <td data-property="Ürünler">
+                        <% if (Array.isArray(order.items)) { %>
+                            <%= order.items.map(function(item) {
+                                const itemName = item.name || (item.mealId && item.mealId.name) || 'Bilinmeyen Ürün';
+                                const qty = item.quantity || 1;
+                                return `${itemName} (${qty}x)`;
+                            }).join(', ') %>
+                        <% } else { %>
+                            Veri Yok
+                        <% } %>
+                    </td>
+
+                    <td data-property="Tutar">
+                        <%= order.totalPrice ? order.totalPrice.toFixed(2) : '0.00' %> TL
+                    </td>
+
+                    <td data-property="Ödeme">
+                        <% const paymentMethods = {
+                            'credit_card': 'Kredi Kartı',
+                            'cash': 'Nakit',
+                            'online_payment': 'Online Ödeme',
+                            'wallet': 'Cüzdan'
+                        }; %>
+                        <%= paymentMethods[order.paymentMethod] || 'Bilinmeyen' %>
+                    </td>
+
+                    <td data-property="Not">
+                        <%= order.note || 'Not bulunmamaktadır.' %>
+                    </td>
+
+                    <td data-property="Durum">
+                        <span class="status status-<%= order.status || 'bilinmeyen' %>">
+                            <%= order.status === 'pending' ? 'Beklemede'
+                                : order.status === 'preparing' ? 'Hazırlanıyor'
+                                : order.status === 'on_the_way' ? 'Yolda'
+                                : 'Bilinmeyen' %>
+                        </span>
+                    </td>
+
+                    <td data-property="İşlemler">
+                        <button type="button" class="btn-update" onclick="openModal('<%= order._id %>')">
+                            Güncelle
+                        </button>
+                    </td>
+
+                    <td data-property="Yazdır">
+                        <button type="button" class="btn-print" onclick="printOrder(this)">
+                            <i class="fas fa-print"></i> Yazdır
+                        </button>
+                    </td>
+                </tr>
+            <% } %>
+        <% }); %>
+    <% } else { %>
+        <tr>
+            <td colspan="10" class="empty-state">Aktif sipariş bulunmamaktadır.</td>
+        </tr>
+    <% } %>
+</tbody>
+
                 </table>
             </div>
         </div>
@@ -1876,8 +1922,134 @@
         }
 
         console.log('Restaurant Dashboard Script yüklendi');
+
+
+
+
+
+
+
     </script>
 
+<script>
+    function printOrder(button) {
+    const row = button.closest('tr');
+    const cells = row.querySelectorAll('td');
+
+    const date = cells[0].textContent.trim();
+
+    const customerCell = cells[1];
+    const customerName = customerCell.childNodes[0]?.textContent.trim() || '';
+    const phoneElement = customerCell.querySelector('small');
+    const phone = phoneElement ? phoneElement.textContent.trim() : '';
+
+    const address = cells[2].textContent.trim();
+    const productsText = cells[3].textContent.trim();
+    const products = productsText.split(', ').map(item => {
+        const parts = item.split(' (');
+        const name = parts[0];
+        const quantity = parts[1] ? parts[1].replace('x)', '') : '1';
+        return { name, quantity };
+    });
+
+    const amount = cells[4].textContent.trim();
+    const payment = cells[5].textContent.trim();
+    const note = cells[6].textContent.trim();
+    const status = cells[7].querySelector('.status')?.textContent.trim() || '';
+
+    let productsHtml = '';
+    products.forEach(product => {
+        productsHtml += `<p>${product.name} (x${product.quantity})</p>`;
+    });
+
+    const printHtml = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fiş</title>
+    <style>
+        body {
+            font-family: monospace;
+            font-size: 14px;
+            padding: 20px;
+            background: white;
+            color: black;
+        }
+        .receipt {
+            max-width: 300px;
+            margin: auto;
+            padding: 10px;
+            border: 1px dashed black;
+        }
+        .centered {
+            text-align: center;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        hr {
+            border: none;
+            border-top: 1px dashed black;
+            margin: 10px 0;
+        }
+        .total {
+            text-align: right;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .small {
+            font-size: 12px;
+            color: #444;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .receipt, .receipt * {
+                visibility: visible;
+            }
+            .receipt {
+                position: absolute;
+                left: 0;
+                top: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="receipt">
+        <h2 class="centered">eduyemek</h2>
+        <p class="centered">Paket Servis</p>
+        <p><strong>Tarih:</strong> ${date}</p>
+        <p><strong>Müşteri:</strong> ${customerName}</p>
+        <p><strong>Tel:</strong> ${phone}</p>
+        <hr>
+        <p><strong>Adres:</strong><br>${address}</p>
+        <hr>
+        <p><strong>Not:</strong><br>${note || '-'}</p>
+        <p><strong>Ödeme Şekli:</strong><br>${payment}</p>
+        <hr>
+        <p><strong>Ürünler:</strong></p>
+        ${productsHtml}
+        <hr>
+        <p class="total">Toplam: ${amount}</p>
+        <h3 class="centered">TEŞEKKÜR EDERİZ</h3>
+    </div>
+    <script>
+        window.onload = function() {
+            window.print();
+        }
+    <\/script>
+</body>
+</html>
+`;
+
+    const win = window.open('', '', 'width=400,height=600');
+    win.document.write(printHtml);
+    win.document.close();
+}
+
+</script>
 
 </body>
 
