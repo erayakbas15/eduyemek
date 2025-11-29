@@ -61,13 +61,15 @@ This is **not the final version** of the EduYemek website — it is the earlier 
 
 ---
 
+## 📄 License
+
+This project is licensed under the MIT License.
+
+---
+
 ## 📧 Contact
 
 Feel free to reach out if you want to discuss the project or ask questions! 
-
-## 📧 Contact
-
-Feel free to reach out if you want to discuss the project or ask questions!
 
 | Contact Channel | Information |
 | :--- | :--- |
