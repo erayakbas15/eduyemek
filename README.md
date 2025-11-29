@@ -72,5 +72,4 @@ Feel free to reach out if you want to discuss the project or ask questions!
 | Contact Channel | Information |
 | :--- | :--- |
 | **E-posta** | okancem1122@gmail.com |
-| **GitHub** | [@okancem] |
 | **LinkedIn** | [https://www.linkedin.com/in/okan-cem/] |
